@@ -78,4 +78,6 @@ It supports ** JavaScript, CSS, HTML, HTML5, PHP, HTM and Images**.
 - Includes the latest Firebase and AdMob SDK updates.
 
 **For Updates & More Releases:**
-Visit us on telegram [@EFXTv](https://t.me/errorfix_tv)
+[JOIN FOR LIVE CLASSES AND SUPPORT](https://t.me/efxtv) 
+
+[![Buy Me A Coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=efxtv&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff)](https://buymeacoffee.com/efxtv)
