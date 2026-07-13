@@ -1,13 +1,18 @@
 package com.webviewtemplate.webviewtemplate1
 
-import android.graphics.Color
+
 import android.Manifest
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import android.widget.*
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import java.util.Locale
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.os.Bundle
