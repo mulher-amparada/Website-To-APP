@@ -23,6 +23,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
+import android.graphics.Typeface
+
+import android.view.ViewGroup
+
+
+
+
 class MainActivity : AppCompatActivity() {
 
 
@@ -85,9 +92,19 @@ class MainActivity : AppCompatActivity() {
         root.setBackgroundColor(Color.BLACK)
 
         setContentView(root)
+        
+        
+
+val raiz = findViewById<View>(
+    android.R.id.content
+)
+
+aplicarFonte(raiz)
 
 
         pedirPermissoes()
+
+pedirPermissaoNotificacao()
 
         abrirPopupVoz()
 
@@ -96,45 +113,54 @@ class MainActivity : AppCompatActivity() {
 
     private fun pedirPermissoes() {
 
-        val permissoes = arrayOf(
+    val permissoes = arrayOf(
 
-            Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.READ_CONTACTS,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.READ_SMS,
-            Manifest.permission.SEND_SMS,
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.CALL_PHONE
+        Manifest.permission.CAMERA,
 
-        )
+        Manifest.permission.POST_NOTIFICATIONS,
+
+        Manifest.permission.RECORD_AUDIO,
+
+        Manifest.permission.READ_CONTACTS,
+
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+
+        Manifest.permission.READ_SMS,
+        Manifest.permission.SEND_SMS,
+
+        Manifest.permission.READ_PHONE_STATE,
+
+        Manifest.permission.CALL_PHONE
+
+    )
 
 
-        val faltando = permissoes.filter {
+    val faltando = permissoes.filter {
 
-            ContextCompat.checkSelfPermission(
-                this,
-                it
-            ) != PackageManager.PERMISSION_GRANTED
+        ContextCompat.checkSelfPermission(
+            this,
+            it
+        ) != PackageManager.PERMISSION_GRANTED
 
-        }
-
-
-        if (faltando.isNotEmpty()) {
-
-            ActivityCompat.requestPermissions(
-                this,
-                faltando.toTypedArray(),
-                REQUEST_PERMISSIONS
-            )
-
-        } else {
-
-            ativarAdministrador()
-
-        }
     }
 
+
+    if (faltando.isNotEmpty()) {
+
+        ActivityCompat.requestPermissions(
+            this,
+            faltando.toTypedArray(),
+            REQUEST_PERMISSIONS
+        )
+
+    } else {
+
+        ativarAdministrador()
+
+    }
+
+}
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -148,6 +174,17 @@ class MainActivity : AppCompatActivity() {
             grantResults
         )
 
+if (requestCode == REQUEST_NOTIFICACAO) {
+
+    if (grantResults.isNotEmpty() &&
+        grantResults[0] == PackageManager.PERMISSION_GRANTED
+    ) {
+
+        // notificações liberadas
+
+    }
+
+}
 
         if (requestCode == REQUEST_PERMISSIONS) {
 
@@ -162,6 +199,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+private fun aplicarFonte(view: View) {
+
+    val fonte = Typeface.createFromAsset(
+        assets,
+        "font.ttf"
+    )
+
+
+    if (view is TextView) {
+
+        view.typeface = fonte
+
+    }
+
+
+    if (view is ViewGroup) {
+
+        for (i in 0 until view.childCount) {
+
+            aplicarFonte(
+                view.getChildAt(i)
+            )
+
+        }
+
+    }
+
+}
 
 
     private fun ativarAdministrador() {
@@ -327,7 +393,33 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+private val REQUEST_NOTIFICACAO = 200
 
+
+private fun pedirPermissaoNotificacao() {
+
+    if (android.os.Build.VERSION.SDK_INT >= 33) {
+
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.POST_NOTIFICATIONS
+                ),
+                REQUEST_NOTIFICACAO
+            )
+
+        }
+
+    }
+
+}
     
 
 
