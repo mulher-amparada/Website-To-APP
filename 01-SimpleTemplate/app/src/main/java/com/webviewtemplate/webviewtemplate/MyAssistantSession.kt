@@ -1,4 +1,4 @@
-package com.webviewtemplate.webviewtemplate
+package com.webviewtemplate.webviewtemplate1
 
 import android.content.Context
 import android.service.voice.VoiceInteractionSession
