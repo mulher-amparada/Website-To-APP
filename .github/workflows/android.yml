@@ -13,7 +13,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: 04.AndroidWebViewPdfViewerApplication
+        working-directory: 01-SimpleTemplate
 
     steps:
       - name: Baixar código
@@ -36,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: APK-Kotlin-Debug
-          path: 04.AndroidWebViewPdfViewerApplication/app/build/outputs/apk/debug/*.apk
+          path: 01-SimpleTemplate
