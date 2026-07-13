@@ -116,6 +116,10 @@ pedirPermissaoNotificacao()
     val permissoes = arrayOf(
 
         Manifest.permission.CAMERA,
+        
+        Manifest.permission.READ_CALENDAR,
+        
+        Manifest.permission.WRITE_CALENDAR,
 
         Manifest.permission.POST_NOTIFICATIONS,
 
@@ -271,6 +275,8 @@ private fun aplicarFonte(view: View) {
             R.layout.popup_voz,
             null
         )
+        
+        aplicarFonte(view)
 
 
         val texto = view.findViewById<TextView>(
