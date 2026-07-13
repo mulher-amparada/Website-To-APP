@@ -36,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: APK-Kotlin-Debug
-          path: 01-SimpleTemplate
+          path: 01-SimpleTemplate/app/build/outputs/apk/debug/*.apk
