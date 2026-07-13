@@ -55,6 +55,20 @@ object Comandos {
 
 }
 
+texto.startsWith("abrir música ") ||
+texto.startsWith("abrir video ") -> {
+
+    val nome = texto
+        .replace("abrir música ", "")
+        .replace("abrir video ", "")
+        .trim()
+
+    abrirMidia(
+        contexto,
+        nome
+    )
+}
+
 texto.startsWith("inicie um timer de ") -> {
 
     val regex = Regex("""(\d+)""")
@@ -1201,6 +1215,91 @@ private fun listarBluetooth(
         lista.toString()
     )
 
+}
+
+private fun abrirMidia(
+    contexto: Context,
+    nomeArquivo: String
+) {
+
+    val uri = MediaStore.Files.getContentUri("external")
+
+    val cursor = contexto.contentResolver.query(
+        uri,
+        arrayOf(
+            MediaStore.Files.FileColumns._ID,
+            MediaStore.Files.FileColumns.DISPLAY_NAME,
+            MediaStore.Files.FileColumns.MIME_TYPE
+        ),
+        null,
+        null,
+        null
+    )
+
+    cursor?.use {
+
+        val idIndex = it.getColumnIndex(
+            MediaStore.Files.FileColumns._ID
+        )
+
+        val nomeIndex = it.getColumnIndex(
+            MediaStore.Files.FileColumns.DISPLAY_NAME
+        )
+
+        val tipoIndex = it.getColumnIndex(
+            MediaStore.Files.FileColumns.MIME_TYPE
+        )
+
+        while(it.moveToNext()) {
+
+            val nome = it.getString(nomeIndex)
+
+            if(nome.equals(nomeArquivo, true)) {
+
+                val id = it.getLong(idIndex)
+
+                val mime = it.getString(tipoIndex)
+
+                val arquivoUri =
+                    ContentUris.withAppendedId(
+                        uri,
+                        id
+                    )
+
+                val intent = Intent(
+                    Intent.ACTION_VIEW
+                )
+
+                intent.setDataAndType(
+                    arquivoUri,
+                    mime
+                )
+
+                intent.addFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+
+                intent.addFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK
+                )
+
+                contexto.startActivity(
+                    Intent.createChooser(
+                        intent,
+                        "Abrir com"
+                    )
+                )
+
+                return
+            }
+        }
+    }
+
+    Toast.makeText(
+        contexto,
+        "Arquivo não encontrado",
+        Toast.LENGTH_SHORT
+    ).show()
 }
 
 }
