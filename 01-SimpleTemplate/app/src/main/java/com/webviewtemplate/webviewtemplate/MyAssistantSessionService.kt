@@ -1,0 +1,5 @@
+package com.webviewtemplate.webviewtemplate
+
+import android.service.voice.VoiceInteractionSessionService
+
+class MyAssistantSessionService : VoiceInteractionSessionService()
