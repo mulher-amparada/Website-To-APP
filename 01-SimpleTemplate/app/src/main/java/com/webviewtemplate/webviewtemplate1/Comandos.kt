@@ -1,426 +1,648 @@
 package com.webviewtemplate.webviewtemplate1
 
 import android.Manifest
-import android.app.Dialog
+import android.content.Context
 import android.app.admin.DevicePolicyManager
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.Build
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
-import android.speech.RecognitionListener
-import android.speech.RecognizerIntent
-import android.speech.SpeechRecognizer
-import android.view.View
-import android.view.WindowManager
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
+import android.net.Uri
+import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
-
-import android.graphics.Typeface
-
-import android.view.ViewGroup
+import android.hardware.camera2.CameraManager
+import com.google.android.gms.location.LocationServices
+import android.hardware.camera2.CameraCharacteristics
 
 
+object Comandos {
 
 
-class MainActivity : AppCompatActivity() {
+    fun executar(
+        contexto: Context,
+        comando: String
+    ) {
+
+        val texto = comando.lowercase()
 
 
-    private val REQUEST_PERMISSIONS = 100
+        when {
+        
+        texto.startsWith("me mande uma notificação") -> {
 
-    private lateinit var adminComponent: ComponentName
-
-    private lateinit var speechRecognizer: SpeechRecognizer
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
+    val mensagem =
+        texto.removePrefix(
+            "me mande uma notificação"
         )
+        .trim()
 
 
-        window.apply {
+    enviarNotificacao(
+        contexto,
+        mensagem
+    )
 
-            addFlags(
-                WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
-            )
+}
 
-            statusBarColor = Color.TRANSPARENT
-            navigationBarColor = Color.TRANSPARENT
+texto.contains("enviar minha localização para o 180") ||
+texto.contains("mandar minha localização para o 180") -> {
+
+    enviarLocalWhatsApp180(contexto)
+
+}
+
+texto.contains("quais são os meus apoios") ||
+texto.contains("quais sao os meus apoios") ||
+texto.contains("meus apoios") -> {
+
+    enviarApoios(contexto)
+
+}
+
+texto.contains("bloquear celular") ||
+texto.contains("bloquear aparelho") -> {
+
+    bloquearCelular(contexto)
+
+}
+
+texto.contains("vibrar") -> {
+
+    vibrar(contexto)
+
+}
+
+texto.contains("ligar lanterna") -> {
+
+    ligarLanterna(contexto)
+
+}
 
 
-            if (android.os.Build.VERSION.SDK_INT >= 28) {
-                navigationBarDividerColor = Color.TRANSPARENT
+texto.contains("desligar lanterna") -> {
+
+    desligarLanterna(contexto)
+
+}
+
+            texto.contains("ligue para 180") ||
+            texto.contains("ligue para o 180") ||
+            texto.contains("ligar para o 180") ||
+            texto.contains("ligar para 180") -> {
+
+                ligar180(contexto)
+
             }
 
 
-            if (android.os.Build.VERSION.SDK_INT >= 29) {
-                isStatusBarContrastEnforced = false
-                isNavigationBarContrastEnforced = false
+            texto.startsWith("abrir ") -> {
+
+                val nomeApp = texto
+                    .removePrefix("abrir ")
+                    .trim()
+
+
+                abrirAplicativo(
+                    contexto,
+                    nomeApp
+                )
+
             }
 
 
-            decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            texto.contains("voltar") -> {
+
+                Toast.makeText(
+                    contexto,
+                    "Voltando",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            }
+
+
+            else -> {
+
+                Toast.makeText(
+                    contexto,
+                    "Comando não encontrado",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            }
+
         }
-
-
-        WindowInsetsControllerCompat(
-            window,
-            window.decorView
-        ).apply {
-
-            isAppearanceLightStatusBars = false
-            isAppearanceLightNavigationBars = false
-        }
-
-
-        val root = FrameLayout(this)
-        root.setBackgroundColor(Color.BLACK)
-
-        setContentView(root)
-        
-        
-
-val raiz = findViewById<View>(
-    android.R.id.content
-)
-
-aplicarFonte(raiz)
-
-
-        pedirPermissoes()
-
-pedirPermissaoNotificacao()
-
-        abrirPopupVoz()
 
     }
 
 
-    private fun pedirPermissoes() {
 
-    val permissoes = arrayOf(
+    private fun ligar180(
+        contexto: Context
+    ) {
 
-        Manifest.permission.CAMERA,
 
-        Manifest.permission.POST_NOTIFICATIONS,
+        if (
+            ContextCompat.checkSelfPermission(
+                contexto,
+                Manifest.permission.CALL_PHONE
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
 
-        Manifest.permission.RECORD_AUDIO,
 
-        Manifest.permission.READ_CONTACTS,
+            val intent = Intent(
+                Intent.ACTION_CALL
+            )
 
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION,
 
-        Manifest.permission.READ_SMS,
-        Manifest.permission.SEND_SMS,
+            intent.data = Uri.parse(
+                "tel:180"
+            )
 
-        Manifest.permission.READ_PHONE_STATE,
 
-        Manifest.permission.CALL_PHONE
+            intent.addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK
+            )
 
+
+            contexto.startActivity(intent)
+
+
+        } else {
+
+
+            Toast.makeText(
+                contexto,
+                "Permissão de telefone não concedida",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        }
+
+    }
+
+
+
+    private fun abrirAplicativo(
+        contexto: Context,
+        nome: String
+    ) {
+
+
+        val pm = contexto.packageManager
+
+
+        val apps = pm.getInstalledApplications(0)
+
+
+        for (app in apps) {
+
+
+            val nomeApp = pm
+                .getApplicationLabel(app)
+                .toString()
+                .lowercase()
+
+
+
+            if (nomeApp.contains(nome)) {
+
+
+                val intent =
+                    pm.getLaunchIntentForPackage(
+                        app.packageName
+                    )
+
+
+                if (intent != null) {
+
+
+                    intent.addFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK
+                    )
+
+
+                    contexto.startActivity(intent)
+
+
+                    return
+
+                }
+
+            }
+
+        }
+
+
+        Toast.makeText(
+            contexto,
+            "Aplicativo não encontrado",
+            Toast.LENGTH_SHORT
+        ).show()
+
+    }
+    
+    private fun ligarServico(
+    contexto: Context,
+    numero: String
+) {
+
+    if (
+        ContextCompat.checkSelfPermission(
+            contexto,
+            Manifest.permission.CALL_PHONE
+        ) == PackageManager.PERMISSION_GRANTED
+    ) {
+
+        val intent = Intent(
+            Intent.ACTION_CALL
+        )
+
+        intent.data = Uri.parse(
+            "tel:$numero"
+        )
+
+        intent.addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK
+        )
+
+        contexto.startActivity(intent)
+
+    } else {
+
+        Toast.makeText(
+            contexto,
+            "Permissão de telefone não concedida",
+            Toast.LENGTH_SHORT
+        ).show()
+
+    }
+
+}
+
+
+private fun bloquearCelular(contexto: Context) {
+
+    val dpm = contexto.getSystemService(
+        Context.DEVICE_POLICY_SERVICE
+    ) as DevicePolicyManager
+
+
+    val admin = ComponentName(
+        contexto,
+        MeuAdministrador::class.java
     )
 
 
-    val faltando = permissoes.filter {
+    if (dpm.isAdminActive(admin)) {
 
-        ContextCompat.checkSelfPermission(
-            this,
-            it
-        ) != PackageManager.PERMISSION_GRANTED
+        Toast.makeText(
+            contexto,
+            "Bloqueando celular",
+            Toast.LENGTH_SHORT
+        ).show()
+
+
+        dpm.lockNow()
+
+    } else {
+
+        Toast.makeText(
+            contexto,
+            "Administrador do dispositivo não ativado",
+            Toast.LENGTH_SHORT
+        ).show()
+
+    }
+
+}
+
+private var cameraIdLanterna: String? = null
+
+
+private fun encontrarCameraComFlash(
+    contexto: Context
+): String? {
+
+
+    val cameraManager =
+        contexto.getSystemService(
+            Context.CAMERA_SERVICE
+        ) as CameraManager
+
+
+    for (cameraId in cameraManager.cameraIdList) {
+
+
+        val caracteristicas =
+            cameraManager.getCameraCharacteristics(
+                cameraId
+            )
+
+
+        val temFlash =
+            caracteristicas.get(
+                CameraCharacteristics.FLASH_INFO_AVAILABLE
+            ) ?: false
+
+
+        if (temFlash) {
+
+            return cameraId
+
+        }
 
     }
 
 
-    if (faltando.isNotEmpty()) {
+    return null
+}
 
-        ActivityCompat.requestPermissions(
-            this,
-            faltando.toTypedArray(),
-            REQUEST_PERMISSIONS
+
+
+fun ligarLanterna(
+    contexto: Context
+) {
+
+
+    val cameraManager =
+        contexto.getSystemService(
+            Context.CAMERA_SERVICE
+        ) as CameraManager
+
+
+    cameraIdLanterna =
+        encontrarCameraComFlash(contexto)
+
+
+    if (cameraIdLanterna != null) {
+
+
+        cameraManager.setTorchMode(
+            cameraIdLanterna!!,
+            true
+        )
+
+    }
+
+}
+
+
+
+fun desligarLanterna(
+    contexto: Context
+) {
+
+
+    val cameraManager =
+        contexto.getSystemService(
+            Context.CAMERA_SERVICE
+        ) as CameraManager
+
+
+    cameraIdLanterna?.let {
+
+
+        cameraManager.setTorchMode(
+            it,
+            false
+        )
+
+    }
+
+}
+
+fun vibrar(
+    contexto: Context
+) {
+
+    val vibrator =
+        contexto.getSystemService(
+            Context.VIBRATOR_SERVICE
+        ) as Vibrator
+
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+        vibrator.vibrate(
+            VibrationEffect.createOneShot(
+                500,
+                VibrationEffect.DEFAULT_AMPLITUDE
+            )
         )
 
     } else {
 
-        ativarAdministrador()
+        vibrator.vibrate(500)
 
     }
 
 }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+private fun enviarNotificacao(
+    contexto: Context,
+    mensagem: String
+) {
 
-        super.onRequestPermissionsResult(
-            requestCode,
-            permissions,
-            grantResults
+    val canalId = "assistente"
+
+
+    val notificationManager =
+        contexto.getSystemService(
+            Context.NOTIFICATION_SERVICE
+        ) as android.app.NotificationManager
+
+
+
+    if (android.os.Build.VERSION.SDK_INT >= 26) {
+
+        val canal = android.app.NotificationChannel(
+            canalId,
+            "Assistente",
+            android.app.NotificationManager.IMPORTANCE_DEFAULT
         )
 
-if (requestCode == REQUEST_NOTIFICACAO) {
-
-    if (grantResults.isNotEmpty() &&
-        grantResults[0] == PackageManager.PERMISSION_GRANTED
-    ) {
-
-        // notificações liberadas
+        notificationManager.createNotificationChannel(
+            canal
+        )
 
     }
 
-}
-
-        if (requestCode == REQUEST_PERMISSIONS) {
-
-            if (grantResults.all {
-                    it == PackageManager.PERMISSION_GRANTED
-                }) {
-
-                ativarAdministrador()
-
-            }
-
-        }
-    }
 
 
-private fun aplicarFonte(view: View) {
+    val notificacao =
+        androidx.core.app.NotificationCompat.Builder(
+            contexto,
+            canalId
+        )
+            .setSmallIcon(
+                R.mipmap.ic_launcher
+            )
+            .setContentTitle(
+                "Assistente"
+            )
+            .setContentText(
+                mensagem
+            )
+            .setPriority(
+                androidx.core.app.NotificationCompat.PRIORITY_DEFAULT
+            )
+            .build()
 
-    val fonte = Typeface.createFromAsset(
-        assets,
-        "font.ttf"
+
+
+    notificationManager.notify(
+        1,
+        notificacao
     )
 
-
-    if (view is TextView) {
-
-        view.typeface = fonte
-
-    }
-
-
-    if (view is ViewGroup) {
-
-        for (i in 0 until view.childCount) {
-
-            aplicarFonte(
-                view.getChildAt(i)
-            )
-
-        }
-
-    }
-
 }
 
+private fun enviarLocalWhatsApp180(
+    contexto: Context
+) {
 
-    private fun ativarAdministrador() {
-
-        adminComponent = ComponentName(
-            this,
-            MeuAdministrador::class.java
+    val fusedLocationClient =
+        LocationServices.getFusedLocationProviderClient(
+            contexto
         )
 
 
-        val intent = Intent(
-            DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
-        )
-
-
-        intent.putExtra(
-            DevicePolicyManager.EXTRA_DEVICE_ADMIN,
-            adminComponent
-        )
-
-
-        intent.putExtra(
-            DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-            "Ative o administrador para liberar funções de segurança"
-        )
-
-
-        startActivity(intent)
-
-    }
-
-
-
-    private fun abrirPopupVoz() {
-
-
-        val dialog = Dialog(this)
-
-
-        val view = layoutInflater.inflate(
-            R.layout.popup_voz,
-            null
-        )
-
-
-        val texto = view.findViewById<TextView>(
-            R.id.textoVoz
-        )
-
-
-        val botao = view.findViewById<Button>(
-            R.id.botaoOuvir
-        )
-
-
-        dialog.setContentView(view)
-
-
-        dialog.window?.setBackgroundDrawable(
-            ColorDrawable(Color.TRANSPARENT)
-        )
-
-
-        dialog.show()
-
-
-
-        botao.setOnClickListener {
-
-            iniciarReconhecimento(texto)
-
-        }
-
-    }
-
-
-
-    private fun iniciarReconhecimento(
-        texto: TextView
+    if (
+        ContextCompat.checkSelfPermission(
+            contexto,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED
     ) {
 
+        Toast.makeText(
+            contexto,
+            "Permissão de localização negada",
+            Toast.LENGTH_SHORT
+        ).show()
 
-        speechRecognizer =
-            SpeechRecognizer.createSpeechRecognizer(this)
-
-
-
-        val intent = Intent(
-            RecognizerIntent.ACTION_RECOGNIZE_SPEECH
-        )
-
-
-        intent.putExtra(
-            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-        )
+        return
+    }
 
 
-        intent.putExtra(
-            RecognizerIntent.EXTRA_LANGUAGE,
-            "pt-BR"
-        )
+    fusedLocationClient.lastLocation
+        .addOnSuccessListener { local ->
 
 
-
-        speechRecognizer.setRecognitionListener(
-
-            object : RecognitionListener {
+            if (local != null) {
 
 
-                override fun onResults(results: Bundle?) {
+                val mensagem =
+                    "Preciso de ajuda. Minha localização:\n" +
+                    "https://maps.google.com/?q=${local.latitude},${local.longitude}"
 
 
-                    val resultado =
-                        results?.getStringArrayList(
-                            SpeechRecognizer.RESULTS_RECOGNITION
-                        )
+                val uri = Uri.parse(
+                    "https://wa.me/556196100180?text=" +
+                            Uri.encode(mensagem)
+                )
 
 
-                    if (!resultado.isNullOrEmpty()) {
-
-                        texto.text = resultado[0]
-
-                        Comandos.executar(
-    this@MainActivity,
-    resultado[0]
-)
-
-                    }
-
-                }
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    uri
+                )
 
 
-
-                override fun onError(error: Int) {
-
-                    texto.text =
-                        "Não foi possível reconhecer"
-
-                }
+                intent.addFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK
+                )
 
 
+                contexto.startActivity(intent)
 
-                override fun onReadyForSpeech(params: Bundle?) {}
-                override fun onBeginningOfSpeech() {}
-                override fun onRmsChanged(rmsdB: Float) {}
-                override fun onBufferReceived(buffer: ByteArray?) {}
-                override fun onEndOfSpeech() {}
-                override fun onPartialResults(partialResults: Bundle?) {}
 
-                override fun onEvent(
-                    eventType: Int,
-                    params: Bundle?
-                ) {}
+            } else {
+
+
+                Toast.makeText(
+                    contexto,
+                    "Não foi possível obter localização",
+                    Toast.LENGTH_SHORT
+                ).show()
 
             }
 
-        )
-
-
-        speechRecognizer.startListening(intent)
-
-    }
-
-
-private val REQUEST_NOTIFICACAO = 200
-
-
-private fun pedirPermissaoNotificacao() {
-
-    if (android.os.Build.VERSION.SDK_INT >= 33) {
-
-        if (
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.POST_NOTIFICATIONS
-                ),
-                REQUEST_NOTIFICACAO
-            )
-
         }
 
+}
+
+private fun enviarApoios(
+    contexto: Context
+) {
+
+    val mensagem = """
+190 - Polícia Militar (emergências policiais)
+191 - Polícia Rodoviária Federal (emergências em rodovias federais)
+192 - SAMU (atendimento médico de urgência)
+193 - Corpo de Bombeiros (incêndios e resgates)
+180 - Central de Atendimento à Mulher
+181 - Disque Denúncia (denúncias)
+156 - Serviços públicos municipais (varia conforme a cidade)
+188 - CVV (apoio emocional)
+190, 191, 192, 193 - Serviços de emergência
+""".trimIndent()
+
+
+    val canalId = "apoios_assistente"
+
+
+    val notificationManager =
+        contexto.getSystemService(
+            Context.NOTIFICATION_SERVICE
+        ) as android.app.NotificationManager
+
+
+
+    if (android.os.Build.VERSION.SDK_INT >= 26) {
+
+        val canal = android.app.NotificationChannel(
+            canalId,
+            "Apoios",
+            android.app.NotificationManager.IMPORTANCE_HIGH
+        )
+
+        notificationManager.createNotificationChannel(
+            canal
+        )
+
     }
 
+
+
+    val notificacao =
+        androidx.core.app.NotificationCompat.Builder(
+            contexto,
+            canalId
+        )
+            .setSmallIcon(
+                R.mipmap.ic_launcher
+            )
+            .setContentTitle(
+                "Seus apoios"
+            )
+            .setStyle(
+                androidx.core.app.NotificationCompat.BigTextStyle()
+                    .bigText(mensagem)
+            )
+            .setContentText(
+                "Serviços de ajuda disponíveis"
+            )
+            .build()
+
+
+
+    notificationManager.notify(
+        10,
+        notificacao
+    )
+
 }
-    
-
-
 }
