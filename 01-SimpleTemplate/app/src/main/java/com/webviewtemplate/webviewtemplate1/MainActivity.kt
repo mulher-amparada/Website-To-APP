@@ -6,7 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.webkit.WebView
 import android.window.OnBackInvokedDispatcher
-import com.webviewtemplate.webviewtemplate.databinding.ActivityMainBinding
+import com.webviewtemplate.webviewtemplate1.databinding.ActivityMainBinding
 
 class MainActivity : Activity() {
     // you can make offline application with local file
