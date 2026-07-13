@@ -115,7 +115,7 @@ pedirPermissaoNotificacao()
 
     val permissoes = arrayOf(
 
-        Manifest.permission.CAMERA,
+        
         
         Manifest.permission.READ_CALENDAR,
         
@@ -132,8 +132,7 @@ pedirPermissaoNotificacao()
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION,
 
-        Manifest.permission.READ_SMS,
-        Manifest.permission.SEND_SMS,
+        
         
         Manifest.permission.READ_MEDIA_IMAGES,
 Manifest.permission.READ_MEDIA_VIDEO,
