@@ -283,26 +283,6 @@ texto.contains("desligar lanterna") -> {
 
 }
 
-private fun bloquearCelular(contexto: Context) {
-
-    val dpm = contexto.getSystemService(
-        Context.DEVICE_POLICY_SERVICE
-    ) as DevicePolicyManager
-
-
-    val admin = ComponentName(
-        contexto,
-        MeuAdministrador::class.java
-    )
-
-
-    if (dpm.isAdminActive(admin)) {
-
-        dpm.lockNow()
-
-    }
-
-}
 
 private fun bloquearCelular(contexto: Context) {
 
