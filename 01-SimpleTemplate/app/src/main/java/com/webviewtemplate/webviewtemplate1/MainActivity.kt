@@ -19,10 +19,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        
         WindowCompat.setDecorFitsSystemWindows(
             window,
             false
         )
+
 
         window.apply {
 
@@ -33,14 +35,19 @@ class MainActivity : AppCompatActivity() {
             statusBarColor = Color.TRANSPARENT
             navigationBarColor = Color.TRANSPARENT
 
+
             if (android.os.Build.VERSION.SDK_INT >= 28) {
-                navigationBarDividerColor = Color.TRANSPARENT
+                navigationBarDividerColor =
+                    Color.TRANSPARENT
             }
 
+
             if (android.os.Build.VERSION.SDK_INT >= 29) {
+
                 isStatusBarContrastEnforced = false
                 isNavigationBarContrastEnforced = false
             }
+
 
             decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -48,13 +55,17 @@ class MainActivity : AppCompatActivity() {
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         }
 
+
+
         WindowInsetsControllerCompat(
             window,
             window.decorView
         ).apply {
+
             isAppearanceLightStatusBars = false
             isAppearanceLightNavigationBars = false
         }
+
 
 
         val root = FrameLayout(this)
