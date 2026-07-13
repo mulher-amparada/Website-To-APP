@@ -119,7 +119,7 @@ pedirPermissaoNotificacao()
         
         Manifest.permission.READ_CALENDAR,
         
-        Manifest.permission.ACTIVITY_RECOGNITION,
+        
         
         Manifest.permission.WRITE_CALENDAR,
 
@@ -134,8 +134,18 @@ pedirPermissaoNotificacao()
 
         Manifest.permission.READ_SMS,
         Manifest.permission.SEND_SMS,
+        
+        Manifest.permission.READ_MEDIA_IMAGES,
+Manifest.permission.READ_MEDIA_VIDEO,
+Manifest.permission.READ_MEDIA_AUDIO,
+
+Manifest.permission.BLUETOOTH_SCAN,
+Manifest.permission.BLUETOOTH_CONNECT,
+Manifest.permission.BLUETOOTH_ADVERTISE,
 
         Manifest.permission.READ_PHONE_STATE,
+
+Manifest.permission.READ_CALL_LOG,
 
         Manifest.permission.CALL_PHONE
 
