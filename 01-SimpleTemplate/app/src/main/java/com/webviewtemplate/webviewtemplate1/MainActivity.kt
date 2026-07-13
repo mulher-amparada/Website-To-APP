@@ -286,7 +286,7 @@ class MainActivity : AppCompatActivity() {
                         texto.text = resultado[0]
 
                         Comandos.executar(
-    this,
+    this@MainActivity,
     resultado[0]
 )
 
