@@ -56,11 +56,11 @@ object Comandos {
 }
 
 texto.startsWith("abrir música ") ||
-texto.startsWith("abrir video ") -> {
+texto.startsWith("abrir vídeo ") -> {
 
     val nome = texto
         .replace("abrir música ", "")
-        .replace("abrir video ", "")
+        .replace("abrir vídeo ", "")
         .trim()
 
     abrirMidia(
