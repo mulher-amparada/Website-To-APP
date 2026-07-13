@@ -42,8 +42,9 @@ android {
     }
 
     buildFeatures {
-        compose false
-    }
+    compose false
+    viewBinding true
+}
 
     packaging {
         resources {
