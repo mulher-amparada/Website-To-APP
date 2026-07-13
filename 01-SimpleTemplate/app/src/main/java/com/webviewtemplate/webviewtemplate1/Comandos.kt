@@ -804,7 +804,7 @@ private fun iniciarTimer(
 
             notificationManager.cancel(500)
 
-            vibrar(contexto)
+            
 
             enviarNotificacao(
                 contexto,
