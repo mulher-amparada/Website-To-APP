@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 private val REQUEST_PERMISSIONS = 100
 
 private lateinit var adminComponent: ComponentName
+private lateinit var speechRecognizer: SpeechRecognizer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,10 +76,12 @@ private lateinit var adminComponent: ComponentName
         root.setBackgroundColor(Color.BLACK)
 
         setContentView(root)
-        
+
         pedirPermissoes()
+        
+        abrirPopupVoz()
     }
-    
+
     private fun pedirPermissoes() {
 
     val permissoes = arrayOf(
@@ -188,4 +191,96 @@ private fun ativarAdministrador() {
     startActivity(intent)
 }
 
+private fun iniciarReconhecimento(texto: TextView) {
+
+    speechRecognizer =
+        SpeechRecognizer.createSpeechRecognizer(this)
+
+
+    val intent = Intent(
+        RecognizerIntent.ACTION_RECOGNIZE_SPEECH
+    )
+
+
+    intent.putExtra(
+        RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+    )
+
+
+    intent.putExtra(
+        RecognizerIntent.EXTRA_LANGUAGE,
+        "pt-BR"
+    )
+
+
+    speechRecognizer.setRecognitionListener(
+        object : RecognitionListener {
+
+            override fun onResults(results: Bundle?) {
+
+                val fala =
+                    results?.getStringArrayList(
+                        SpeechRecognizer.RESULTS_RECOGNITION
+                    )?.firstOrNull()
+
+
+                texto.text = fala ?: "Não entendi"
+
+            }
+
+
+            override fun onError(error: Int) {
+                texto.text = "Erro de voz"
+            }
+
+            override fun onReadyForSpeech(params: Bundle?) {}
+            override fun onBeginningOfSpeech() {}
+            override fun onRmsChanged(rmsdB: Float) {}
+            override fun onBufferReceived(buffer: ByteArray?) {}
+            override fun onEndOfSpeech() {}
+            override fun onPartialResults(partialResults: Bundle?) {}
+            override fun onEvent(eventType: Int, params: Bundle?) {}
+
+        }
+    )
+
+
+    speechRecognizer.startListening(intent)
+}
+
+private fun abrirPopupVoz() {
+
+    val dialog = Dialog(this)
+
+    val view = layoutInflater.inflate(
+        R.layout.popup_voz,
+        null
+    )
+
+    val texto = view.findViewById<TextView>(
+        R.id.textoVoz
+    )
+
+    val botao = view.findViewById<Button>(
+        R.id.botaoOuvir
+    )
+
+
+    dialog.setContentView(view)
+
+    dialog.window?.setBackgroundDrawable(
+        ColorDrawable(Color.TRANSPARENT)
+    )
+
+
+    dialog.show()
+
+
+    botao.setOnClickListener {
+
+        iniciarReconhecimento(texto)
+
+    }
+}
 }
