@@ -119,6 +119,8 @@ pedirPermissaoNotificacao()
         
         Manifest.permission.READ_CALENDAR,
         
+        Manifest.permission.ACTIVITY_RECOGNITION,
+        
         Manifest.permission.WRITE_CALENDAR,
 
         Manifest.permission.POST_NOTIFICATIONS,
