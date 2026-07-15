@@ -101,7 +101,7 @@ val raiz = findViewById<View>(
 aplicarFonte(raiz)
 
 
-        pedirPermissoes()
+        AbrirBiometria()
 
 
 
@@ -346,5 +346,63 @@ private fun pedirPermissaoNotificacao() {
     }
 }
 
+private fun abrirBiometria() {
+
+    val executor = ContextCompat.getMainExecutor(this)
+
+    val biometricPrompt = BiometricPrompt(
+        this,
+        executor,
+        object : BiometricPrompt.AuthenticationCallback() {
+
+            override fun onAuthenticationSucceeded(
+                result: BiometricPrompt.AuthenticationResult
+            ) {
+                super.onAuthenticationSucceeded(result)
+
+                // Liberou, continua o app
+                iniciarApp()
+            }
+
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+            }
+
+
+            override fun onAuthenticationError(
+                errorCode: Int,
+                errString: CharSequence
+            ) {
+                super.onAuthenticationError(
+                    errorCode,
+                    errString
+                )
+
+                finish()
+            }
+        }
+    )
+
+
+    val info = BiometricPrompt.PromptInfo.Builder()
+        .setTitle("Desbloquear aplicativo")
+        .setSubtitle("Use biometria ou senha do dispositivo")
+        .setAllowedAuthenticators(
+            BiometricManager.Authenticators.BIOMETRIC_WEAK or
+            BiometricManager.Authenticators.DEVICE_CREDENTIAL
+        )
+        .build()
+
+
+    biometricPrompt.authenticate(info)
+
+}
+
+private fun iniciarApp() {
+
+    pedirPermissao()
+
+}
 
 }
