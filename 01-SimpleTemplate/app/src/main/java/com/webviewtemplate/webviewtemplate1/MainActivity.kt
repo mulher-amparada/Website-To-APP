@@ -1,5 +1,6 @@
 package com.webviewtemplate.webviewtemplate1
 
+
 import android.Manifest
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
@@ -21,7 +22,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
 import android.graphics.Typeface
 
 import android.view.ViewGroup
@@ -101,7 +103,7 @@ val raiz = findViewById<View>(
 aplicarFonte(raiz)
 
 
-        AbrirBiometria()
+        abrirBiometria()
 
 
 
@@ -401,7 +403,7 @@ private fun abrirBiometria() {
 
 private fun iniciarApp() {
 
-    pedirPermissao()
+    pedirPermissoes()
 
 }
 
