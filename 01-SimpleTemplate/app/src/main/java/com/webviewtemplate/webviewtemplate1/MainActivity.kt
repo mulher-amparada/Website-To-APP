@@ -1,20 +1,19 @@
-package com.webviewtemplate.webviewtemplate1
+package com.assist
 
 import android.Manifest
-import android.app.Dialog
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+
 import android.os.Bundle
-import android.speech.RecognitionListener
+
 import android.speech.RecognizerIntent
-import android.speech.SpeechRecognizer
+
 import android.view.View
 import android.view.WindowManager
-import android.widget.Button
+
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -22,9 +21,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricPrompt
-
 
 import android.graphics.Typeface
 
@@ -40,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var adminComponent: ComponentName
 
-    private lateinit var speechRecognizer: SpeechRecognizer
+    
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,7 +101,11 @@ val raiz = findViewById<View>(
 aplicarFonte(raiz)
 
 
-        abrirBiometria()
+        pedirPermissoes()
+
+
+
+        
 
     }
 
@@ -168,12 +168,12 @@ Manifest.permission.READ_CALL_LOG,
             REQUEST_PERMISSIONS
         )
 
-    } else {
+} else {
 
-        ativarAdministrador()
+    ativarAdministrador()
+    iniciarReconhecimento()
 
-    }
-
+}
 }
 
     override fun onRequestPermissionsResult(
@@ -196,6 +196,8 @@ if (requestCode == REQUEST_NOTIFICACAO) {
 
         // notificações liberadas
 
+
+
     }
 
 }
@@ -207,6 +209,7 @@ if (requestCode == REQUEST_NOTIFICACAO) {
                 }) {
 
                 ativarAdministrador()
+                iniciarReconhecimento()
 
             }
 
@@ -275,140 +278,27 @@ private fun aplicarFonte(view: View) {
 
 
 
-    private fun abrirPopupVoz() {
+    
 
 
-        val dialog = Dialog(this)
-
-
-        val view = layoutInflater.inflate(
-            R.layout.popup_voz,
-            null
-        )
-        
-        aplicarFonte(view)
-
-
-        val texto = view.findViewById<TextView>(
-            R.id.textoVoz
-        )
-
-
-        val botao = view.findViewById<Button>(
-            R.id.botaoOuvir
-        )
-
-
-        dialog.setContentView(view)
-
-
-        dialog.window?.setBackgroundDrawable(
-            ColorDrawable(Color.TRANSPARENT)
-        )
-
-
-        dialog.show()
-
-
-
-        botao.setOnClickListener {
-
-            iniciarReconhecimento(texto)
-
-        }
-
-    }
-
-
-
-    private fun iniciarReconhecimento(
-        texto: TextView
-    ) {
-
-
-        speechRecognizer =
-            SpeechRecognizer.createSpeechRecognizer(this)
-
-
-
-        val intent = Intent(
-            RecognizerIntent.ACTION_RECOGNIZE_SPEECH
-        )
-
-
-        intent.putExtra(
+    private fun iniciarReconhecimento() {
+    val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+        putExtra(
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
         )
-
-
-        intent.putExtra(
+        putExtra(
             RecognizerIntent.EXTRA_LANGUAGE,
             "pt-BR"
         )
-
-
-
-        speechRecognizer.setRecognitionListener(
-
-            object : RecognitionListener {
-
-
-                override fun onResults(results: Bundle?) {
-
-
-                    val resultado =
-                        results?.getStringArrayList(
-                            SpeechRecognizer.RESULTS_RECOGNITION
-                        )
-
-
-                    if (!resultado.isNullOrEmpty()) {
-
-                        texto.text = resultado[0]
-
-                        Comandos.executar(
-    this@MainActivity,
-    resultado[0]
-)
-
-                    }
-
-                }
-
-
-
-                override fun onError(error: Int) {
-
-                    texto.text =
-                        "Não foi possível reconhecer"
-
-                }
-
-
-
-                override fun onReadyForSpeech(params: Bundle?) {}
-                override fun onBeginningOfSpeech() {}
-                override fun onRmsChanged(rmsdB: Float) {}
-                override fun onBufferReceived(buffer: ByteArray?) {}
-                override fun onEndOfSpeech() {}
-                override fun onPartialResults(partialResults: Bundle?) {}
-
-                override fun onEvent(
-                    eventType: Int,
-                    params: Bundle?
-                ) {}
-
-            }
-
+        putExtra(
+            RecognizerIntent.EXTRA_PROMPT,
+            "Fale agora"
         )
-
-
-        speechRecognizer.startListening(intent)
-
     }
 
-
+    startActivityForResult(intent, 1)
+}
 private val REQUEST_NOTIFICACAO = 200
 
 
@@ -437,67 +327,24 @@ private fun pedirPermissaoNotificacao() {
 
 }
     
-private fun abrirBiometria() {
+    
+    override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+) {
+    super.onActivityResult(requestCode, resultCode, data)
 
-    val executor = ContextCompat.getMainExecutor(this)
-
-    val biometricPrompt = BiometricPrompt(
-        this,
-        executor,
-        object : BiometricPrompt.AuthenticationCallback() {
-
-            override fun onAuthenticationSucceeded(
-                result: BiometricPrompt.AuthenticationResult
-            ) {
-                super.onAuthenticationSucceeded(result)
-
-                // Liberou, continua o app
-                iniciarApp()
-            }
-
-
-            override fun onAuthenticationFailed() {
-                super.onAuthenticationFailed()
-            }
-
-
-            override fun onAuthenticationError(
-                errorCode: Int,
-                errString: CharSequence
-            ) {
-                super.onAuthenticationError(
-                    errorCode,
-                    errString
-                )
-
-                finish()
-            }
-        }
-    )
-
-
-    val info = BiometricPrompt.PromptInfo.Builder()
-        .setTitle("Desbloquear aplicativo")
-        .setSubtitle("Use biometria ou senha do dispositivo")
-        .setAllowedAuthenticators(
-            BiometricManager.Authenticators.BIOMETRIC_WEAK or
-            BiometricManager.Authenticators.DEVICE_CREDENTIAL
+    if (requestCode == 1 && resultCode == RESULT_OK) {
+        val resultado = data?.getStringArrayListExtra(
+            RecognizerIntent.EXTRA_RESULTS
         )
-        .build()
 
-
-    biometricPrompt.authenticate(info)
-
+        if (!resultado.isNullOrEmpty()) {
+            Comandos.executar(this, resultado[0])
+        }
+    }
 }
 
-private fun iniciarApp() {
-
-    pedirPermissoes()
-
-    pedirPermissaoNotificacao()
-
-    abrirPopupVoz()
-
-}
 
 }
