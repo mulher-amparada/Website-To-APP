@@ -85,9 +85,69 @@
             android:name=".FileActivity"
             android:exported="false"/>
 
-        <activity
-            android:name=".EscolherIconeActivity"
-            android:exported="false"/>
+  <activity
+    android:name=".EscolherIconeActivity"
+    android:exported="false" />
+
+<activity-alias
+    android:name=".IconeOriginal"
+    android:targetActivity=".MainActivity"
+    android:icon="@mipmap/ic_launcher"
+    android:label="Mulher Amparada"
+    android:enabled="true"
+    android:exported="true">
+
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+    </intent-filter>
+
+</activity-alias>
+
+<activity-alias
+    android:name=".Icone1"
+    android:targetActivity=".MainActivity"
+    android:icon="@drawable/icon1"
+    android:label="Mulher Amparada"
+    android:enabled="false"
+    android:exported="true">
+
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+    </intent-filter>
+
+</activity-alias>
+
+<activity-alias
+    android:name=".Icone2"
+    android:targetActivity=".MainActivity"
+    android:icon="@drawable/icon2"
+    android:label="Mulher Amparada"
+    android:enabled="false"
+    android:exported="true">
+
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+    </intent-filter>
+
+</activity-alias>
+
+<activity-alias
+    android:name=".Icone3"
+    android:targetActivity=".MainActivity"
+    android:icon="@drawable/icon3"
+    android:label="Mulher Amparada"
+    android:enabled="false"
+    android:exported="true">
+
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+    </intent-filter>
+
+</activity-alias>
 
         <activity
             android:name=".GravarActivity"
