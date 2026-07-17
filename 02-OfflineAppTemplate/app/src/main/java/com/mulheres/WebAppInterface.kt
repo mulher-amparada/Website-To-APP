@@ -22,28 +22,47 @@ class WebAppInterface(
         } catch (_: Exception) {
         }
     }
+    
+@JavascriptInterface
+fun solicitarAdministrador() {
 
-    @JavascriptInterface
-    fun solicitarAdministrador() {
-        val component = ComponentName(
-            activity,
-            MyDeviceAdminReceiver::class.java
-        )
+    try {
 
-        val intent = Intent("android.app.action.ADD_DEVICE_ADMIN")
+        val component =
+            ComponentName(
+                activity,
+                MyDeviceAdminReceiver::class.java
+            )
+
+
+        val intent =
+            Intent(
+                DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
+            )
+
 
         intent.putExtra(
-            "android.app.extra.DEVICE_ADMIN",
-            component as Parcelable
+            DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+            component
         )
 
+
         intent.putExtra(
-            "android.app.extra.ADD_EXPLANATION",
+            DevicePolicyManager.EXTRA_ADD_EXPLANATION,
             "Este aplicativo precisa da permissão de Administrador do dispositivo."
         )
 
+
         activity.startActivity(intent)
+
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
+
     }
+
+}
 
     @JavascriptInterface
     fun bloquearTela() {
