@@ -1,27 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Internet / WebView -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Localização -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <!-- Contatos -->
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+
+    <!-- SMS -->
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+
+    <!-- Ligações -->
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <!-- Microfone -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
+    <!-- Vibração -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <!-- Notificações Android 13+ -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <!-- Foreground Service -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE"/>
+
+    <!-- Wake Lock -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
 
     <application
-        android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
+        android:theme="@style/Theme.App"
+        android:label="Mulher Amparada"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.androidWebViewOfflineApplication"
-        tools:targetApi="31">
+        android:allowBackup="true"
+        android:supportsRtl="true">
+
+
+        <!-- Tela principal -->
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.androidWebViewOfflineApplication">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="true">
 
-                <category android:name="android.intent.category.LAUNCHER" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
+
+
+        <!-- Serviço de detecção de palmas -->
+        <service
+            android:name=".PalmaService"
+            android:exported="false"
+            android:foregroundServiceType="microphone"/>
+
+
+        <!-- Administrador do dispositivo -->
+        <receiver
+            android:name=".MyDeviceAdminReceiver"
+            android:permission="android.permission.BIND_DEVICE_ADMIN"
+            android:exported="true">
+
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin"/>
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
+            </intent-filter>
+
+        </receiver>
+
+
+        <!-- Outras telas caso existam -->
+        <activity
+            android:name=".FileActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".EscolherIconeActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".GravarActivity"
+            android:exported="false"/>
+
+
     </application>
 
 </manifest>
