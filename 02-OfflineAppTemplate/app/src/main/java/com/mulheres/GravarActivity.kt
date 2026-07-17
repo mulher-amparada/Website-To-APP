@@ -1,6 +1,10 @@
 package com.mulheres
 
-import com.mulheres.WebAppInterface
+import android.os.Build
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import android.Manifest
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -45,8 +49,6 @@ window.navigationBarColor = Color.BLACK
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {  
     window.isNavigationBarContrastEnforced = false  
 }  
-
-setContentView(R.layout.activity_main)  
 
 WindowCompat.setDecorFitsSystemWindows(window, false)  
 
