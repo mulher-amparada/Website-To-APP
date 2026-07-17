@@ -12,8 +12,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
+
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -256,46 +255,21 @@ webView.webViewClient = object : WebViewClient() {
         return false  
     }  
 
-    override fun onPageFinished(  
-        view: WebView?,  
-        url: String?  
-    ) {  
-        super.onPageFinished(view, url)  
+    override fun onPageFinished(
+    view: WebView?,
+    url: String?
+) {
+    super.onPageFinished(view, url)
 
-        if (semInternet()) {  
-            val js = """  
-                (function() {  
-
-                    var style = document.createElement('style');  
-
-                    style.innerHTML = `  
-                        @font-face {  
-                            font-family: 'Quicksand';  
-                            src: url('file:///android_asset/font.ttf');  
-                        }  
-
-                        * {  
-                            font-family: 'Quicksand' !important;  
-                        }  
-                    `;  
-
-                    document.head.appendChild(style);  
-
-                })();  
-            """.trimIndent()  
-
-            view?.evaluateJavascript(js, null)  
-        }  
-
-        view?.evaluateJavascript(
-    """
-    if(typeof mostrarConteudo === 'function'){
-        mostrarConteudo();
-    }
-    """.trimIndent(),
-    null
-)
-    }  
+    view?.evaluateJavascript(
+        """
+        if(typeof mostrarConteudo === 'function'){
+            mostrarConteudo();
+        }
+        """.trimIndent(),
+        null
+    )
+}
 }
 
 }
@@ -397,18 +371,6 @@ Manifest.permission.RECORD_AUDIO
 )
 }
 
-private fun semInternet(): Boolean {
-val connectivityManager =
-getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-val network = connectivityManager.activeNetwork ?: return true  
-
-val capabilities =  
-    connectivityManager.getNetworkCapabilities(network) ?: return true  
-
-return !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-
-}
 
 private fun temPermissoes(): Boolean {
 return ContextCompat.checkSelfPermission(
