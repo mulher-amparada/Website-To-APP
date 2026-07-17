@@ -261,9 +261,7 @@ delete.layoutParams =
             Color.TRANSPARENT
         )
 
-        delete.setTextColor(
-            Color.rgb(255,45,85)
-        )
+        
 
 
         container.addView(icon)
