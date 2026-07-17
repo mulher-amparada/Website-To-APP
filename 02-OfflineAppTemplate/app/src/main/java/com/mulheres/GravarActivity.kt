@@ -30,8 +30,31 @@ class GravarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.statusBarColor = Color.TRANSPARENT
-        window.navigationBarColor = Color.TRANSPARENT
+        WindowCompat.setDecorFitsSystemWindows(window, false)  
+
+val controller = WindowInsetsControllerCompat(window, window.decorView)  
+controller.show(WindowInsetsCompat.Type.systemBars())  
+controller.systemBarsBehavior =  
+    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE  
+controller.isAppearanceLightStatusBars = false  
+controller.isAppearanceLightNavigationBars = false  
+
+window.statusBarColor = Color.BLACK  
+window.navigationBarColor = Color.BLACK  
+
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {  
+    window.isNavigationBarContrastEnforced = false  
+}  
+
+setContentView(R.layout.activity_main)  
+
+WindowCompat.setDecorFitsSystemWindows(window, false)  
+
+ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, insets ->  
+    insets.getInsets(WindowInsetsCompat.Type.systemBars())  
+    view.setPadding(0, 0, 0, 0)  
+    insets  
+}  
 
         setContentView(R.layout.activity_gravar)
 
