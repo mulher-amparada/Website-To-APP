@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-        namespace 'com.example.androidWebViewOfflineApplication'
+        namespace 'com.mulheres'
     compileSdk 34
 
     defaultConfig {
-                applicationId "com.example.androidWebViewOfflineApplication"
+                applicationId "com.mulheres"
         minSdk 23
         targetSdk 34
 
