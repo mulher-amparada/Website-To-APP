@@ -120,7 +120,12 @@ class WebAppInterface(
             .apply()
     }
 
-    
+    @JavascriptInterface
+    fun openRecorder() {
+        activity.startActivity(
+            Intent(activity, GravarActivity::class.java)
+        )
+    }
 
     @JavascriptInterface
     fun abrirContatos() {
@@ -224,6 +229,13 @@ class WebAppInterface(
             .putString("lista", lista)
             .apply()
     }
+    
+    @JavascriptInterface
+fun openRecorder() {
+    activity.startActivity(
+        Intent(activity, GravarActivity::class.java)
+    )
+}
 
     @JavascriptInterface
     fun ligarDireto(numero: String) {
