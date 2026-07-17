@@ -390,7 +390,6 @@ this,
 arrayOf(
 Manifest.permission.ACCESS_FINE_LOCATION,
 Manifest.permission.READ_CONTACTS,
-Manifest.permission.SEND_SMS,
 Manifest.permission.CALL_PHONE,
 Manifest.permission.RECORD_AUDIO
 ),
@@ -420,11 +419,6 @@ Manifest.permission.ACCESS_FINE_LOCATION
 ContextCompat.checkSelfPermission(  
     this,  
     Manifest.permission.READ_CONTACTS  
-) == PackageManager.PERMISSION_GRANTED &&  
-
-ContextCompat.checkSelfPermission(  
-    this,  
-    Manifest.permission.SEND_SMS  
 ) == PackageManager.PERMISSION_GRANTED &&  
 
 ContextCompat.checkSelfPermission(  
