@@ -323,10 +323,14 @@ shakeListener = object : SensorEventListener {
 
             val agora = System.currentTimeMillis()  
 
-            if (agora - ultimoShake > 4000) {  
-                ultimoShake = agora  
-                ligarDireto("180")  
-            }  
+if (agora - ultimoShake > 4000) {
+    ultimoShake = agora
+
+    val intent = Intent(Intent.ACTION_DIAL).apply {
+        data = Uri.parse("tel:180")
+    }
+    startActivity(intent)
+}
         }  
     }  
 
