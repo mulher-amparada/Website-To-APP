@@ -93,6 +93,46 @@
             android:name=".GravarActivity"
             android:exported="false"/>
 
+<receiver
+    android:name=".SosWidget"
+    android:exported="true">
+    
+    <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+    </intent-filter>
+
+    <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/sos_widget_info"/>
+</receiver>
+
+
+<receiver
+    android:name=".PalmasWidget"
+    android:exported="true">
+    
+    <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+    </intent-filter>
+
+    <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/palmas_widget_info"/>
+</receiver>
+
+
+<receiver
+    android:name=".LocalizacaoWidget"
+    android:exported="true">
+    
+    <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+    </intent-filter>
+
+    <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/localizacao_widget_info"/>
+</receiver>
 
     </application>
 
