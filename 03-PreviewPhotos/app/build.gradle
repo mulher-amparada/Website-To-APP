@@ -1,23 +1,20 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    namespace 'com.example.androidWebViewOfflineApplication'
-    compileSdk 34
+    namespace 'com.gerenciar'
+    compileSdk 36
 
     defaultConfig {
-        applicationId "com.example.androidWebViewOfflineApplication"
+        applicationId 'com.gerenciar'
         minSdk 23
-        targetSdk 34
+        targetSdk 36
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary true
-        }
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
     buildTypes {
@@ -26,42 +23,49 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
+
     buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.5.1'
-    }
-    packaging {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
+        viewBinding true
     }
 }
 
 dependencies {
 
-    implementation libs.androidx.core.ktx
-    implementation libs.androidx.lifecycle.runtime.ktx
-    implementation libs.androidx.activity.compose
-    implementation platform(libs.androidx.compose.bom)
-    implementation libs.androidx.ui
-    implementation libs.androidx.ui.graphics
-    implementation libs.androidx.ui.tooling.preview
-    implementation libs.androidx.material3
-    implementation libs.androidx.webkit
-    testImplementation libs.junit
-    androidTestImplementation libs.androidx.junit
-    androidTestImplementation libs.androidx.espresso.core
-    androidTestImplementation platform(libs.androidx.compose.bom)
-    androidTestImplementation libs.androidx.ui.test.junit4
-    debugImplementation libs.androidx.ui.tooling
-    debugImplementation libs.androidx.ui.test.manifest
+    // AndroidX
+    implementation 'androidx.core:core-ktx:1.16.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.activity:activity-ktx:1.10.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+
+    // Material Design
+    implementation 'com.google.android.material:material:1.12.0'
+
+    // Lifecycle
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.9.1'
+
+    // FileProvider
+    implementation 'androidx.core:core:1.16.0'
+
+    // Media3
+    implementation 'androidx.media3:media3-exoplayer:1.8.0'
+    implementation 'androidx.media3:media3-ui:1.8.0'
+    implementation 'androidx.media3:media3-common:1.8.0'
+    implementation 'androidx.media3:media3-session:1.8.0'
+
+    // Zip
+    implementation 'net.lingala.zip4j:zip4j:2.11.5'
+
+    // Testes
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }
