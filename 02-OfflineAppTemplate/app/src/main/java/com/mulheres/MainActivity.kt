@@ -591,7 +591,7 @@ fun iniciarBiometria() {
     }
 }
 
-fun getDestinoBiometria(): Int = destinoBiometria
+
 
 @JavascriptInterface
 fun iniciarBiometriaPrincesa() {
@@ -736,10 +736,6 @@ fun pegarLocalizacao() {
             webView.evaluateJavascript(js, null)
         }
     }
-}
-
-fun setDestinoBiometria(value: Int) {
-    destinoBiometria = value
 }
 
 }
