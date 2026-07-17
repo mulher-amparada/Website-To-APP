@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+<title>Agenda</title>
+
+<style>
+img {
+
+width:60px;
+    height:60px;
+
+    object-fit:cover;
+
+    
+
+    flex-shrink:0;
+    }
+    
+  svg  {
+    width:60px;
+    height:60px;
+    }
+    
+@font-face {
+  font-family: "Quicksand";
+  src: url("file:///android_asset/font.ttf") format("truetype");
+  font-weight: 700;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Quicksand',sans-serif;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  
+  color:white;
+  overflow:auto;
+}
+
+/* centralização */
+.container{
+  min-height:100vh;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  padding:22px;
+}
+
+/* card principal */
+.card{
+  width:100%;
+  max-width:430px;
+
+  
+
+  
+
+  border-radius:38px;
+
+  padding:30px 22px;
+
+  text-align:center;
+
+  box-shadow:
+  0 0 40px rgba(255,255,255,0.03);
+}
+
+/* clique em mim */
+.voltar{
+  color:pink;
+
+  font-size:17px;
+  font-weight:500;
+
+  margin-bottom:28px;
+
+  cursor:pointer;
+
+  transition:0.2s;
+}
+
+.voltar:active{
+  transform:scale(0.97);
+  opacity:0.75;
+}
+
+/* ícone */
+.icon{
+  width:92px;
+  height:92px;
+
+  border-radius:30px;
+
+  background:mediumslateblue;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  margin:0 auto 22px auto;
+
+  font-size:42px;
+
+  box-shadow:
+  0 0 35px rgba(123,104,238,0.35);
+}
+
+/* título */
+h2{
+  font-size:30px;
+  font-weight:700;
+
+  margin-bottom:10px;
+}
+
+/* titulo */
+.title{
+  color:dimgray;
+
+  font-size:30px;
+
+  line-height:1.5;
+
+  margin-bottom:10px;
+  margin-top: 10px;
+    font-weight: 700px;
+}
+
+.subtitle{
+  color:#8d8d8d;
+
+  font-size:15px;
+
+  line-height:1.5;
+
+  margin-bottom:34px;
+}
+
+/* lista de botões */
+.buttons{
+  display:flex;
+  flex-direction:column;
+
+  gap:16px;
+}
+
+/* botão */
+.btn{
+  width:100%;
+
+  border:none;
+
+  border-radius:50px;
+
+  padding:19px 22px;
+
+  background:#171717;
+
+  color:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  font-size:17px;
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:0.2s;
+
+  border:1px solid #242424;
+}
+
+.btn:hover{
+  border-color:mediumslateblue;
+}
+
+.btn:active{
+  transform:scale(0.98);
+  opacity:0.85;
+}
+
+/* lado esquerdo */
+.left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+/* emoji */
+.emoji{
+  width:45px;
+  height:45px;
+
+  border-radius:16px;
+
+  
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:22px;
+}
+
+/* seta */
+.arrow{
+  font-size:20px;
+  opacity:0.5;
+}
+
+/* footer */
+.footer{
+  margin-top:30px;
+
+  color:#666;
+
+  font-size:13px;
+}
+
+/* animação entrada */
+.card{
+  animation:fade 0.5s ease;
+}
+
+@keyframes fade{
+
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+}
+
+span {
+font-size: 15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="card">
+
+    <div class="icon">
+        <img src="1.svg" alt="icone"/>
+    </div>
+
+    <h2>Meus Acessos</h2>
+
+    <div class="subtitle">
+      Tudo organizado em um único lugar.
+    </div>
+
+    <div class="buttons">
+    
+    <div class="title">
+      Funções na mesma tela:
+    </div>
+
+      <button class="btn" onclick="ir('calendario.html')">
+    
+        <div class="left">
+          <div class="emoji">
+            <img src="2.svg" alt="icone"/>
+          </div>
+          <span>Calendário menstrual com registro manual</span>
+        </div>
+
+        
+
+      </button>
+
+<button class="btn" onclick="ir('calendar.html')">
+    
+        <div class="left">
+          <div class="emoji">
+            <img src="3.svg" alt="icone"/>
+          </div>
+          <span>Calendário de eventos</span>
+        </div>
+
+        
+
+      </button>
+
+<button class="btn" onclick="ir('mapa.html')">
+    
+        <div class="left">
+          <div class="emoji">
+            <img src="4.svg" alt="icone"/>
+          </div>
+          <span>Mapa da sua região</span>
+        </div>
+
+        
+
+      </button>
+
+
+      <button class="btn" onclick="ir('caderno.html')">
+
+        <div class="left">
+          <div class="emoji">
+            <img src="5.svg" alt="icone"/>
+          </div>
+          <span>Diário e anotações</span>
+        </div>
+
+        
+
+      </button>
+
+      <button class="btn" onclick="ir('treino.html')">
+
+        <div class="left">
+          <div class="emoji">
+            <img src="6.svg" alt="icone"/>
+          </div>
+          <span>Rotina gamificada</span>
+        </div>
+
+        
+
+      </button>
+
+       <button class="btn" onclick="ir('daora.html')">
+
+        <div class="left">
+          <div class="emoji">
+            <img src="7.svg" alt="icone"/>
+          </div>
+          <span>Relógio + Localização</span>
+        </div>
+
+        
+
+       </button>
+
+       <button class="btn" onclick="ir('calc.html')">
+
+        <div class="left">
+          <div class="emoji">
+            <img src="8.svg" alt="icone"/>
+          </div>
+          <span>Calculadora</span>
+        </div>
+
+        
+
+       </button>
+
+        <button class="btn" onclick="ir('task.html')">
+
+        <div class="left">
+          <div class="emoji">
+            <img src="9.svg" alt="icone"/>
+          </div>
+          <span>Minhas tarefas</span>
+        </div>
+
+        
+
+        </button>
+
+<div class="title">
+      Funções em telas separadas:
+    </div>
+    
+<button class="btn" onclick="Android.openRecorder()">
+
+        <div class="left">
+          <div class="emoji">
+            <img src="10.svg" alt="icone"/>
+          </div>
+          <span>Gravador de voz</span>
+        </div>
+
+        
+
+        </button>
+
+<button class="btn" onclick="Android.openFiles();">
+
+        <div class="left">
+          <div class="emoji">
+            <img src="11.svg" alt="icone"/>
+          </div>
+          <span>Meus Arquivos</span>
+        </div>
+
+        
+
+        </button>
+
+<button class="btn" onclick="Android.abrirEscolherIcone();">
+
+        <div class="left">
+          <div class="emoji">
+            <img src="12.svg" alt="icone"/>
+          </div>
+          <span>Escolher ícone  do app</span>
+        </div>
+
+        
+
+        </button>
+
+
+<div class="title">
+      Funções de emergência:
+    </div>
+
+<button class="btn" onclick="ativarEbloquear();">
+
+        <div class="left">
+          <div class="emoji">
+            <img src="13.svg" alt="icone"/>
+          </div>
+          <span>Desligar o celular</span>
+        </div>
+
+        
+
+        </button>
+        
+    </div>
+
+    <div class="footer">
+      Secured By • Mulher Amparada.
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const lock = new Audio("lock.mp3");
+
+lock.preload = "auto";
+lock.volume = 1;
+
+let bloqueado = false;
+
+/* toca áudio e só depois redireciona */
+function tocarSom(callback){
+
+  if(bloqueado) return;
+
+  bloqueado = true;
+
+  lock.currentTime = 0;
+
+  const promessa = lock.play();
+
+  if(promessa !== undefined){
+
+    promessa.then(() => {
+
+      setTimeout(() => {
+        callback();
+      }, 400);
+
+    }).catch(() => {
+      callback();
+    });
+
+  }else{
+    callback();
+  }
+
+}
+
+/* ir para página */
+function ir(pagina){
+
+  tocarSom(() => {
+    window.location.href = pagina;
+  });
+
+}
+
+/* voltar */
+
+/* tocar ao sair */
+window.addEventListener("beforeunload", () => {
+
+  try{
+
+    lock.currentTime = 0;
+    lock.play();
+
+  }catch(e){}
+
+});
+
+</script>
+
+<script>
+window.addEventListener("load", () => {
+
+    let wall = "";
+
+    try {
+        wall = Android.getWallpaperUrl();
+    } catch (e) {}
+
+    if (wall && wall.length > 0) {
+
+        document.body.style.backgroundImage = `url('${wall}')`;
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
+        document.body.style.backgroundRepeat = "no-repeat";
+        document.body.style.backgroundAttachment = "fixed";
+
+    } else {
+
+        document.body.style.background = "black";
+
+    }
+});
+</script>
+
+<script>
+function ativarEbloquear() {
+    if (typeof Android === "undefined") return;
+
+    Android.solicitarAdministrador();
+
+    // Se a permissão já estiver concedida, bloqueará imediatamente.
+    // Caso contrário, o usuário precisará concedê-la e chamar novamente.
+    Android.bloquearTela();
+}
+
+</script>
+
+</body>
+</html>

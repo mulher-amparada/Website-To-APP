@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa</title>
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<style>
+
+@font-face {
+  font-family: "Quicksand";
+  src: url("font.ttf") format("truetype");
+}
+
+body {
+  margin: 0;
+  
+  font-family: 'Quicksand', sans-serif;
+  overflow-x: hidden;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateX(-50%) translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateX(-50%) translateY(0);
+    }
+}
+
+
+/* botão */
+.voltar {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+
+  color: pink;
+  text-decoration: none;
+  font-weight: 600;
+      animation:fadeUp 0.6s ease-out forwards;
+}
+
+/* MAPA estilo "card central" */
+#map {
+  position: absolute;
+  
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 92%;
+  height: calc(100vh - 90px);
+
+  border-radius: 18px;
+  overflow: hidden;
+animation:fadeUp 0.6s ease-out forwards;
+}
+</style>
+</head>
+
+<body>
+
+<br><br>
+<div id="map"></div>
+<br><br>
+
+<script>
+var map = L.map('map', {
+  zoomControl: false,
+  attributionControl: false
+}).setView([-23.5505, -46.6333], 12);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19
+}).addTo(map);
+
+var pontos = [
+  [-23.5505, -46.6333],
+  [-23.5600, -46.6200],
+  [-23.5400, -46.6500]
+];
+
+pontos.forEach(p => {
+  L.circleMarker(p, {
+    radius: 6,
+    color: "pink",
+    fillColor: "pink",
+    fillOpacity: 0.9
+  }).addTo(map);
+});
+</script>
+
+<script>
+window.addEventListener("load", () => {
+
+    let wall = "";
+
+    try {
+        wall = Android.getWallpaperUrl();
+    } catch (e) {}
+
+    if (wall && wall.length > 0) {
+
+        document.body.style.backgroundImage = `url('${wall}')`;
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
+        document.body.style.backgroundRepeat = "no-repeat";
+        document.body.style.backgroundAttachment = "fixed";
+
+    } else {
+
+        document.body.style.background = "black";
+
+    }
+});
+</script>
+
+</body>
+</html>

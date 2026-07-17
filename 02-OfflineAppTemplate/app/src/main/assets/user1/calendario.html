@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ciclo</title>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+@font-face {
+    font-family: "Quicksand";
+    src: url("font.ttf") format("truetype");
+}
+
+:root {
+    --rosa: #ff8fab;
+    --rosa-escuro: #ff4d6d;
+    --rosa-claro: #ff758f;
+    --texto: #ffffff;
+    --fundo-card: rgba(255, 255, 255, 0.05);
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Quicksand", sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: var(--texto);
+}
+
+/* ===========================
+   TOPO
+=========================== */
+
+.topo {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 15px 18px;
+    width: 90%;
+margin-left: 5%;
+    
+    
+}
+
+.titulo {
+    color: var(--rosa);
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* ===========================
+   CARDS
+=========================== */
+
+.card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin: 12px;
+    padding: 16px;
+
+    border-radius: 22px;
+
+    background: var(--rosa);
+    color: #fff;
+
+    cursor: pointer;
+
+    transition: transform .2s ease,
+                box-shadow .2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .25);
+}
+
+/* ===========================
+   BOTÕES
+=========================== */
+
+
+.botao,
+.apagar {
+    pointer-events: auto;
+}
+
+.botao {
+    position: relative;
+    right: 20px;
+    
+
+    width: 65px;
+    height: 45px;
+
+    border: none;
+    border-radius: 200px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 30px;
+    color: white;
+
+    cursor: pointer;
+
+    background: linear-gradient(
+        135deg,
+        var(--rosa-escuro),
+        var(--rosa-claro)
+    );
+
+    box-shadow: 0 10px 24px rgba(255, 77, 109, .35);
+
+    transition: transform .2s;
+}
+
+.botao:hover {
+    transform: scale(1.08);
+}
+
+.apagar {
+    position: relative;
+    left: 20px;
+    height: 45px;
+width: 65px;
+    padding: 12px 18px;
+
+    border: none;
+    border-radius: 999px;
+
+    background: #d62828;
+    color: white;
+
+    cursor: pointer;
+
+    transition: transform .2s;
+}
+
+.apagar:hover {
+    transform: scale(1.04);
+}
+
+/* ===========================
+   GRÁFICOS
+=========================== */
+
+#telaGraficos {
+    display: none;
+    padding: 12px;
+}
+
+canvas {
+    display: block;
+
+    width: 100% !important;
+    max-width: 100%;
+
+    margin-bottom: 16px;
+    padding: 12px;
+
+    border-radius: 16px;
+
+    background: var(--fundo-card);
+}
+
+#g6 {
+    margin-bottom: 110px;
+}
+
+/* ===========================
+   BOTÃO VOLTAR
+=========================== */
+
+#volta {
+    position: sticky;
+    top: 15px;
+    left: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 95px;
+    height: 42px;
+
+    border: none;
+    border-radius: 999px;
+
+    cursor: pointer;
+
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+
+    background: linear-gradient(135deg, #333, #555);
+
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .3);
+
+    z-index: 999;
+
+    transition: transform .2s;
+}
+
+#volta:hover {
+    transform: translateY(-2px);
+}
+
+img {
+
+width:24px;
+    height:24px;
+
+    object-fit:cover;
+
+    
+
+    flex-shrink:0;
+    
+    }
+    
+    svg  {
+    width:24px;
+    height:24px;
+    
+    }
+</style>
+</head>
+
+<body>
+
+<div id="app">
+<br><br>
+<div class="topo">
+
+
+
+<div class="botao" onclick="abrirRegistro()">+</div>
+<button class="apagar" onclick="apagarTudo()">
+  <img src="14.svg" alt="icone"/>
+</button>
+
+
+</div>
+
+<div id="lista"></div>
+
+<div id="telaGraficos">
+
+<button id="volta" onclick="voltarLista()">Voltar</button>
+
+
+    <canvas id="g1"></canvas>
+    <canvas id="g2"></canvas>
+    <canvas id="g3"></canvas>
+    <canvas id="g4"></canvas>
+    <canvas id="g5"></canvas>
+    <canvas id="g6"></canvas>
+</div>
+
+</div>
+
+<script>
+
+let charts = [];
+
+function getDados() {
+
+    try {
+
+        const dados = Cripto.carregar("ciclo");
+
+        return dados
+            ? JSON.parse(dados)
+            : [];
+
+    } catch(e) {
+
+        return [];
+    }
+}
+
+function salvarDados(d) {
+
+    Cripto.salvar(
+        "ciclo",
+        JSON.stringify(d)
+    );
+}
+
+/* =========================
+   20 PERGUNTAS
+========================= */
+function abrirRegistro() {
+    const data = prompt("Data (YYYY-MM-DD)");
+    if (!data) return;
+
+    const registro = {
+        data,
+        dor: Number(prompt("Dor (0-10)")),
+        humorTexto: prompt("Humor (feliz, triste, desconfortavel)"),
+
+        agua: confirm("Bebeu água?"),
+        cafe: confirm("Tomou café?"),
+        chocolate: confirm("Comeu chocolate?"),
+
+        cansaco: confirm("Cansaço?"),
+        irritacao: confirm("Irritação?"),
+        ansiedade: confirm("Ansiedade?"),
+        colica: confirm("Cólica?"),
+        dorCabeca: confirm("Dor de cabeça?"),
+        inchaco: confirm("Inchaço?"),
+        acne: confirm("Acne?"),
+        sonoRuim: confirm("Sono ruim?"),
+        apetite: confirm("Apetite alterado?"),
+        exercicio: confirm("Fez exercício?"),
+        libido: confirm("Libido alterada?"),
+        concentracao: confirm("Concentração ruim?"),
+        estresse: confirm("Estresse?"),
+        tristeza: confirm("Tristeza?"),
+        felicidade: confirm("Felicidade?"),
+        sensibilidade: confirm("Sensibilidade emocional?"),
+        nausea: confirm("Náusea?"),
+        tontura: confirm("Tontura?"),
+        energiaBaixa: confirm("Energia baixa?")
+    };
+
+    const dados = getDados();
+    dados.push(registro);
+    salvarDados(dados);
+    renderizar();
+}
+
+/* =========================
+   DELETE
+========================= */
+function apagarTudo() {
+    if (!confirm("Apagar tudo?")) return;
+    Cripto.remover("ciclo");
+    renderizar();
+}
+
+/* =========================
+   LISTA
+========================= */
+function renderizar() {
+    const container = document.getElementById("lista");
+    const dados = getDados();
+
+    container.innerHTML = "";
+
+    if (dados.length === 0) {
+        container.innerHTML = "<p style='opacity:0.6;text-align:center'>Nenhum registro</p>";
+        return;
+    }
+
+    dados.forEach((d) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        let emoji = "😐";
+        if (d.humorTexto === "feliz") emoji = "😊";
+        if (d.humorTexto === "triste") emoji = "😢";
+        if (d.humorTexto === "desconfortavel") emoji = "😣";
+
+        card.innerHTML = `
+            <div style="font-size:28px">${emoji}</div>
+            <div>
+                <div>${d.data}</div>
+                <div>Dor: ${d.dor}</div>
+            </div>
+        `;
+
+        card.onclick = () => abrirGraficos(d);
+
+        container.appendChild(card);
+    });
+}
+
+/* =========================
+   GRÁFICOS
+========================= */
+function destruir() {
+    charts.forEach(c => c.destroy());
+    charts = [];
+}
+
+function abrirGraficos(d) {
+    document.getElementById("lista").style.display = "none";
+    document.getElementById("telaGraficos").style.display = "block";
+
+    destruir();
+
+    charts.push(new Chart(g1, {
+        type: "bar",
+        data: { labels: ["Dor"], datasets: [{ data: [d.dor] }] }
+    }));
+
+    charts.push(new Chart(g2, {
+        type: "pie",
+        data: {
+            labels: ["Água", "Café", "Chocolate"],
+            datasets: [{
+                data: [d.agua, d.cafe, d.chocolate].map(v => v ? 1 : 0)
+            }]
+        }
+    }));
+
+    charts.push(new Chart(g3, {
+        type: "radar",
+        data: {
+            labels: ["Cansaço","Ansiedade","Estresse","Tristeza"],
+            datasets: [{
+                data: [d.cansaco, d.ansiedade, d.estresse, d.tristeza].map(v => v ? 1 : 0)
+            }]
+        }
+    }));
+
+    charts.push(new Chart(g4, {
+        type: "polarArea",
+        data: {
+            labels: ["Cólica","Dor cabeça","Inchaço"],
+            datasets: [{
+                data: [d.colica, d.dorCabeca, d.inchaco].map(v => v ? 1 : 0)
+            }]
+        }
+    }));
+
+    charts.push(new Chart(g5, {
+        type: "doughnut",
+        data: {
+            labels: ["Exercício","Sono ruim","Energia baixa"],
+            datasets: [{
+                data: [d.exercicio, d.sonoRuim, d.energiaBaixa].map(v => v ? 1 : 0)
+            }]
+        }
+    }));
+
+    charts.push(new Chart(g6, {
+        type: "line",
+        data: {
+            labels: ["Libido","Concentração","Sensibilidade"],
+            datasets: [{
+                data: [d.libido, d.concentracao, d.sensibilidade].map(v => v ? 1 : 0)
+            }]
+        }
+    }));
+}
+
+/* ========================= */
+function voltarLista() {
+    document.getElementById("lista").style.display = "block";
+    document.getElementById("telaGraficos").style.display = "none";
+}
+
+renderizar();
+
+document.addEventListener("DOMContentLoaded", () => {
+  const app = document.getElementById("app");
+
+  app.style.opacity = "0";
+  app.style.transform = "translateY(20px)";
+  app.style.transition = "opacity 600ms ease, transform 600ms ease";
+
+  requestAnimationFrame(() => {
+    app.style.opacity = "1";
+    app.style.transform = "translateY(0)";
+  });
+});
+</script>
+
+<script>
+window.addEventListener("load", () => {
+
+    let wall = "";
+
+    try {
+        wall = Android.getWallpaperUrl();
+    } catch (e) {}
+
+    if (wall && wall.length > 0) {
+
+        document.body.style.backgroundImage = `url('${wall}')`;
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
+        document.body.style.backgroundRepeat = "no-repeat";
+        document.body.style.backgroundAttachment = "fixed";
+
+    } else {
+
+        document.body.style.background = "black";
+
+    }
+});
+</script>
+
+</body>
+</html>
