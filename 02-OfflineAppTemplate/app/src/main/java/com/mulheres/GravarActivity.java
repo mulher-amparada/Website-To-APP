@@ -1,5 +1,6 @@
 package com.mulheres
 
+import com.mulheres.WebAppInterface
 import android.Manifest
 import android.media.MediaPlayer
 import android.media.MediaRecorder
