@@ -173,8 +173,14 @@ texto.contains("mandar minha localização para o 180") -> {
 
 }
 
-texto.contains("me envie uma notificação de download de mentira") ||
-texto.contains("me mande uma notificação de download de mentira") -> {
+texto.contains("me envie uma notificação de download ficticio") ||
+texto.contains("Me envie uma notificação de download ficticio") ||
+texto.contains("me envie uma notificação de download fictício") ||
+texto.contains("Me envie uma notificação de download fictício") ||
+texto.contains("me mande uma notificação de download fictício") ||
+texto.contains("Me mande uma notificação de download fictício") ||
+texto.contains("me mande uma notificação de download ficticio") ||
+texto.contains("Me mande uma notificação de download ficticio") -> {
 
     enviarDownloadFalso(contexto)
 
