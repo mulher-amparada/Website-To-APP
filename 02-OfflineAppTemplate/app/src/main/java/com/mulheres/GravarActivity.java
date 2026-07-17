@@ -226,6 +226,13 @@ icon.layoutParams =
         60,
         60
     )
+    
+    val text = TextView(this)
+
+text.text = file.name
+text.textSize = 16f
+text.setTextColor(Color.WHITE)
+text.setPadding(24, 0, 24, 0)
 
         text.setTextColor(Color.WHITE)
 
@@ -258,8 +265,9 @@ delete.layoutParams =
         )
 
 
-        container.addView(text)
-        container.addView(delete)
+        container.addView(icon)
+container.addView(text)
+container.addView(delete)
 
 
         text.setOnClickListener {
