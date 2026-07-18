@@ -13,7 +13,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: 02-OfflineAppTemplate
+        working-directory: 04-LinkToApp
 
     steps:
       - name: Baixar código
@@ -36,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: APK-Kotlin-Debug
-          path: 02-OfflineAppTemplate/app/build/outputs/apk/debug/*.apk
+          path: 04-LinkToApp/app/build/outputs/apk/debug/*.apk
