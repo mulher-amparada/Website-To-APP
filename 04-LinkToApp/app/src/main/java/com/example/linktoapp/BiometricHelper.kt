@@ -1,12 +1,12 @@
 package com.linktoapp.app
 
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 
 class BiometricHelper(
-    private val activity: ComponentActivity
+    private val activity: AppCompatActivity
 ) {
 
     fun autenticar(
