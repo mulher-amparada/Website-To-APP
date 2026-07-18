@@ -1,56 +1,30 @@
 package com.linktoapp.app;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.View;
-import android.view.WindowManager;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+object UnlockManager {
 
-public class MainActivity extends Activity {
+    private val desbloqueados = HashSet<String>()
 
-    // 🔗 CHANGE YOUR LINK HERE
-    private static final String APP_URL = "https://bing.com/";
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // FULL SCREEN
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
-
-        setContentView(R.layout.activity_main);
-
-        WebView webView = findViewById(R.id.webview);
-
-        WebSettings settings = webView.getSettings();
-        settings.setJavaScriptEnabled(true);
-        settings.setDomStorageEnabled(true);
-        settings.setLoadWithOverviewMode(true);
-        settings.setUseWideViewPort(true);
-
-        webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl(APP_URL);
-
-        // Hide system UI (immersive)
-        webView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        );
+    fun desbloquear(packageName: String) {
+        synchronized(desbloqueados) {
+            desbloqueados.add(packageName)
+        }
     }
 
-    @Override
-    public void onBackPressed() {
-        WebView webView = findViewById(R.id.webview);
-        if (webView.canGoBack()) {
-            webView.goBack();
-        } else {
-            super.onBackPressed();
+    fun bloquear(packageName: String) {
+        synchronized(desbloqueados) {
+            desbloqueados.remove(packageName)
+        }
+    }
+
+    fun bloqueado(packageName: String): Boolean {
+        synchronized(desbloqueados) {
+            return !desbloqueados.contains(packageName)
+        }
+    }
+
+    fun limpar() {
+        synchronized(desbloqueados) {
+            desbloqueados.clear()
         }
     }
 }
