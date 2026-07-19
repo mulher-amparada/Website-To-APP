@@ -269,6 +269,11 @@ text.textSize = 16f
 text.setTextColor(Color.WHITE)
 text.setPadding(24, 0, 24, 0)
 
+text.typeface = Typeface.createFromAsset(
+    assets,
+    "font.ttf"
+)
+
         text.setTextColor(Color.WHITE)
 
         text.layoutParams =
