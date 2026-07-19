@@ -18,6 +18,10 @@ import android.graphics.Color
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import java.io.File
+import android.graphics.Typeface
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 
 class GravarActivity : AppCompatActivity() {
 
@@ -59,6 +63,12 @@ ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, insets ->
 }  
 
         setContentView(R.layout.activity_gravar)
+
+val raiz = findViewById<View>(
+    android.R.id.content
+)
+
+aplicarFonte(raiz)
 
         btnRecord = findViewById(R.id.btnRecord)
         list = findViewById(R.id.list)
@@ -349,6 +359,27 @@ container.addView(delete)
         player?.release()
     }
 
+private fun aplicarFonte(view: View) {
+
+    val fonte = resources.assets
+        .open("font.ttf")
+        .let {
+            android.graphics.Typeface.createFromAsset(
+                assets,
+                "font.ttf"
+            )
+        }
+
+    if (view is android.widget.TextView) {
+        view.typeface = fonte
+    }
+
+    if (view is android.view.ViewGroup) {
+        for (i in 0 until view.childCount) {
+            aplicarFonte(view.getChildAt(i))
+        }
+    }
+}
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
