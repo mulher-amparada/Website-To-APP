@@ -9,6 +9,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import android.graphics.Typeface
 
 class FolderAdapter(
     private val onClick: (File) -> Unit
@@ -34,6 +35,15 @@ class FolderAdapter(
     override fun onBindViewHolder(holder: VH, position: Int) {
 
         val file = list[position]
+
+val fonte = Typeface.createFromAsset(
+    holder.itemView.context.assets,
+    "font.ttf"
+)
+
+holder.name.typeface = fonte
+holder.date.typeface = fonte
+holder.count.typeface = fonte
 
         holder.name.text = file.name.ifEmpty {
             "Sem nome"
