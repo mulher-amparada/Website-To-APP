@@ -15,7 +15,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.view.View
 import android.view.animation.DecelerateInterpolator
 import java.io.File
 import android.graphics.Typeface
