@@ -9,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import android.graphics.Typeface
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 
 class EscolherIconeActivity : AppCompatActivity() {
 
@@ -39,6 +43,12 @@ class EscolherIconeActivity : AppCompatActivity() {
 
 
         setContentView(R.layout.activity_escolher_icone)
+
+val raiz = findViewById<View>(
+    android.R.id.content
+)
+
+aplicarFonte(raiz)
 
 
         findViewById<Button>(R.id.btnIconeOriginal)
@@ -113,6 +123,27 @@ class EscolherIconeActivity : AppCompatActivity() {
         trocarPara("com.mulheres.Icone1")
     }
 
+private fun aplicarFonte(view: View) {
+
+    val fonte = resources.assets
+        .open("font.ttf")
+        .let {
+            android.graphics.Typeface.createFromAsset(
+                assets,
+                "font.ttf"
+            )
+        }
+
+    if (view is android.widget.TextView) {
+        view.typeface = fonte
+    }
+
+    if (view is android.view.ViewGroup) {
+        for (i in 0 until view.childCount) {
+            aplicarFonte(view.getChildAt(i))
+        }
+    }
+}
 
     private fun trocarParaIcone2() {
         trocarPara("com.mulheres.Icone2")
