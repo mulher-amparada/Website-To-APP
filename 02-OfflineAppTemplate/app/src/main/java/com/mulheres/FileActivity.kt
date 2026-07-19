@@ -1,6 +1,10 @@
 package com.mulheres
 
 import android.app.Activity
+import android.graphics.Typeface
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -60,6 +64,12 @@ class FileActivity : AppCompatActivity() {
 
 
         setContentView(R.layout.activity_file)
+
+val raiz = findViewById<View>(
+    android.R.id.content
+)
+
+aplicarFonte(raiz)
 
 
         recycler = findViewById(R.id.recycler)
@@ -337,6 +347,27 @@ class FileActivity : AppCompatActivity() {
     }
 
 
+private fun aplicarFonte(view: View) {
+
+    val fonte = resources.assets
+        .open("font.ttf")
+        .let {
+            android.graphics.Typeface.createFromAsset(
+                assets,
+                "font.ttf"
+            )
+        }
+
+    if (view is android.widget.TextView) {
+        view.typeface = fonte
+    }
+
+    if (view is android.view.ViewGroup) {
+        for (i in 0 until view.childCount) {
+            aplicarFonte(view.getChildAt(i))
+        }
+    }
+}
 
     override fun onBackPressed() {
 
