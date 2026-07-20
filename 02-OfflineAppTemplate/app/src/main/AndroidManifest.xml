@@ -92,7 +92,7 @@
     android:name=".IconeOriginal"
     android:targetActivity=".MainActivity"
     android:icon="@mipmap/ic_launcher"
-    android:label="Mulher Amparada"
+    android:label="✅️Mulher Amparada"
     android:enabled="true"
     android:exported="true">
 
@@ -107,7 +107,7 @@
     android:name=".Icone1"
     android:targetActivity=".MainActivity"
     android:icon="@drawable/icon1"
-    android:label="Mulher Amparada"
+    android:label="✅️Mulher Amparada"
     android:enabled="false"
     android:exported="true">
 
@@ -122,7 +122,7 @@
     android:name=".Icone2"
     android:targetActivity=".MainActivity"
     android:icon="@drawable/icon2"
-    android:label="Mulher Amparada"
+    android:label="✅️Mulher Amparada"
     android:enabled="false"
     android:exported="true">
 
@@ -137,7 +137,7 @@
     android:name=".Icone3"
     android:targetActivity=".MainActivity"
     android:icon="@drawable/icon3"
-    android:label="Mulher Amparada"
+    android:label="✅️Mulher Amparada"
     android:enabled="false"
     android:exported="true">
 
