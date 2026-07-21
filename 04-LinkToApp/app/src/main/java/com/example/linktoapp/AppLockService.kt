@@ -119,15 +119,6 @@ private fun ehAplicativoReal(pacote: String): Boolean {
 
     private fun mostrarBloqueio() {
 
-    if (overlay != null)
-        return
-
-
-    overlay = LockOverlay(this)
-
-    overlay?.mostrar()
-
-
     val intent = Intent(
         this,
         BiometricActivity::class.java
@@ -141,10 +132,4 @@ private fun ehAplicativoReal(pacote: String): Boolean {
     startActivity(intent)
 
 }
-
-
-
-    override fun onInterrupt() {
-    }
-
 }
