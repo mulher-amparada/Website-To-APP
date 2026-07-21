@@ -9,122 +9,197 @@ import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var lista: RecyclerView
-    private lateinit var repository: AppRepository
 
     private val fonte by lazy {
-        Typeface.createFromAsset(assets, "font.ttf")
+
+        Typeface.createFromAsset(
+            assets,
+            "font.ttf"
+        )
+
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
+
+
 
         WindowCompat.setDecorFitsSystemWindows(
             window,
             false
         )
 
+
+
         window.apply {
+
 
             addFlags(
                 WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
             )
 
-            statusBarColor = Color.TRANSPARENT
-            navigationBarColor = Color.TRANSPARENT
+
+            statusBarColor =
+                Color.TRANSPARENT
+
+
+            navigationBarColor =
+                Color.TRANSPARENT
+
+
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                navigationBarDividerColor = Color.TRANSPARENT
+
+                navigationBarDividerColor =
+                    Color.TRANSPARENT
+
             }
+
+
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                isStatusBarContrastEnforced = false
-                isNavigationBarContrastEnforced = false
+
+                isStatusBarContrastEnforced =
+                    false
+
+                isNavigationBarContrastEnforced =
+                    false
+
             }
 
+
+
             decorView.systemUiVisibility =
+
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+
+
         }
+
+
 
         WindowInsetsControllerCompat(
             window,
             window.decorView
         ).apply {
-            isAppearanceLightStatusBars = false
-            isAppearanceLightNavigationBars = false
+
+
+            isAppearanceLightStatusBars =
+                false
+
+
+            isAppearanceLightNavigationBars =
+                false
+
         }
 
-        setContentView(R.layout.activity_main)
 
-        val raiz = findViewById<View>(android.R.id.content)
-        aplicarFonte(raiz)
 
-        repository = AppRepository(this)
-
-        lista = findViewById(R.id.lista)
-        lista.layoutManager = LinearLayoutManager(this)
-
-        carregarApps()
-
-        if (!Settings.Secure.getString(
-                contentResolver,
-                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-            ).orEmpty().contains(packageName)
-        ) {
-            startActivity(
-                Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-            )
-        }
-    }
-
-    private fun carregarApps() {
-
-        val pm = packageManager
-
-        val apps = pm.getInstalledApplications(0)
-            .map {
-                AppInfo(
-                    nome = pm.getApplicationLabel(it).toString(),
-                    pacote = it.packageName,
-                    icone = pm.getApplicationIcon(it),
-                    protegido = repository.protegido(it.packageName)
-                )
-            }
-            .sortedBy {
-                it.nome.lowercase()
-            }
-
-        lista.adapter = AppAdapter(
-            apps.toMutableList(),
-            repository
+        setContentView(
+            R.layout.activity_main
         )
 
-        lista.post {
-            aplicarFonte(findViewById(android.R.id.content))
+
+
+        aplicarFonte(
+            findViewById(
+                android.R.id.content
+            )
+        )
+
+
+
+        val botao = findViewById<Button>(
+            R.id.btnAtivar
+        )
+
+
+
+        botao.setOnClickListener {
+
+            ativarAcessibilidade()
+
         }
+
     }
 
-    private fun aplicarFonte(view: View) {
+
+
+    private fun ativarAcessibilidade() {
+
+
+        val ativa = Settings.Secure.getString(
+            contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        )
+        .orEmpty()
+        .contains(packageName)
+
+
+
+        if (!ativa) {
+
+
+            startActivity(
+                Intent(
+                    Settings.ACTION_ACCESSIBILITY_SETTINGS
+                )
+            )
+
+
+        }
+
+    }
+
+
+
+
+    private fun aplicarFonte(
+        view: View
+    ) {
+
 
         if (view is TextView) {
-            view.typeface = fonte
+
+            view.typeface =
+                fonte
+
         }
 
+
+
         if (view is ViewGroup) {
+
+
             for (i in 0 until view.childCount) {
-                aplicarFonte(view.getChildAt(i))
+
+
+                aplicarFonte(
+                    view.getChildAt(i)
+                )
+
+
             }
+
         }
+
+
     }
+
+
 }
