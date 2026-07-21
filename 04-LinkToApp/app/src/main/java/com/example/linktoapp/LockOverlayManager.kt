@@ -1,18 +1,18 @@
-package com.linktoapp.app
+package com.example.linktoapp
+
+import android.content.Context
 
 object LockOverlayManager {
 
-    @Volatile
-    var overlay: LockOverlay? = null
+    private var overlay: LockOverlay? = null
 
 
-    fun mostrar(service: AppLockService) {
+    fun mostrar(context: Context) {
 
         if (overlay != null)
             return
 
-
-        overlay = LockOverlay(service)
+        overlay = LockOverlay(context)
 
         overlay?.mostrar()
 
