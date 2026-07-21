@@ -12,6 +12,8 @@
     android:paddingEnd="16dp"
     android:paddingBottom="24dp"
     android:overScrollMode="never"
-    android:scrollbarStyle="outsideOverlay"
     android:scrollbars="vertical"
+    android:scrollbarStyle="insideOverlay"
+    android:scrollbarThumbVertical="@drawable/scrollbar_personalizado"
+    android:fadeScrollbars="false"
     android:fadingEdge="none"/>
