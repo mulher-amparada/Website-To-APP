@@ -36,6 +36,7 @@ class AppLockService : AccessibilityService() {
         ) {
             UnlockManager.bloquear(pacoteDesbloqueado)
             pacoteDesbloqueado = ""
+            ultimoPacote = ""
         }
 
         ultimoPacote = pacote
