@@ -10,57 +10,64 @@ class AppLockService : AccessibilityService() {
 
     private var ultimoPacote = ""
 
-    private var pacoteBloqueadoAtual = ""
-
-
     override fun onServiceConnected() {
         super.onServiceConnected()
-
         repository = AppRepository(this)
     }
-
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
 
         if (event == null)
             return
 
-
         if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED)
             return
 
-
-        val pacote = event.packageName?.toString()
-            ?: return
-
+        val pacote = event.packageName?.toString() ?: return
 
 
         /*
-         * Saiu do aplicativo bloqueado.
-         * Remove qualquer bloqueio pendente.
+         * Se apertou voltar na LockActivity,
+         * reabre a tela de bloqueio usando
+         * o pacote salvo anteriormente.
          */
-        if (
-            pacoteBloqueadoAtual.isNotEmpty() &&
-            pacote != pacoteBloqueadoAtual
-        ) {
+        if (LockState.voltarPressionado) {
 
-            LockOverlayManager.remover()
+            LockState.voltarPressionado = false
 
-            pacoteBloqueadoAtual = ""
+            if (LockState.pacoteBloqueado.isEmpty())
+                return
 
-            LockState.pacoteBloqueado = ""
+            val intent = Intent(
+                this,
+                LockActivity::class.java
+            )
+
+            intent.putExtra(
+                "package",
+                LockState.pacoteBloqueado
+            )
+
+            intent.addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+            )
+
+            startActivity(intent)
 
             return
         }
 
 
-
         /*
-         * Ignora SystemUI
+         * Ignora eventos do sistema:
+         * - barra de navegação
+         * - notificações
+         * - painel rápido
          */
         if (pacote == "com.android.systemui")
             return
-
 
 
         /*
@@ -70,7 +77,6 @@ class AppLockService : AccessibilityService() {
             return
 
 
-
         /*
          * Ignora o próprio AppLock
          */
@@ -78,96 +84,57 @@ class AppLockService : AccessibilityService() {
             return
 
 
-
         /*
-         * Ignora mudança interna de Activity
+         * Ignora troca de Activity
+         * dentro do mesmo aplicativo.
          */
         if (pacote == ultimoPacote)
             return
 
 
-
         ultimoPacote = pacote
 
 
-
         /*
-         * Só bloqueia aplicativos reais
-         */
-        if (!ehAplicativoReal(pacote))
-            return
-
-
-
-        /*
-         * Verifica se o aplicativo está protegido
+         * Verifica se o aplicativo está protegido.
          */
         if (!repository.protegido(pacote))
             return
 
 
+        /*
+         * Não abre duas telas de bloqueio.
+         */
+        if (LockActivity.aberta)
+            return
+
 
         /*
-         * Salva o pacote bloqueado
+         * Guarda o app que está sendo bloqueado.
          */
-        pacoteBloqueadoAtual = pacote
-
         LockState.pacoteBloqueado = pacote
 
 
-
-        mostrarBloqueio()
-
-    }
-
-
-
-    private fun ehAplicativoReal(
-        pacote: String
-    ): Boolean {
-
-        return try {
-
-            val info = packageManager.getApplicationInfo(
-                pacote,
-                0
-            )
-
-
-            (info.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) == 0
-
-
-        } catch (e: Exception) {
-
-            false
-
-        }
-
-    }
-
-
-
-    private fun mostrarBloqueio() {
-
         val intent = Intent(
             this,
-            BiometricActivity::class.java
+            LockActivity::class.java
         )
 
+        intent.putExtra(
+            "package",
+            pacote
+        )
 
         intent.addFlags(
             Intent.FLAG_ACTIVITY_NEW_TASK or
+            Intent.FLAG_ACTIVITY_SINGLE_TOP or
             Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
         )
-
 
         startActivity(intent)
 
     }
 
-
-
     override fun onInterrupt() {
     }
-
 }
