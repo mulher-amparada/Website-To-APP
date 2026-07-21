@@ -79,8 +79,11 @@ class AppLockService : AccessibilityService() {
 
 
         // Verifica se está protegido
-        if (!repository.protegido(pacote))
-            return
+        if (!ehAplicativoReal(pacote))
+    return
+
+if (!repository.protegido(pacote))
+    return
 
 
 
