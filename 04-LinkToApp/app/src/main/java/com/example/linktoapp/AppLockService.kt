@@ -10,8 +10,6 @@ class AppLockService : AccessibilityService() {
 
     private var ultimoPacote = ""
 
-    private var overlay: LockOverlay? = null
-
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -35,7 +33,7 @@ class AppLockService : AccessibilityService() {
 
 
 
-        // Voltar pressionado na tela de bloqueio
+        // Se voltou da tela de bloqueio
         if (LockState.voltarPressionado) {
 
             LockState.voltarPressionado = false
@@ -68,26 +66,28 @@ class AppLockService : AccessibilityService() {
 
 
 
-        // Ignora mudança interna de Activity
+        // Ignora troca de Activity do mesmo app
         if (pacote == ultimoPacote)
             return
-
 
 
         ultimoPacote = pacote
 
 
 
-        // Verifica se está protegido
+        // Somente apps reais
         if (!ehAplicativoReal(pacote))
-    return
-
-if (!repository.protegido(pacote))
-    return
+            return
 
 
 
-        // Salva o pacote bloqueado
+        // Verifica se está protegido
+        if (!repository.protegido(pacote))
+            return
+
+
+
+        // Salva pacote bloqueado
         LockState.pacoteBloqueado = pacote
 
 
@@ -97,39 +97,53 @@ if (!repository.protegido(pacote))
     }
 
 
-private fun ehAplicativoReal(pacote: String): Boolean {
 
-    return try {
+    private fun ehAplicativoReal(
+        pacote: String
+    ): Boolean {
 
-        val info = packageManager.getApplicationInfo(
-            pacote,
-            0
-        )
+        return try {
 
-        info.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM == 0 ||
-        repository.protegido(pacote)
+            val info = packageManager.getApplicationInfo(
+                pacote,
+                0
+            )
 
-    } catch (e: Exception) {
 
-        false
+            (info.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) == 0
+
+
+        } catch (e: Exception) {
+
+            false
+
+        }
 
     }
 
-}
+
 
     private fun mostrarBloqueio() {
 
-    val intent = Intent(
-        this,
-        BiometricActivity::class.java
-    )
+        val intent = Intent(
+            this,
+            BiometricActivity::class.java
+        )
 
-    intent.addFlags(
-        Intent.FLAG_ACTIVITY_NEW_TASK or
-        Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
-    )
 
-    startActivity(intent)
+        intent.addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK or
+            Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+        )
 
-}
+
+        startActivity(intent)
+
+    }
+
+
+
+    override fun onInterrupt() {
+    }
+
 }
