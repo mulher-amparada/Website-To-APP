@@ -5,4 +5,13 @@
     android:id="@+id/lista"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"/>
+    android:background="#000000"
+    android:clipToPadding="false"
+    android:paddingStart="16dp"
+    android:paddingTop="24dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="24dp"
+    android:overScrollMode="never"
+    android:scrollbarStyle="outsideOverlay"
+    android:scrollbars="vertical"
+    android:fadingEdge="none"/>
