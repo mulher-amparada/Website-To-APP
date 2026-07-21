@@ -1,6 +1,5 @@
 package com.linktoapp.app
 
-import android.net.Uri
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -23,10 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var repository: AppRepository
 
     private val fonte by lazy {
-        Typeface.createFromAsset(
-            assets,
-            "font.ttf"
-        )
+        Typeface.createFromAsset(assets, "font.ttf")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,78 +57,36 @@ class MainActivity : AppCompatActivity() {
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         }
 
-
         WindowInsetsControllerCompat(
             window,
             window.decorView
         ).apply {
-
             isAppearanceLightStatusBars = false
             isAppearanceLightNavigationBars = false
         }
 
-
         setContentView(R.layout.activity_main)
 
-
-        val raiz = findViewById<View>(
-            android.R.id.content
-        )
-
+        val raiz = findViewById<View>(android.R.id.content)
         aplicarFonte(raiz)
-
 
         repository = AppRepository(this)
 
-
         lista = findViewById(R.id.lista)
-
-        lista.layoutManager =
-            LinearLayoutManager(this)
-
+        lista.layoutManager = LinearLayoutManager(this)
 
         carregarApps()
 
-
-
-        // Permissão de Accessibility
-        if (
-            !Settings.Secure.getString(
+        if (!Settings.Secure.getString(
                 contentResolver,
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-            )
-            .orEmpty()
-            .contains(packageName)
+            ).orEmpty().contains(packageName)
         ) {
-
             startActivity(
-                Intent(
-                    Settings.ACTION_ACCESSIBILITY_SETTINGS
-                )
+                Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
             )
         }
-
-
-
-        // Permissão de Overlay
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            if (!Settings.canDrawOverlays(this)) {
-
-                val intent = Intent(
-                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse(
-                        "package:$packageName"
-                    )
-                )
-
-                startActivity(intent)
-            }
-        }
-
     }
-
-
 
     private fun carregarApps() {
 
@@ -140,63 +94,37 @@ class MainActivity : AppCompatActivity() {
 
         val apps = pm.getInstalledApplications(0)
             .map {
-
                 AppInfo(
                     nome = pm.getApplicationLabel(it).toString(),
                     pacote = it.packageName,
                     icone = pm.getApplicationIcon(it),
                     protegido = repository.protegido(it.packageName)
                 )
-
             }
             .sortedBy {
-
                 it.nome.lowercase()
-
             }
-
 
         lista.adapter = AppAdapter(
             apps.toMutableList(),
             repository
         )
 
-
         lista.post {
-
-            aplicarFonte(
-                findViewById(
-                    android.R.id.content
-                )
-            )
-
+            aplicarFonte(findViewById(android.R.id.content))
         }
-
     }
-
-
 
     private fun aplicarFonte(view: View) {
 
         if (view is TextView) {
-
             view.typeface = fonte
-
         }
-
 
         if (view is ViewGroup) {
-
             for (i in 0 until view.childCount) {
-
-                aplicarFonte(
-                    view.getChildAt(i)
-                )
-
+                aplicarFonte(view.getChildAt(i))
             }
-
         }
-
     }
-
 }
