@@ -59,11 +59,9 @@ class LockActivity : AppCompatActivity() {
 
             sucesso = {
 
-                UnlockManager.desbloquear(pacote)
+    finish()
 
-                finish()
-
-            },
+},
 
             erro = {
 
