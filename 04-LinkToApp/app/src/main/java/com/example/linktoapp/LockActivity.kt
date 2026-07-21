@@ -16,12 +16,17 @@ class LockActivity : AppCompatActivity() {
         var aberta = false
     }
 
+    private var pacote = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         aberta = true
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
         window.apply {
 
@@ -51,23 +56,29 @@ class LockActivity : AppCompatActivity() {
             window,
             window.decorView
         ).apply {
+
             isAppearanceLightStatusBars = false
             isAppearanceLightNavigationBars = false
         }
 
         setContentView(R.layout.activity_lock)
 
-val raiz = findViewById<View>(
-    android.R.id.content
-)
+        val raiz = findViewById<View>(
+            android.R.id.content
+        )
 
-aplicarFonte(raiz)
+        aplicarFonte(raiz)
 
-
-        intent.getStringExtra("package") ?: run {
+        pacote = intent.getStringExtra("package") ?: run {
             finish()
             return
         }
+
+        abrirBiometria()
+    }
+
+
+    private fun abrirBiometria() {
 
         BiometricHelper(this).autenticar(
 
@@ -86,34 +97,39 @@ aplicarFonte(raiz)
         )
     }
 
-private fun aplicarFonte(view: View) {
 
-    val fonte = resources.assets
-        .open("font.ttf")
-        .let {
-            android.graphics.Typeface.createFromAsset(
-                assets,
-                "font.ttf"
-            )
+    private fun aplicarFonte(view: View) {
+
+        val fonte = android.graphics.Typeface.createFromAsset(
+            assets,
+            "font.ttf"
+        )
+
+        if (view is android.widget.TextView) {
+            view.typeface = fonte
         }
 
-    if (view is android.widget.TextView) {
-        view.typeface = fonte
-    }
+        if (view is android.view.ViewGroup) {
 
-    if (view is android.view.ViewGroup) {
-        for (i in 0 until view.childCount) {
-            aplicarFonte(view.getChildAt(i))
+            for (i in 0 until view.childCount) {
+                aplicarFonte(view.getChildAt(i))
+            }
         }
     }
-}
 
-    override fun onDestroy() {
-        aberta = false
-        super.onDestroy()
-    }
 
     override fun onBackPressed() {
-        // impede sair usando voltar
+
+        // Ao apertar voltar, abre a biometria novamente
+        abrirBiometria()
+
+    }
+
+
+    override fun onDestroy() {
+
+        aberta = false
+
+        super.onDestroy()
     }
 }
