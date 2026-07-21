@@ -24,23 +24,36 @@ class AppLockService : AccessibilityService() {
 
         val pacote = event.packageName?.toString() ?: return
 
-        if (pacote == packageName)
+        // Ignora o próprio AppLock
+        if (pacote == packageName) {
             return
+        }
 
-        if (pacote == ultimoPacote)
+        // Mesmo aplicativo: ignora troca de Activity
+        if (pacote == ultimoPacote) {
             return
+        }
 
+        // Novo aplicativo aberto
         ultimoPacote = pacote
 
+        // Verifica se está protegido
         if (!repository.protegido(pacote))
             return
 
+        // Evita abrir várias telas de bloqueio
         if (LockActivity.aberta)
             return
 
-        val intent = Intent(this, LockActivity::class.java)
+        val intent = Intent(
+            this,
+            LockActivity::class.java
+        )
 
-        intent.putExtra("package", pacote)
+        intent.putExtra(
+            "package",
+            pacote
+        )
 
         intent.addFlags(
             Intent.FLAG_ACTIVITY_NEW_TASK or
