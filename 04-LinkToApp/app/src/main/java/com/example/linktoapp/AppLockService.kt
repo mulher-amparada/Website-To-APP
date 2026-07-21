@@ -1,7 +1,6 @@
 package com.linktoapp.app
 
 import android.accessibilityservice.AccessibilityService
-import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 
 class AppLockService : AccessibilityService() {
@@ -12,13 +11,16 @@ class AppLockService : AccessibilityService() {
 
 
     override fun onServiceConnected() {
+
         super.onServiceConnected()
 
         repository = AppRepository(this)
+
     }
 
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+
 
         if (event == null)
             return
@@ -28,28 +30,36 @@ class AppLockService : AccessibilityService() {
             return
 
 
-        val pacote = event.packageName?.toString()
-            ?: return
+
+        val pacote =
+            event.packageName?.toString()
+                ?: return
 
 
 
-        // Ignora sistema
+        // ignora sistema
+
         if (pacote == "com.android.systemui")
             return
 
 
-        // Ignora teclado
+
+        // ignora teclado
+
         if (pacote == "com.google.android.inputmethod.latin")
             return
 
 
-        // Ignora o próprio app
+
+        // ignora o próprio app
+
         if (pacote == packageName)
             return
 
 
 
-        // Mesmo pacote, não faz novamente
+        // mesmo app
+
         if (pacote == ultimoPacote)
             return
 
@@ -59,46 +69,23 @@ class AppLockService : AccessibilityService() {
 
 
 
-        // Verifica proteção
+        // verifica proteção
+
         if (!repository.protegido(pacote))
             return
 
 
 
-        if (LockState.bloqueando)
-            return
+        // bloqueia tela pelo administrador
 
-
-
-        LockState.pacoteBloqueado = pacote
-        LockState.bloqueando = true
-
-
-
-        val intent = Intent(
-            this,
-            LockActivity::class.java
-        )
-
-
-        intent.putExtra(
-            "package",
-            pacote
-        )
-
-
-        intent.addFlags(
-            Intent.FLAG_ACTIVITY_NEW_TASK or
-            Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
-        )
-
-
-        startActivity(intent)
+        DeviceAdminHelper.bloquearTela(this)
 
     }
 
 
+
     override fun onInterrupt() {
+
     }
 
 }
