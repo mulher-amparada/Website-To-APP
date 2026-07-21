@@ -13,13 +13,17 @@ import androidx.core.view.WindowInsetsControllerCompat
 class LockActivity : AppCompatActivity() {
 
     companion object {
+
         @Volatile
         var aberta = false
+
     }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         aberta = true
 
@@ -30,7 +34,9 @@ class LockActivity : AppCompatActivity() {
 
                 override fun handleOnBackPressed() {
 
-                    // Bloqueia o botão voltar
+                    // Apenas bloqueia o voltar
+                    // sem fechar a Activity
+
                     LockState.voltarPressionado = true
 
                 }
@@ -39,10 +45,12 @@ class LockActivity : AppCompatActivity() {
         )
 
 
+
         WindowCompat.setDecorFitsSystemWindows(
             window,
             false
         )
+
 
 
         window.apply {
@@ -51,13 +59,19 @@ class LockActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
             )
 
+
             statusBarColor = Color.TRANSPARENT
             navigationBarColor = Color.TRANSPARENT
 
 
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                navigationBarDividerColor = Color.TRANSPARENT
+
+                navigationBarDividerColor =
+                    Color.TRANSPARENT
+
             }
+
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -68,12 +82,17 @@ class LockActivity : AppCompatActivity() {
             }
 
 
+
+            // Mantém layout ocupando a área das barras
+            // sem esconder fullscreen
+
             decorView.systemUiVisibility =
-    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-    
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+
         }
+
 
 
         WindowInsetsControllerCompat(
@@ -94,11 +113,9 @@ class LockActivity : AppCompatActivity() {
 
 
 
-        val raiz = findViewById<View>(
-            android.R.id.content
+        aplicarFonte(
+            findViewById(android.R.id.content)
         )
-
-        aplicarFonte(raiz)
 
 
 
@@ -107,9 +124,13 @@ class LockActivity : AppCompatActivity() {
         )
 
 
+
         if (pacote.isNullOrEmpty()) {
 
+            aberta = false
+
             finish()
+
             return
 
         }
@@ -120,17 +141,29 @@ class LockActivity : AppCompatActivity() {
 
             sucesso = {
 
+
+                LockState.pacoteDesbloqueado =
+                    pacote
+
+
+                LockState.bloqueando = false
+
+
                 aberta = false
+
 
                 finish()
 
             },
 
 
+
             erro = {
 
-                // Não fecha a tela se cancelar/errar
-                // mantém o bloqueio ativo
+                // Não fecha.
+                // Continua na tela de bloqueio.
+
+                LockState.bloqueando = true
 
             }
 
@@ -140,14 +173,18 @@ class LockActivity : AppCompatActivity() {
 
 
 
+
     private fun aplicarFonte(
         view: View
     ) {
 
-        val fonte = android.graphics.Typeface.createFromAsset(
-            assets,
-            "font.ttf"
-        )
+
+        val fonte =
+            android.graphics.Typeface.createFromAsset(
+                assets,
+                "font.ttf"
+            )
+
 
 
         if (view is android.widget.TextView) {
@@ -155,6 +192,7 @@ class LockActivity : AppCompatActivity() {
             view.typeface = fonte
 
         }
+
 
 
         if (view is android.view.ViewGroup) {
@@ -173,7 +211,10 @@ class LockActivity : AppCompatActivity() {
 
 
 
+
     override fun onDestroy() {
+
+        aberta = false
 
         super.onDestroy()
 
