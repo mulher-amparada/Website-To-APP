@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -16,12 +17,32 @@ class LockActivity : AppCompatActivity() {
         var aberta = false
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         aberta = true
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+
+                override fun handleOnBackPressed() {
+
+                    LockState.voltarPressionado = true
+
+                }
+
+            }
+        )
+
+
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
+
 
         window.apply {
 
@@ -32,14 +53,17 @@ class LockActivity : AppCompatActivity() {
             statusBarColor = Color.TRANSPARENT
             navigationBarColor = Color.TRANSPARENT
 
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 navigationBarDividerColor = Color.TRANSPARENT
             }
+
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 isStatusBarContrastEnforced = false
                 isNavigationBarContrastEnforced = false
             }
+
 
             decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -47,27 +71,34 @@ class LockActivity : AppCompatActivity() {
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         }
 
+
         WindowInsetsControllerCompat(
             window,
             window.decorView
         ).apply {
+
             isAppearanceLightStatusBars = false
             isAppearanceLightNavigationBars = false
+
         }
+
 
         setContentView(R.layout.activity_lock)
 
-val raiz = findViewById<View>(
-    android.R.id.content
-)
 
-aplicarFonte(raiz)
+        val raiz = findViewById<View>(
+            android.R.id.content
+        )
+
+        aplicarFonte(raiz)
+
 
 
         intent.getStringExtra("package") ?: run {
             finish()
             return
         }
+
 
         BiometricHelper(this).autenticar(
 
@@ -77,6 +108,7 @@ aplicarFonte(raiz)
 
             },
 
+
             erro = {
 
                 finishAffinity()
@@ -84,36 +116,44 @@ aplicarFonte(raiz)
             }
 
         )
+
     }
 
-private fun aplicarFonte(view: View) {
 
-    val fonte = resources.assets
-        .open("font.ttf")
-        .let {
-            android.graphics.Typeface.createFromAsset(
-                assets,
-                "font.ttf"
-            )
+    private fun aplicarFonte(view: View) {
+
+        val fonte = android.graphics.Typeface.createFromAsset(
+            assets,
+            "font.ttf"
+        )
+
+
+        if (view is android.widget.TextView) {
+            view.typeface = fonte
         }
 
-    if (view is android.widget.TextView) {
-        view.typeface = fonte
+
+        if (view is android.view.ViewGroup) {
+
+            for (i in 0 until view.childCount) {
+
+                aplicarFonte(
+                    view.getChildAt(i)
+                )
+
+            }
+
+        }
+
     }
 
-    if (view is android.view.ViewGroup) {
-        for (i in 0 until view.childCount) {
-            aplicarFonte(view.getChildAt(i))
-        }
-    }
-}
 
     override fun onDestroy() {
+
         aberta = false
+
         super.onDestroy()
+
     }
 
-    override fun onBackPressed() {
-        LockState.voltarPressionado = true
-}
 }
