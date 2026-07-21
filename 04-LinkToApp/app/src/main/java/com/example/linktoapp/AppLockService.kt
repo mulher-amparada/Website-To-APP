@@ -33,22 +33,14 @@ class AppLockService : AccessibilityService() {
 
 
 
-        // Evita recriar a tela enquanto está bloqueando
-        if (LockState.bloqueando)
-            return
-
-
-
-        // Ignora SystemUI
+        // Ignora sistema
         if (pacote == "com.android.systemui")
             return
-
 
 
         // Ignora teclado
         if (pacote == "com.google.android.inputmethod.latin")
             return
-
 
 
         // Ignora o próprio app
@@ -57,59 +49,20 @@ class AppLockService : AccessibilityService() {
 
 
 
-        // Se este app já foi desbloqueado,
-        // deixa ele continuar aberto
-        if (pacote == LockState.pacoteDesbloqueado) {
-
-            return
-
-        }
-
-
-
-        // Saiu do app desbloqueado
-        if (
-            LockState.pacoteDesbloqueado.isNotEmpty() &&
-            pacote != LockState.pacoteDesbloqueado
-        ) {
-
-            LockState.pacoteDesbloqueado = ""
-
-        }
-
-
-
-        // Ignora troca de Activity do mesmo app
+        // Mesmo pacote, não faz novamente
         if (pacote == ultimoPacote)
             return
+
 
 
         ultimoPacote = pacote
 
 
 
-        // Verifica se o app está protegido
+        // Verifica proteção
         if (!repository.protegido(pacote))
             return
 
-
-
-        // Salva o pacote bloqueado
-        LockState.pacoteBloqueado = pacote
-
-
-
-        abrirBloqueio(
-            pacote
-        )
-
-    }
-
-
-
-    private fun abrirBloqueio(
-        pacote: String
-    ) {
 
 
         if (LockState.bloqueando)
@@ -117,6 +70,7 @@ class AppLockService : AccessibilityService() {
 
 
 
+        LockState.pacoteBloqueado = pacote
         LockState.bloqueando = true
 
 
@@ -133,19 +87,15 @@ class AppLockService : AccessibilityService() {
         )
 
 
-
         intent.addFlags(
             Intent.FLAG_ACTIVITY_NEW_TASK or
-            Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS or
-            Intent.FLAG_ACTIVITY_NO_HISTORY
+            Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
         )
-
 
 
         startActivity(intent)
 
     }
-
 
 
     override fun onInterrupt() {
