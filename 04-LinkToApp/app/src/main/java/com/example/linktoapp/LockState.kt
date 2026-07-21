@@ -5,7 +5,12 @@ object LockState {
     @Volatile
     var voltarPressionado = false
 
+
     @Volatile
     var pacoteBloqueado = ""
+
+
+    @Volatile
+    var pacoteDesbloqueado = ""
 
 }
