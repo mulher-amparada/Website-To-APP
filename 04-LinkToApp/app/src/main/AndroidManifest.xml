@@ -22,6 +22,11 @@
             android:turnScreenOn="true"
             android:exported="false"/>
 
+<activity
+    android:name=".BiometricActivity"
+    android:excludeFromRecents="true"
+    android:exported="false"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
