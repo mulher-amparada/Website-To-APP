@@ -11,8 +11,15 @@ import androidx.core.view.WindowInsetsControllerCompat
 
 class LockActivity : AppCompatActivity() {
 
+    companion object {
+        @Volatile
+        var aberta = false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        aberta = true
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
@@ -50,7 +57,7 @@ class LockActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_lock)
 
-        val pacote = intent.getStringExtra("package") ?: run {
+        intent.getStringExtra("package") ?: run {
             finish()
             return
         }
@@ -59,9 +66,9 @@ class LockActivity : AppCompatActivity() {
 
             sucesso = {
 
-    finish()
+                finish()
 
-},
+            },
 
             erro = {
 
@@ -70,6 +77,11 @@ class LockActivity : AppCompatActivity() {
             }
 
         )
+    }
+
+    override fun onDestroy() {
+        aberta = false
+        super.onDestroy()
     }
 
     override fun onBackPressed() {
