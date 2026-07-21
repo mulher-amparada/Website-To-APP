@@ -83,22 +83,17 @@ class MainActivity : AppCompatActivity() {
         val pm = packageManager
 
         val apps = pm.getInstalledApplications(0)
-            .filter {
-                pm.getLaunchIntentForPackage(it.packageName) != null
-            }
-            .map {
-
-                AppInfo(
-                    nome = pm.getApplicationLabel(it).toString(),
-                    pacote = it.packageName,
-                    icone = pm.getApplicationIcon(it),
-                    protegido = repository.protegido(it.packageName)
-                )
-
-            }
-            .sortedBy {
-                it.nome.lowercase()
-            }
+    .map {
+        AppInfo(
+            nome = pm.getApplicationLabel(it).toString(),
+            pacote = it.packageName,
+            icone = pm.getApplicationIcon(it),
+            protegido = repository.protegido(it.packageName)
+        )
+    }
+    .sortedBy {
+        it.nome.lowercase()
+    }
 
         lista.adapter = AppAdapter(
             apps.toMutableList(),
