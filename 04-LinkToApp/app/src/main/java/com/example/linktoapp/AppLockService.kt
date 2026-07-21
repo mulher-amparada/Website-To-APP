@@ -94,6 +94,25 @@ class AppLockService : AccessibilityService() {
     }
 
 
+private fun ehAplicativoReal(pacote: String): Boolean {
+
+    return try {
+
+        val info = packageManager.getApplicationInfo(
+            pacote,
+            0
+        )
+
+        info.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM == 0 ||
+        repository.protegido(pacote)
+
+    } catch (e: Exception) {
+
+        false
+
+    }
+
+}
 
     private fun mostrarBloqueio() {
 
