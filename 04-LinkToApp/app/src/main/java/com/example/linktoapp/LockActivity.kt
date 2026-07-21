@@ -8,11 +8,8 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import android.content.Intent
 
 class LockActivity : AppCompatActivity() {
-
-private var pacote = ""
 
     companion object {
         @Volatile
@@ -59,8 +56,6 @@ private var pacote = ""
         }
 
         setContentView(R.layout.activity_lock)
-
-
 
 val raiz = findViewById<View>(
     android.R.id.content
@@ -113,24 +108,13 @@ private fun aplicarFonte(view: View) {
     }
 }
 
+    override fun onDestroy() {
+        aberta = false
+        super.onDestroy()
+    }
+
     override fun onBackPressed() {
-
-    val intent = Intent(
-        this,
-        LockActivity::class.java
-    )
-
-    intent.putExtra(
-        "package",
-        pacote
-    )
-
-    intent.addFlags(
-        Intent.FLAG_ACTIVITY_NEW_TASK or
-        Intent.FLAG_ACTIVITY_CLEAR_TOP
-    )
-
-    startActivity(intent)
-
-}
+        // impede sair usando voltar
+finishAffinity()
+    }
 }
