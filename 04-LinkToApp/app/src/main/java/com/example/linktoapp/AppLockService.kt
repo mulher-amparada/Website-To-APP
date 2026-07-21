@@ -131,7 +131,21 @@ class AppLockService : AccessibilityService() {
             Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
         )
 
-        startActivity(intent)
+        val overlay = LockOverlay(this)
+
+overlay.mostrar()
+
+BiometricHelper(this).autenticar(
+
+    sucesso = {
+        overlay.remover()
+    },
+
+    erro = {
+        overlay.remover()
+    }
+
+)
 
     }
 
