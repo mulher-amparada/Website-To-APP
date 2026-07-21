@@ -97,38 +97,28 @@ class AppLockService : AccessibilityService() {
 
     private fun mostrarBloqueio() {
 
-        if (overlay != null)
-            return
+    if (overlay != null)
+        return
 
 
-        overlay = LockOverlay(this)
+    overlay = LockOverlay(this)
 
-        overlay?.mostrar()
-
-
-
-        BiometricHelper(this).autenticar(
-
-            sucesso = {
-
-                overlay?.remover()
-
-                overlay = null
-
-            },
+    overlay?.mostrar()
 
 
-            erro = {
+    val intent = Intent(
+        this,
+        BiometricActivity::class.java
+    )
 
-                overlay?.remover()
+    intent.addFlags(
+        Intent.FLAG_ACTIVITY_NEW_TASK or
+        Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+    )
 
-                overlay = null
+    startActivity(intent)
 
-            }
-
-        )
-
-    }
+}
 
 
 
