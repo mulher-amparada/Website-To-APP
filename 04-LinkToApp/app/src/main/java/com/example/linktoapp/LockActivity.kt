@@ -37,8 +37,7 @@ class LockActivity : AppCompatActivity() {
                     // Apenas bloqueia o voltar
                     // sem fechar a Activity
 
-                    LockState.voltarPressionado = true
-
+                    
                 }
 
             }
