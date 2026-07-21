@@ -8,7 +8,6 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import android.content.Intent
 
 class LockActivity : AppCompatActivity() {
 
@@ -111,18 +110,7 @@ private fun aplicarFonte(view: View) {
 
     override fun onBackPressed() {
 
-    val intent = Intent(
-        Intent.ACTION_MAIN
-    )
-
-    intent.addCategory(
-        Intent.CATEGORY_HOME
-    )
-
-    intent.flags =
-        Intent.FLAG_ACTIVITY_NEW_TASK
-
-    startActivity(intent)
+    
 
 }
 }
