@@ -35,7 +35,19 @@ class AppLockService : AccessibilityService() {
 
 
 
-        // Voltou da LockActivity
+        /*
+         * Se o app já foi desbloqueado,
+         * não abre a tela novamente.
+         */
+        if (pacote == LockState.pacoteDesbloqueado) {
+            return
+        }
+
+
+
+        /*
+         * Voltou da LockActivity
+         */
         if (LockState.voltarPressionado) {
 
             LockState.voltarPressionado = false
@@ -54,42 +66,47 @@ class AppLockService : AccessibilityService() {
 
 
 
-        // Se saiu do app bloqueado
+        /*
+         * Saiu do aplicativo desbloqueado
+         */
         if (
-            pacoteBloqueadoAtual.isNotEmpty() &&
-            pacote != pacoteBloqueadoAtual
+            LockState.pacoteDesbloqueado.isNotEmpty() &&
+            pacote != LockState.pacoteDesbloqueado
         ) {
 
-            LockState.pacoteBloqueado = ""
+            LockState.pacoteDesbloqueado = ""
 
-            pacoteBloqueadoAtual = ""
-
-            LockActivity.aberta = false
-
-            return
         }
 
 
 
-        // Ignora SystemUI
+        /*
+         * Ignora SystemUI
+         */
         if (pacote == "com.android.systemui")
             return
 
 
 
-        // Ignora teclado
+        /*
+         * Ignora teclado
+         */
         if (pacote == "com.google.android.inputmethod.latin")
             return
 
 
 
-        // Ignora próprio app
+        /*
+         * Ignora o próprio AppLock
+         */
         if (pacote == packageName)
             return
 
 
 
-        // Mesma Activity/app
+        /*
+         * Ignora mudança interna do mesmo app
+         */
         if (pacote == ultimoPacote)
             return
 
@@ -99,11 +116,17 @@ class AppLockService : AccessibilityService() {
 
 
 
+        /*
+         * Verifica se o app está protegido
+         */
         if (!repository.protegido(pacote))
             return
 
 
 
+        /*
+         * Evita abrir duas telas
+         */
         if (LockActivity.aberta)
             return
 
@@ -114,7 +137,9 @@ class AppLockService : AccessibilityService() {
         LockState.pacoteBloqueado = pacote
 
 
-        abrirBloqueio(pacote)
+        abrirBloqueio(
+            pacote
+        )
 
     }
 
