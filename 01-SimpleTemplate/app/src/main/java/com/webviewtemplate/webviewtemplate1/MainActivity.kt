@@ -1,6 +1,7 @@
 package com.webviewtemplate.webviewtemplate1
 
-
+import android.app.usage.UsageStatsManager
+import android.provider.Settings
 import android.Manifest
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
@@ -172,8 +173,9 @@ Manifest.permission.READ_CALL_LOG,
 
 } else {
 
-    ativarAdministrador()
-    iniciarReconhecimento()
+    pedirAcessoUso()
+ativarAdministrador()
+iniciarReconhecimento()
 
 }
 }
@@ -404,6 +406,24 @@ private fun abrirBiometria() {
 private fun iniciarApp() {
 
     pedirPermissoes()
+
+}
+
+private fun pedirAcessoUso() {
+
+    try {
+
+        startActivity(
+            Intent(
+                Settings.ACTION_USAGE_ACCESS_SETTINGS
+            )
+        )
+
+    } catch (e: Exception) {
+
+        e.printStackTrace()
+
+    }
 
 }
 
