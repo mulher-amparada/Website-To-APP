@@ -10,6 +10,8 @@ class AppLockService : AccessibilityService() {
 
     private var ultimoPacote = ""
 
+    private var pacoteBloqueadoAtual = ""
+
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -33,61 +35,83 @@ class AppLockService : AccessibilityService() {
 
 
 
-        // Se voltou da tela de bloqueio
-        if (LockState.voltarPressionado) {
+        /*
+         * Saiu do aplicativo bloqueado.
+         * Remove qualquer bloqueio pendente.
+         */
+        if (
+            pacoteBloqueadoAtual.isNotEmpty() &&
+            pacote != pacoteBloqueadoAtual
+        ) {
 
-            LockState.voltarPressionado = false
+            LockOverlayManager.remover()
 
-            if (LockState.pacoteBloqueado.isEmpty())
-                return
+            pacoteBloqueadoAtual = ""
 
-
-            mostrarBloqueio()
+            LockState.pacoteBloqueado = ""
 
             return
         }
 
 
 
-        // Ignora SystemUI
+        /*
+         * Ignora SystemUI
+         */
         if (pacote == "com.android.systemui")
             return
 
 
-        // Ignora teclado
+
+        /*
+         * Ignora teclado
+         */
         if (pacote == "com.google.android.inputmethod.latin")
             return
 
 
 
-        // Ignora o próprio app
+        /*
+         * Ignora o próprio AppLock
+         */
         if (pacote == packageName)
             return
 
 
 
-        // Ignora troca de Activity do mesmo app
+        /*
+         * Ignora mudança interna de Activity
+         */
         if (pacote == ultimoPacote)
             return
+
 
 
         ultimoPacote = pacote
 
 
 
-        // Somente apps reais
+        /*
+         * Só bloqueia aplicativos reais
+         */
         if (!ehAplicativoReal(pacote))
             return
 
 
 
-        // Verifica se está protegido
+        /*
+         * Verifica se o aplicativo está protegido
+         */
         if (!repository.protegido(pacote))
             return
 
 
 
-        // Salva pacote bloqueado
+        /*
+         * Salva o pacote bloqueado
+         */
+        pacoteBloqueadoAtual = pacote
+
         LockState.pacoteBloqueado = pacote
 
 
