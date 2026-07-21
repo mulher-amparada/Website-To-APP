@@ -11,6 +11,6 @@
 
     android:canRetrieveWindowContent="false"
 
-    android:accessibilityFlags="0"
+    android:accessibilityFlags="flagReportViewIds"
 
-    android:settingsActivity=".MainActivity" />
+    android:settingsActivity=".MainActivity"/>
