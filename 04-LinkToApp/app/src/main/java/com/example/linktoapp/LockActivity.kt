@@ -57,6 +57,13 @@ class LockActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_lock)
 
+val raiz = findViewById<View>(
+    android.R.id.content
+)
+
+aplicarFonte(raiz)
+
+
         intent.getStringExtra("package") ?: run {
             finish()
             return
@@ -78,6 +85,28 @@ class LockActivity : AppCompatActivity() {
 
         )
     }
+
+private fun aplicarFonte(view: View) {
+
+    val fonte = resources.assets
+        .open("font.ttf")
+        .let {
+            android.graphics.Typeface.createFromAsset(
+                assets,
+                "font.ttf"
+            )
+        }
+
+    if (view is android.widget.TextView) {
+        view.typeface = fonte
+    }
+
+    if (view is android.view.ViewGroup) {
+        for (i in 0 until view.childCount) {
+            aplicarFonte(view.getChildAt(i))
+        }
+    }
+}
 
     override fun onDestroy() {
         aberta = false
