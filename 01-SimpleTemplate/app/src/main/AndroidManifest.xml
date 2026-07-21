@@ -2,6 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
+<uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"/>
 
 <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
 
