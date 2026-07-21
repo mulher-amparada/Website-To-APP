@@ -1,4 +1,4 @@
-package com.example.linktoapp
+package com.linktoapp.app
 
 import android.content.Context
 
