@@ -10,8 +10,6 @@ class AppLockService : AccessibilityService() {
 
     private var ultimoPacote = ""
 
-    private var pacoteBloqueadoAtual = ""
-
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -35,40 +33,41 @@ class AppLockService : AccessibilityService() {
 
 
 
-        /*
-         * Se o app já foi desbloqueado,
-         * não abre a tela novamente.
-         */
+        // Evita recriar a tela enquanto está bloqueando
+        if (LockState.bloqueando)
+            return
+
+
+
+        // Ignora SystemUI
+        if (pacote == "com.android.systemui")
+            return
+
+
+
+        // Ignora teclado
+        if (pacote == "com.google.android.inputmethod.latin")
+            return
+
+
+
+        // Ignora o próprio app
+        if (pacote == packageName)
+            return
+
+
+
+        // Se este app já foi desbloqueado,
+        // deixa ele continuar aberto
         if (pacote == LockState.pacoteDesbloqueado) {
+
             return
+
         }
 
 
 
-        /*
-         * Voltou da LockActivity
-         */
-        if (LockState.voltarPressionado) {
-
-            LockState.voltarPressionado = false
-
-
-            if (LockState.pacoteBloqueado.isEmpty())
-                return
-
-
-            abrirBloqueio(
-                LockState.pacoteBloqueado
-            )
-
-            return
-        }
-
-
-
-        /*
-         * Saiu do aplicativo desbloqueado
-         */
+        // Saiu do app desbloqueado
         if (
             LockState.pacoteDesbloqueado.isNotEmpty() &&
             pacote != LockState.pacoteDesbloqueado
@@ -80,61 +79,24 @@ class AppLockService : AccessibilityService() {
 
 
 
-        /*
-         * Ignora SystemUI
-         */
-        if (pacote == "com.android.systemui")
-            return
-
-
-
-        /*
-         * Ignora teclado
-         */
-        if (pacote == "com.google.android.inputmethod.latin")
-            return
-
-
-
-        /*
-         * Ignora o próprio AppLock
-         */
-        if (pacote == packageName)
-            return
-
-
-
-        /*
-         * Ignora mudança interna do mesmo app
-         */
+        // Ignora troca de Activity do mesmo app
         if (pacote == ultimoPacote)
             return
-
 
 
         ultimoPacote = pacote
 
 
 
-        /*
-         * Verifica se o app está protegido
-         */
+        // Verifica se o app está protegido
         if (!repository.protegido(pacote))
             return
 
 
 
-        /*
-         * Evita abrir duas telas
-         */
-        if (LockActivity.aberta)
-            return
-
-
-
-        pacoteBloqueadoAtual = pacote
-
+        // Salva o pacote bloqueado
         LockState.pacoteBloqueado = pacote
+
 
 
         abrirBloqueio(
@@ -149,6 +111,16 @@ class AppLockService : AccessibilityService() {
         pacote: String
     ) {
 
+
+        if (LockState.bloqueando)
+            return
+
+
+
+        LockState.bloqueando = true
+
+
+
         val intent = Intent(
             this,
             LockActivity::class.java
@@ -161,10 +133,13 @@ class AppLockService : AccessibilityService() {
         )
 
 
+
         intent.addFlags(
             Intent.FLAG_ACTIVITY_NEW_TASK or
-            Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+            Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS or
+            Intent.FLAG_ACTIVITY_NO_HISTORY
         )
+
 
 
         startActivity(intent)
