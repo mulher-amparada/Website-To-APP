@@ -30,6 +30,7 @@ class LockActivity : AppCompatActivity() {
 
                 override fun handleOnBackPressed() {
 
+                    // Bloqueia o botão voltar
                     LockState.voltarPressionado = true
 
                 }
@@ -60,15 +61,20 @@ class LockActivity : AppCompatActivity() {
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
                 isStatusBarContrastEnforced = false
                 isNavigationBarContrastEnforced = false
+
             }
 
 
             decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+    View.SYSTEM_UI_FLAG_FULLSCREEN or
+    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         }
 
 
@@ -83,7 +89,11 @@ class LockActivity : AppCompatActivity() {
         }
 
 
-        setContentView(R.layout.activity_lock)
+
+        setContentView(
+            R.layout.activity_lock
+        )
+
 
 
         val raiz = findViewById<View>(
@@ -94,15 +104,25 @@ class LockActivity : AppCompatActivity() {
 
 
 
-        intent.getStringExtra("package") ?: run {
+        val pacote = intent.getStringExtra(
+            "package"
+        )
+
+
+        if (pacote.isNullOrEmpty()) {
+
             finish()
             return
+
         }
+
 
 
         BiometricHelper(this).autenticar(
 
             sucesso = {
+
+                aberta = false
 
                 finish()
 
@@ -111,7 +131,8 @@ class LockActivity : AppCompatActivity() {
 
             erro = {
 
-                finishAffinity()
+                // Não fecha a tela se cancelar/errar
+                // mantém o bloqueio ativo
 
             }
 
@@ -120,7 +141,10 @@ class LockActivity : AppCompatActivity() {
     }
 
 
-    private fun aplicarFonte(view: View) {
+
+    private fun aplicarFonte(
+        view: View
+    ) {
 
         val fonte = android.graphics.Typeface.createFromAsset(
             assets,
@@ -129,7 +153,9 @@ class LockActivity : AppCompatActivity() {
 
 
         if (view is android.widget.TextView) {
+
             view.typeface = fonte
+
         }
 
 
@@ -148,9 +174,8 @@ class LockActivity : AppCompatActivity() {
     }
 
 
-    override fun onDestroy() {
 
-        aberta = false
+    override fun onDestroy() {
 
         super.onDestroy()
 
