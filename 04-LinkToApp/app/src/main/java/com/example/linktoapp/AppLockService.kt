@@ -24,6 +24,12 @@ class AppLockService : AccessibilityService() {
 
         val pacote = event.packageName?.toString() ?: return
 
+if (
+    pacote == "com.android.systemui" ||
+    pacote == "com.google.android.inputmethod.latin"
+)
+    return
+
         // Ignora o próprio AppLock
         if (pacote == packageName) {
             return
