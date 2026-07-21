@@ -9,7 +9,7 @@ class AppLockService : AccessibilityService() {
     private lateinit var repository: AppRepository
 
     private var ultimoPacote = ""
-    private var pacoteDesbloqueado = ""
+    private var lockAberto = false
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -25,34 +25,26 @@ class AppLockService : AccessibilityService() {
 
         val pacote = event.packageName?.toString() ?: return
 
-        if (pacote == packageName)
+        if (pacote == packageName) {
+            lockAberto = false
             return
-
-        if (pacote == ultimoPacote)
-            return
-
-        if (pacoteDesbloqueado.isNotEmpty() &&
-            pacote != pacoteDesbloqueado
-        ) {
-            UnlockManager.bloquear(pacoteDesbloqueado)
-            pacoteDesbloqueado = ""
-            ultimoPacote = ""
         }
 
-        ultimoPacote = pacote
+        if (pacote != ultimoPacote) {
+            ultimoPacote = pacote
+            lockAberto = false
+        }
 
         if (!repository.protegido(pacote))
             return
 
-        if (!UnlockManager.bloqueado(pacote))
+        if (lockAberto)
             return
 
-        pacoteDesbloqueado = pacote
+        lockAberto = true
 
         val intent = Intent(this, LockActivity::class.java)
-
         intent.putExtra("package", pacote)
-
         intent.addFlags(
             Intent.FLAG_ACTIVITY_NEW_TASK or
             Intent.FLAG_ACTIVITY_SINGLE_TOP or
