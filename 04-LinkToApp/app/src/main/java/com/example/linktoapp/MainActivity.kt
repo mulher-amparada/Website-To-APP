@@ -2,11 +2,14 @@ package com.linktoapp.app
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -17,6 +20,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var lista: RecyclerView
     private lateinit var repository: AppRepository
+
+    private val fonte by lazy {
+        Typeface.createFromAsset(assets, "font.ttf")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +67,9 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
+        val raiz = findViewById<View>(android.R.id.content)
+        aplicarFonte(raiz)
+
         repository = AppRepository(this)
 
         lista = findViewById(R.id.lista)
@@ -83,21 +93,38 @@ class MainActivity : AppCompatActivity() {
         val pm = packageManager
 
         val apps = pm.getInstalledApplications(0)
-    .map {
-        AppInfo(
-            nome = pm.getApplicationLabel(it).toString(),
-            pacote = it.packageName,
-            icone = pm.getApplicationIcon(it),
-            protegido = repository.protegido(it.packageName)
-        )
-    }
-    .sortedBy {
-        it.nome.lowercase()
-    }
+            .map {
+                AppInfo(
+                    nome = pm.getApplicationLabel(it).toString(),
+                    pacote = it.packageName,
+                    icone = pm.getApplicationIcon(it),
+                    protegido = repository.protegido(it.packageName)
+                )
+            }
+            .sortedBy {
+                it.nome.lowercase()
+            }
 
         lista.adapter = AppAdapter(
             apps.toMutableList(),
             repository
         )
+
+        lista.post {
+            aplicarFonte(findViewById(android.R.id.content))
+        }
+    }
+
+    private fun aplicarFonte(view: View) {
+
+        if (view is TextView) {
+            view.typeface = fonte
+        }
+
+        if (view is ViewGroup) {
+            for (i in 0 until view.childCount) {
+                aplicarFonte(view.getChildAt(i))
+            }
+        }
     }
 }
