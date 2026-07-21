@@ -26,9 +26,17 @@ class AppLockService : AccessibilityService() {
         val pacote = event.packageName?.toString() ?: return
 
 
+        /*
+         * Se apertou voltar na LockActivity,
+         * reabre a tela de bloqueio usando
+         * o pacote salvo anteriormente.
+         */
         if (LockState.voltarPressionado) {
 
             LockState.voltarPressionado = false
+
+            if (LockState.pacoteBloqueado.isEmpty())
+                return
 
             val intent = Intent(
                 this,
@@ -37,7 +45,7 @@ class AppLockService : AccessibilityService() {
 
             intent.putExtra(
                 "package",
-                pacote
+                LockState.pacoteBloqueado
             )
 
             intent.addFlags(
@@ -52,19 +60,34 @@ class AppLockService : AccessibilityService() {
         }
 
 
-        if (
-            pacote == "com.android.systemui" ||
-            pacote == "com.google.android.inputmethod.latin"
-        )
+        /*
+         * Ignora eventos do sistema:
+         * - barra de navegação
+         * - notificações
+         * - painel rápido
+         */
+        if (pacote == "com.android.systemui")
             return
 
 
-        // Ignora o próprio AppLock
+        /*
+         * Ignora teclado
+         */
+        if (pacote == "com.google.android.inputmethod.latin")
+            return
+
+
+        /*
+         * Ignora o próprio AppLock
+         */
         if (pacote == packageName)
             return
 
 
-        // Ignora mudança de Activity dentro do mesmo app
+        /*
+         * Ignora troca de Activity
+         * dentro do mesmo aplicativo.
+         */
         if (pacote == ultimoPacote)
             return
 
@@ -72,14 +95,24 @@ class AppLockService : AccessibilityService() {
         ultimoPacote = pacote
 
 
-        // Verifica se o app está protegido
+        /*
+         * Verifica se o aplicativo está protegido.
+         */
         if (!repository.protegido(pacote))
             return
 
 
-        // Evita abrir várias LockActivity
+        /*
+         * Não abre duas telas de bloqueio.
+         */
         if (LockActivity.aberta)
             return
+
+
+        /*
+         * Guarda o app que está sendo bloqueado.
+         */
+        LockState.pacoteBloqueado = pacote
 
 
         val intent = Intent(
