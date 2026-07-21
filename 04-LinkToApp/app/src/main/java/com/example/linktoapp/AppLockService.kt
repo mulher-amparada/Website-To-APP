@@ -10,27 +10,32 @@ class AppLockService : AccessibilityService() {
 
     private var ultimoPacote = ""
 
+    private var overlay: LockOverlay? = null
+
+
     override fun onServiceConnected() {
         super.onServiceConnected()
+
         repository = AppRepository(this)
     }
+
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
 
         if (event == null)
             return
 
+
         if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED)
             return
 
-        val pacote = event.packageName?.toString() ?: return
+
+        val pacote = event.packageName?.toString()
+            ?: return
 
 
-        /*
-         * Se apertou voltar na LockActivity,
-         * reabre a tela de bloqueio usando
-         * o pacote salvo anteriormente.
-         */
+
+        // Voltar pressionado na tela de bloqueio
         if (LockState.voltarPressionado) {
 
             LockState.voltarPressionado = false
@@ -38,117 +43,96 @@ class AppLockService : AccessibilityService() {
             if (LockState.pacoteBloqueado.isEmpty())
                 return
 
-            val intent = Intent(
-                this,
-                LockActivity::class.java
-            )
 
-            intent.putExtra(
-                "package",
-                LockState.pacoteBloqueado
-            )
-
-            intent.addFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK or
-                Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
-            )
-
-            startActivity(intent)
+            mostrarBloqueio()
 
             return
         }
 
 
-        /*
-         * Ignora eventos do sistema:
-         * - barra de navegação
-         * - notificações
-         * - painel rápido
-         */
+
+        // Ignora SystemUI
         if (pacote == "com.android.systemui")
             return
 
 
-        /*
-         * Ignora teclado
-         */
+        // Ignora teclado
         if (pacote == "com.google.android.inputmethod.latin")
             return
 
 
-        /*
-         * Ignora o próprio AppLock
-         */
+
+        // Ignora o próprio app
         if (pacote == packageName)
             return
 
 
-        /*
-         * Ignora troca de Activity
-         * dentro do mesmo aplicativo.
-         */
+
+        // Ignora mudança interna de Activity
         if (pacote == ultimoPacote)
             return
+
 
 
         ultimoPacote = pacote
 
 
-        /*
-         * Verifica se o aplicativo está protegido.
-         */
+
+        // Verifica se está protegido
         if (!repository.protegido(pacote))
             return
 
 
-        /*
-         * Não abre duas telas de bloqueio.
-         */
-        if (LockActivity.aberta)
-            return
 
-
-        /*
-         * Guarda o app que está sendo bloqueado.
-         */
+        // Salva o pacote bloqueado
         LockState.pacoteBloqueado = pacote
 
 
-        val intent = Intent(
-            this,
-            LockActivity::class.java
-        )
 
-        intent.putExtra(
-            "package",
-            pacote
-        )
-
-        intent.addFlags(
-            Intent.FLAG_ACTIVITY_NEW_TASK or
-            Intent.FLAG_ACTIVITY_SINGLE_TOP or
-            Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
-        )
-
-        val overlay = LockOverlay(this)
-
-overlay.mostrar()
-
-BiometricHelper(this).autenticar(
-
-    sucesso = {
-        overlay.remover()
-    },
-
-    erro = {
-        overlay.remover()
-    }
-
-)
+        mostrarBloqueio()
 
     }
+
+
+
+    private fun mostrarBloqueio() {
+
+        if (overlay != null)
+            return
+
+
+        overlay = LockOverlay(this)
+
+        overlay?.mostrar()
+
+
+
+        BiometricHelper(this).autenticar(
+
+            sucesso = {
+
+                overlay?.remover()
+
+                overlay = null
+
+            },
+
+
+            erro = {
+
+                overlay?.remover()
+
+                overlay = null
+
+            }
+
+        )
+
+    }
+
+
 
     override fun onInterrupt() {
     }
+
 }
