@@ -8,6 +8,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import android.content.Intent
 
 class LockActivity : AppCompatActivity() {
 
@@ -16,17 +17,12 @@ class LockActivity : AppCompatActivity() {
         var aberta = false
     }
 
-    private var pacote = ""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         aberta = true
 
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         window.apply {
 
@@ -56,29 +52,23 @@ class LockActivity : AppCompatActivity() {
             window,
             window.decorView
         ).apply {
-
             isAppearanceLightStatusBars = false
             isAppearanceLightNavigationBars = false
         }
 
         setContentView(R.layout.activity_lock)
 
-        val raiz = findViewById<View>(
-            android.R.id.content
-        )
+val raiz = findViewById<View>(
+    android.R.id.content
+)
 
-        aplicarFonte(raiz)
+aplicarFonte(raiz)
 
-        pacote = intent.getStringExtra("package") ?: run {
+
+        intent.getStringExtra("package") ?: run {
             finish()
             return
         }
-
-        abrirBiometria()
-    }
-
-
-    private fun abrirBiometria() {
 
         BiometricHelper(this).autenticar(
 
@@ -97,39 +87,42 @@ class LockActivity : AppCompatActivity() {
         )
     }
 
+private fun aplicarFonte(view: View) {
 
-    private fun aplicarFonte(view: View) {
-
-        val fonte = android.graphics.Typeface.createFromAsset(
-            assets,
-            "font.ttf"
-        )
-
-        if (view is android.widget.TextView) {
-            view.typeface = fonte
+    val fonte = resources.assets
+        .open("font.ttf")
+        .let {
+            android.graphics.Typeface.createFromAsset(
+                assets,
+                "font.ttf"
+            )
         }
 
-        if (view is android.view.ViewGroup) {
-
-            for (i in 0 until view.childCount) {
-                aplicarFonte(view.getChildAt(i))
-            }
-        }
+    if (view is android.widget.TextView) {
+        view.typeface = fonte
     }
 
+    if (view is android.view.ViewGroup) {
+        for (i in 0 until view.childCount) {
+            aplicarFonte(view.getChildAt(i))
+        }
+    }
+}
 
     override fun onBackPressed() {
 
-        // Ao apertar voltar, abre a biometria novamente
-        abrirBiometria()
+    val intent = Intent(
+        Intent.ACTION_MAIN
+    )
 
-    }
+    intent.addCategory(
+        Intent.CATEGORY_HOME
+    )
 
+    intent.flags =
+        Intent.FLAG_ACTIVITY_NEW_TASK
 
-    override fun onDestroy() {
+    startActivity(intent)
 
-        aberta = false
-
-        super.onDestroy()
-    }
+}
 }
