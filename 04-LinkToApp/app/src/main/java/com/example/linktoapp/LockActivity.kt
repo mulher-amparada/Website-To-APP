@@ -114,7 +114,6 @@ private fun aplicarFonte(view: View) {
     }
 
     override fun onBackPressed() {
-        // impede sair usando voltar
-finishAffinity()
-    }
+        LockState.voltarPressionado = true
+}
 }
