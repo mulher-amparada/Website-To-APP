@@ -121,6 +121,19 @@ texto.contains("dispositivos pareados") -> {
 
 }
 
+texto.startsWith("pesquisar ") -> {
+
+    val pesquisa = texto
+        .removePrefix("pesquisar ")
+        .trim()
+
+    pesquisarGoogle(
+        contexto,
+        pesquisa
+    )
+
+}
+
 texto.contains("quantas vezes liguei para pedir ajuda") ||
 texto.contains("ligações de ajuda") ||
 texto.contains("historico de ajuda") -> {
@@ -1306,6 +1319,29 @@ private fun abrirMidia(
         "Arquivo não encontrado",
         Toast.LENGTH_SHORT
     ).show()
+}
+
+private fun pesquisarGoogle(
+    contexto: Context,
+    pesquisa: String
+) {
+
+    val uri = Uri.parse(
+        "https://www.google.com/search?q=" +
+                Uri.encode(pesquisa)
+    )
+
+    val intent = Intent(
+        Intent.ACTION_VIEW,
+        uri
+    )
+
+    intent.addFlags(
+        Intent.FLAG_ACTIVITY_NEW_TASK
+    )
+
+    contexto.startActivity(intent)
+
 }
 
 }
