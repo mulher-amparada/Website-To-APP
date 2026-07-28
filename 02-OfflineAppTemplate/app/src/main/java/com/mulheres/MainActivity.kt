@@ -176,52 +176,116 @@ startActivity(intent)
 
 private fun configurarWebView() {
 
-webView.addJavascriptInterface(  
-    WebAppInterface(this),  
-    "Android"  
-)  
+    Toast.makeText(this, "1", Toast.LENGTH_SHORT).show()
 
-webView.addJavascriptInterface(  
-    Cripto(this),  
-    "Cripto"  
-)  
+    webView.addJavascriptInterface(
+        WebAppInterface(this),
+        "Android"
+    )
 
-val settings = webView.settings  
+    Toast.makeText(this, "2", Toast.LENGTH_SHORT).show()
 
-settings.javaScriptEnabled = true  
-settings.mediaPlaybackRequiresUserGesture = false  
-settings.domStorageEnabled = true  
-settings.setGeolocationEnabled(true)  
+    webView.addJavascriptInterface(
+        Cripto(this),
+        "Cripto"
+    )
 
-settings.allowFileAccess = true  
-settings.allowContentAccess = true  
-settings.javaScriptCanOpenWindowsAutomatically = true  
-settings.allowFileAccessFromFileURLs = true  
-settings.allowUniversalAccessFromFileURLs = true  
+    Toast.makeText(this, "3", Toast.LENGTH_SHORT).show()
 
-webView.webChromeClient = object : WebChromeClient() {  
+    val settings = webView.settings
 
-    override fun onGeolocationPermissionsShowPrompt(  
-        origin: String?,  
-        callback: GeolocationPermissions.Callback?  
-    ) {  
-        callback?.invoke(origin, true, false)  
-    }  
+    Toast.makeText(this, "4", Toast.LENGTH_SHORT).show()
 
-    override fun onPermissionRequest(request: PermissionRequest) {  
-        runOnUiThread {  
-            val resources = request.resources  
+    settings.javaScriptEnabled = true
+    settings.mediaPlaybackRequiresUserGesture = false
+    settings.domStorageEnabled = true
+    settings.setGeolocationEnabled(true)
 
-            if (resources.contains(PermissionRequest.RESOURCE_AUDIO_CAPTURE)) {  
-                request.grant(  
-                    arrayOf(PermissionRequest.RESOURCE_AUDIO_CAPTURE)  
-                )  
-            } else {  
-                request.deny()  
-            }  
-        }  
-    }  
-}  
+    settings.allowFileAccess = true
+    settings.allowContentAccess = true
+    settings.javaScriptCanOpenWindowsAutomatically = true
+    settings.allowFileAccessFromFileURLs = true
+    settings.allowUniversalAccessFromFileURLs = true
+
+    Toast.makeText(this, "5", Toast.LENGTH_SHORT).show()
+
+    webView.webChromeClient = object : WebChromeClient() {
+
+        override fun onGeolocationPermissionsShowPrompt(
+            origin: String?,
+            callback: GeolocationPermissions.Callback?
+        ) {
+            callback?.invoke(origin, true, false)
+        }
+
+        override fun onPermissionRequest(request: PermissionRequest) {
+            runOnUiThread {
+                val resources = request.resources
+
+                if (resources.contains(PermissionRequest.RESOURCE_AUDIO_CAPTURE)) {
+                    request.grant(
+                        arrayOf(PermissionRequest.RESOURCE_AUDIO_CAPTURE)
+                    )
+                } else {
+                    request.deny()
+                }
+            }
+        }
+    }
+
+    Toast.makeText(this, "6", Toast.LENGTH_SHORT).show()
+
+    webView.webViewClient = object : WebViewClient() {
+
+        override fun shouldOverrideUrlLoading(
+            view: WebView?,
+            request: WebResourceRequest?
+        ): Boolean {
+
+            val url = request?.url.toString()
+
+            if (url.startsWith("tel:")) {
+                startActivity(
+                    Intent(
+                        Intent.ACTION_DIAL,
+                        Uri.parse(url)
+                    )
+                )
+                return true
+            }
+
+            if (url.startsWith("https://wa.me")) {
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(url)
+                    )
+                )
+                return true
+            }
+
+            return false
+        }
+
+        override fun onPageFinished(
+            view: WebView?,
+            url: String?
+        ) {
+            super.onPageFinished(view, url)
+
+            view?.evaluateJavascript(
+                """
+                if(typeof mostrarConteudo === 'function'){
+                    mostrarConteudo();
+                }
+                """.trimIndent(),
+                null
+            )
+        }
+    }
+
+    Toast.makeText(this, "7", Toast.LENGTH_SHORT).show()
+}
 
 webView.webViewClient = object : WebViewClient() {  
 
