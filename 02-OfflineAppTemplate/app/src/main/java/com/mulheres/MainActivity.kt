@@ -190,7 +190,6 @@ private fun configurarWebView() {
 
     Toast.makeText(this, "4", Toast.LENGTH_SHORT).show()
     
-val settings = webView.settings  
 
 settings.javaScriptEnabled = true  
 settings.mediaPlaybackRequiresUserGesture = false  
