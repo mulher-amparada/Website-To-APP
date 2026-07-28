@@ -175,20 +175,17 @@ startActivity(intent)
 }
 
 private fun configurarWebView() {
+webView.addJavascriptInterface(
+    WebAppInterface(this),
+    "Android"
+)
 
-    Toast.makeText(this, "1", Toast.LENGTH_SHORT).show()
+webView.addJavascriptInterface(
+    Cripto(this),
+    "Cripto"
+)
 
-    webView.addJavascriptInterface(WebAppInterface(this), "Android")
-
-    Toast.makeText(this, "2", Toast.LENGTH_SHORT).show()
-
-    webView.addJavascriptInterface(Cripto(this), "Cripto")
-
-    Toast.makeText(this, "3", Toast.LENGTH_SHORT).show()
-
-    val settings = webView.settings
-
-    Toast.makeText(this, "4", Toast.LENGTH_SHORT).show()
+val settings = webView.settings
     
 
 settings.javaScriptEnabled = true  
