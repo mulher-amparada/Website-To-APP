@@ -6,5 +6,6 @@
     android:minHeight="110dp"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/widget_palmas"
+    android:previewLayout="@layout/widget_palmas"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen" />
