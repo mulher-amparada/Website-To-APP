@@ -12,7 +12,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-
+import com.google.android.gms.location.Priority
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -111,6 +111,10 @@ if (!pagina.isNullOrEmpty()) {
 
 if (!temPermissoes()) {  
     pedirPermissoes()  
+}
+
+if (intent?.getBooleanExtra("ABRIR_LOCALIZACAO", false) == true) {
+    abrirWhatsAppComLocalizacao()
 }
 
 }
@@ -360,6 +364,45 @@ private fun pararSensor() {
         sensorManager.unregisterListener(shakeListener)
     }
 
+}
+
+private fun abrirWhatsAppComLocalizacao() {
+
+    val client = LocationServices.getFusedLocationProviderClient(this)
+
+    if (ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        finish()
+        return
+    }
+
+    client.getCurrentLocation(
+        com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY,
+        null
+    ).addOnSuccessListener { location ->
+
+        if (location != null) {
+
+            val link =
+                "https://maps.google.com/?q=${location.latitude},${location.longitude}"
+
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                setPackage("com.whatsapp")
+                putExtra(Intent.EXTRA_TEXT, "Minha localização:\n$link")
+            }
+
+            startActivity(intent)
+        }
+
+        finish()
+
+    }.addOnFailureListener {
+        finish()
+    }
 }
 
 private fun pedirPermissoes() {
