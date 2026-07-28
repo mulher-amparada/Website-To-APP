@@ -3,26 +3,11 @@ package com.mulheres
 import android.content.Context
 import android.content.SharedPreferences
 import android.webkit.JavascriptInterface
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 
 class Cripto(context: Context) {
 
-    private val prefs: SharedPreferences
-
-    init {
-        val masterKey = MasterKey.Builder(context)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
-
-        prefs = EncryptedSharedPreferences.create(
-            context,
-            "dados_seguro",
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    }
+    private val prefs: SharedPreferences =
+        context.getSharedPreferences("dados_seguro", Context.MODE_PRIVATE)
 
     @JavascriptInterface
     fun salvar(chave: String, valor: String) {
