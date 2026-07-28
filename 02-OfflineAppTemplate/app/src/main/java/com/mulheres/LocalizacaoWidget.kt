@@ -14,6 +14,7 @@ class LocalizacaoWidget : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
+
         appWidgetIds.forEach { appWidgetId ->
 
             val views = RemoteViews(
@@ -21,34 +22,27 @@ class LocalizacaoWidget : AppWidgetProvider() {
                 R.layout.widget_localizacao
             )
 
-            val intent = Intent(context, LocalizacaoWidget::class.java).apply {
-                action = ACTION_ENVIAR_LOCALIZACAO
+            val intent = Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                putExtra("ABRIR_LOCALIZACAO", true)
             }
 
-            val pendingIntent = PendingIntent.getBroadcast(
+            val pendingIntent = PendingIntent.getActivity(
                 context,
                 appWidgetId,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
-            views.setOnClickPendingIntent(R.id.localizacao, pendingIntent)
+            views.setOnClickPendingIntent(
+                R.id.localizacao,
+                pendingIntent
+            )
 
-            appWidgetManager.updateAppWidget(appWidgetId, views)
+            appWidgetManager.updateAppWidget(
+                appWidgetId,
+                views
+            )
         }
-    }
-
-    override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-
-        if (intent.action == ACTION_ENVIAR_LOCALIZACAO) {
-            val serviceIntent = Intent(context, LocalizacaoService::class.java)
-            context.startForegroundService(serviceIntent)
-        }
-    }
-
-    companion object {
-        private const val ACTION_ENVIAR_LOCALIZACAO =
-            "com.mulheres.ENVIAR_LOCALIZACAO"
     }
 }
