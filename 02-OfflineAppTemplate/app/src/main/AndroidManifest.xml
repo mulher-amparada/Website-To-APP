@@ -204,6 +204,12 @@
         android:resource="@xml/file_paths"/>
 </provider>
 
+<service
+    android:name=".LocalizacaoService"
+    android:enabled="true"
+    android:exported="false"
+    android:foregroundServiceType="location" />
+    
     </application>
 
 </manifest>
