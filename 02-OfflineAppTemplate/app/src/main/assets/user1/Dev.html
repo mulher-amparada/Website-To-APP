@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Site</title>
+
+<style>
+@font-face {
+  font-family: "Quicksand";
+  src: url("font.ttf") format("truetype");
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Quicksand',sans-serif;
+}
+
+body {
+    color:white;
+    background: black;
+}
+
+header{
+    padding:70px 20px;
+    text-align:center;
+}
+
+header h1{
+    font-size:48px;
+    margin-bottom:15px;
+}
+
+header p{
+    color:#cbd5e1;
+    max-width:700px;
+    margin:auto;
+    font-size:18px;
+}
+
+main{
+    max-width:900px;
+    margin:auto;
+    padding:30px 20px 70px;
+}
+
+.card{
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:20px;
+    padding:25px;
+    margin-bottom:25px;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    background:rgba(255,255,255,.12);
+}
+
+.card h2{
+    color:#ff9999;
+    margin-bottom:12px;
+}
+
+.card p{
+    line-height:1.8;
+    color:#e2e8f0;
+}
+
+footer{
+    text-align:center;
+    padding:25px;
+    color:#94a3b8;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Bem-vindo</h1>
+    <p>Um espaço elegante para compartilhar ideias, histórias, artigos e qualquer tipo de texto.</p>
+</header>
+
+<main>
+
+<div class="card">
+<h2>Quem é o desenvolvedor dos 3 aplicativos?</h2>
+<p>
+Os 3 aplicativos (o assistente de voz, o gerenciador de arquivos e o próprio mulher amparada), foram feitos por um desenvolvedor brasileiro, autista nível 1, menino de 15 anos chamado "Samuel De Oliveira Rigueiro"
+</p>
+</div>
+
+
+</main>
+
+</body>
+</html>
