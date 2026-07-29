@@ -25,7 +25,7 @@ class WebAppInterface(
 
 @JavascriptInterface
 fun abrirPorIntent() {
-    val intent = Intent("com.webviewtemplate.webviewtemplate1.OPEN").apply {
+    val intent = Intent("com.assist.OPEN").apply {
         setPackage("com.webviewtemplate.webviewtemplate1")
     }
 
