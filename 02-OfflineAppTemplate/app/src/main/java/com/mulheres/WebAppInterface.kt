@@ -73,6 +73,15 @@ fun solicitarAdministrador() {
 
 }
 
+@JavascriptInterface
+fun abrirGerenciador() {
+    val intent = Intent("com.gerenciar.OPEN").apply {
+        setPackage("com.gerenciar")
+    }
+
+    activity.startActivity(intent)
+}
+
     @JavascriptInterface
     fun bloquearTela() {
         val dpm = activity.getSystemService(Context.DEVICE_POLICY_SERVICE)
