@@ -22,6 +22,15 @@ class WebAppInterface(
         } catch (_: Exception) {
         }
     }
+
+@JavascriptInterface
+fun abrirPorIntent() {
+    val intent = Intent("com.webviewtemplate.webviewtemplate1.OPEN").apply {
+        setPackage("com.webviewtemplate.webviewtemplate1")
+    }
+
+    activity.startActivity(intent)
+}
     
 @JavascriptInterface
 fun solicitarAdministrador() {
