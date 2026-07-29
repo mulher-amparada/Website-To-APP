@@ -1,4 +1,4 @@
-package com.assist
+package com.webviewtemplate.webviewtemplate1
 
 import android.Manifest
 import android.app.admin.DevicePolicyManager
