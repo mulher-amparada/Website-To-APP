@@ -133,7 +133,7 @@ main{
     width:65%;
     max-width:430px;
     height:58px;
-    border-radius:12px;
+    border-radius:120px;
     background:#ff9999;
     display:flex;
     align-items:center;
@@ -221,22 +221,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const grid = document.querySelector(".grid");
     const pesquisa = document.getElementById("pesquisaInput");
 
-    const apps = JSON.parse(Android.obterApps());
+    let apps = JSON.parse(Android.obterApps());
 
-    apps.sort((a, b) => a.nome.localeCompare(b.nome));
+    apps.sort((a, b) =>
+        a.nome.localeCompare(
+            b.nome,
+            "pt-BR",
+            { sensitivity: "base" }
+        )
+    );
 
     function renderizar(lista) {
 
         grid.innerHTML = "";
+
+        const fragment = document.createDocumentFragment();
 
         lista.forEach(app => {
 
             const div = document.createElement("div");
             div.className = "app";
 
-            div.onclick = () => {
+            div.addEventListener("click", () => {
                 Android.abrirApp(app.pacote);
-            };
+            });
 
             div.innerHTML = `
                 <div class="icon">
@@ -248,8 +256,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `;
 
-            grid.appendChild(div);
+            fragment.appendChild(div);
         });
+
+        grid.appendChild(fragment);
     }
 
     renderizar(apps);
