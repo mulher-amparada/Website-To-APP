@@ -1,5 +1,16 @@
 package com.mulheres
 
+import org.json.JSONArray
+import org.json.JSONObject
+
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.BitmapDrawable
+
+import android.util.Base64
+
+import java.io.ByteArrayOutputStream
 import android.app.Activity
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
