@@ -207,7 +207,7 @@
 
 <service
     android:name=".AbrirAppTile"
-    android:label="Mulher Amparada"
+    android:label="Abrir app do mulher amparada"
     android:icon="@drawable/icone_tile"
     android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
     android:exported="true">
