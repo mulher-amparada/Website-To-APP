@@ -24,6 +24,55 @@ class WebAppInterface(
     }
 
 @JavascriptInterface
+fun obterApps(): String {
+    val pm = activity.packageManager
+    val lista = JSONArray()
+
+    pm.getInstalledApplications(0).forEach { app ->
+
+        if (pm.getLaunchIntentForPackage(app.packageName) == null)
+            return@forEach
+
+        lista.put(JSONObject().apply {
+            put("nome", pm.getApplicationLabel(app).toString())
+            put("pacote", app.packageName)
+            put("icone", drawableToBase64(pm.getApplicationIcon(app)))
+        })
+    }
+
+    return lista.toString()
+}
+
+@JavascriptInterface
+fun abrirApp(pacote: String) {
+    activity.packageManager
+        .getLaunchIntentForPackage(pacote)
+        ?.let(activity::startActivity)
+}
+
+private fun drawableToBase64(drawable: Drawable): String {
+    val bitmap = if (drawable is BitmapDrawable) {
+        drawable.bitmap
+    } else {
+        val bitmap = Bitmap.createBitmap(
+            drawable.intrinsicWidth.coerceAtLeast(1),
+            drawable.intrinsicHeight.coerceAtLeast(1),
+            Bitmap.Config.ARGB_8888
+        )
+
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        bitmap
+    }
+
+    val stream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+
+    return "data:image/png;base64," +
+        Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP)
+}
+@JavascriptInterface
 fun abrirPorIntent() {
     val intent = Intent("com.assist.OPEN").apply {
         setPackage("com.assist")
