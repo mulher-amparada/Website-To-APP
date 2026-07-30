@@ -2,14 +2,13 @@ package com.mulheres
 
 import org.json.JSONArray
 import org.json.JSONObject
-
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.BitmapDrawable
-
 import android.util.Base64
-
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import java.io.ByteArrayOutputStream
 import android.app.Activity
 import android.app.admin.DevicePolicyManager
@@ -33,31 +32,55 @@ class WebAppInterface(
         } catch (_: Exception) {
         }
     }
+    
 @JavascriptInterface
 fun obterApps(): String {
 
     val pm = activity.packageManager
     val lista = JSONArray()
 
-    val intent = Intent(Intent.ACTION_MAIN).apply {
-        addCategory(Intent.CATEGORY_LAUNCHER)
-    }
+    val apps = pm.getInstalledApplications(
+        PackageManager.GET_META_DATA
+    )
 
-    val apps = pm.queryIntentActivities(intent, 0)
+    apps
+        .sortedBy {
+            pm.getApplicationLabel(it).toString().lowercase()
+        }
+        .forEach { app ->
 
-    apps.sortedBy {
-        it.loadLabel(pm).toString().lowercase()
-    }.forEach { resolveInfo ->
+            // Ignora apps de sistema
+            if ((app.flags and ApplicationInfo.FLAG_SYSTEM) != 0)
+                return@forEach
 
-        lista.put(JSONObject().apply {
-            put("nome", resolveInfo.loadLabel(pm).toString())
-            put("pacote", resolveInfo.activityInfo.packageName)
-            put(
-                "icone",
-                drawableToBase64(resolveInfo.loadIcon(pm))
-            )
-        })
-    }
+            // Ignora apps atualizados do sistema
+            if ((app.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0)
+                return@forEach
+
+            // Ignora apps sem tela inicial
+            val launchIntent =
+                pm.getLaunchIntentForPackage(app.packageName)
+                    ?: return@forEach
+
+            lista.put(JSONObject().apply {
+                put(
+                    "nome",
+                    pm.getApplicationLabel(app).toString()
+                )
+
+                put(
+                    "pacote",
+                    app.packageName
+                )
+
+                put(
+                    "icone",
+                    drawableToBase64(
+                        pm.getApplicationIcon(app)
+                    )
+                )
+            })
+        }
 
     return lista.toString()
 }
@@ -91,6 +114,7 @@ private fun drawableToBase64(drawable: Drawable): String {
     return "data:image/png;base64," +
         Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP)
 }
+
 @JavascriptInterface
 fun abrirPorIntent() {
     val intent = Intent("com.assist.OPEN").apply {
