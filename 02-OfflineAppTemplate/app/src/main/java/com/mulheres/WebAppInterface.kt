@@ -39,47 +39,42 @@ fun obterApps(): String {
     val pm = activity.packageManager
     val lista = JSONArray()
 
-    val apps = pm.getInstalledApplications(
-        PackageManager.GET_META_DATA
-    )
-
-    apps
+    pm.getInstalledApplications(PackageManager.GET_META_DATA)
         .sortedBy {
             pm.getApplicationLabel(it).toString().lowercase()
         }
         .forEach { app ->
 
-            // Ignora apps de sistema
-            if ((app.flags and ApplicationInfo.FLAG_SYSTEM) != 0)
+            val pacote = app.packageName.lowercase()
+
+            if (
+                pacote.contains("systemui") ||
+                pacote.contains("knox")
+            ) {
                 return@forEach
+            }
 
-            // Ignora apps atualizados do sistema
-            if ((app.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0)
-                return@forEach
-
-            // Ignora apps sem tela inicial
-            val launchIntent =
-                pm.getLaunchIntentForPackage(app.packageName)
-                    ?: return@forEach
-
-            lista.put(JSONObject().apply {
-                put(
-                    "nome",
-                    pm.getApplicationLabel(app).toString()
-                )
-
-                put(
-                    "pacote",
-                    app.packageName
-                )
-
-                put(
-                    "icone",
-                    drawableToBase64(
-                        pm.getApplicationIcon(app)
+            try {
+                lista.put(JSONObject().apply {
+                    put(
+                        "nome",
+                        pm.getApplicationLabel(app).toString()
                     )
-                )
-            })
+
+                    put(
+                        "pacote",
+                        app.packageName
+                    )
+
+                    put(
+                        "icone",
+                        drawableToBase64(
+                            pm.getApplicationIcon(app)
+                        )
+                    )
+                })
+            } catch (_: Exception) {
+            }
         }
 
     return lista.toString()
