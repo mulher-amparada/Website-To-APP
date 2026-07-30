@@ -33,21 +33,29 @@ class WebAppInterface(
         } catch (_: Exception) {
         }
     }
-
 @JavascriptInterface
 fun obterApps(): String {
+
     val pm = activity.packageManager
     val lista = JSONArray()
 
-    pm.getInstalledApplications(0).forEach { app ->
+    val intent = Intent(Intent.ACTION_MAIN).apply {
+        addCategory(Intent.CATEGORY_LAUNCHER)
+    }
 
-        if (pm.getLaunchIntentForPackage(app.packageName) == null)
-            return@forEach
+    val apps = pm.queryIntentActivities(intent, 0)
+
+    apps.sortedBy {
+        it.loadLabel(pm).toString().lowercase()
+    }.forEach { resolveInfo ->
 
         lista.put(JSONObject().apply {
-            put("nome", pm.getApplicationLabel(app).toString())
-            put("pacote", app.packageName)
-            put("icone", drawableToBase64(pm.getApplicationIcon(app)))
+            put("nome", resolveInfo.loadLabel(pm).toString())
+            put("pacote", resolveInfo.activityInfo.packageName)
+            put(
+                "icone",
+                drawableToBase64(resolveInfo.loadIcon(pm))
+            )
         })
     }
 
