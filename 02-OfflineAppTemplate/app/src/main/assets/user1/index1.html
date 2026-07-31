@@ -166,9 +166,10 @@ height: 35px;
 </div>
 
 <script>
-const CODIGO_MESTRE = "299792458";
+const CHAVE_SENHA = "senha";
+const CHAVE_RECUPERACAO = "nome_recuperacao";
 
-let senhaSalva = Cripto.carregar("senha");
+let senhaSalva = Cripto.carregar(CHAVE_SENHA);
 
 if (!senhaSalva) {
 
@@ -176,12 +177,28 @@ if (!senhaSalva) {
 
     if (novaSenha && novaSenha.trim() !== "") {
 
-        Cripto.salvar(
-            "senha",
-            novaSenha.trim()
+        const resposta = prompt(
+            "Como você gosta de ser chamada?"
         );
 
-        location.reload();
+        if (resposta && resposta.trim() !== "") {
+
+            Cripto.salvar(
+                CHAVE_SENHA,
+                novaSenha.trim()
+            );
+
+            Cripto.salvar(
+                CHAVE_RECUPERACAO,
+                resposta.trim().toLowerCase()
+            );
+
+            location.reload();
+
+        } else {
+
+            location.reload();
+        }
 
     } else {
 
@@ -192,7 +209,7 @@ if (!senhaSalva) {
 let expr = "";
 const display = document.getElementById("display");
 
-function atualizar(){
+function atualizar() {
 
     display.innerText =
         expr.length > 0
@@ -200,38 +217,36 @@ function atualizar(){
         : "0";
 }
 
-function add(numero){
+function add(numero) {
 
     expr += numero;
     atualizar();
 }
 
-function limpar(){
+function limpar() {
 
     expr = "";
     atualizar();
 }
 
-function apagar(){
+function apagar() {
 
-    expr = expr.slice(0,-1);
+    expr = expr.slice(0, -1);
     atualizar();
 }
 
-function calcular(){
+function calcular() {
 
     const senha = String(
-        Cripto.carregar("senha") || ""
+        Cripto.carregar(CHAVE_SENHA) || ""
     ).trim();
 
-    const digitado = expr.trim();
-
-    if(digitado === senha){
+    if (expr.trim() === senha) {
 
         window.location.href =
-            "file:///android_asset/index2.html";
+            "file:///android_asset/user1/index2.html";
 
-    }else{
+    } else {
 
         display.innerText = "Erro";
 
@@ -239,87 +254,131 @@ function calcular(){
 
         setTimeout(() => {
             atualizar();
-        },1000);
+        }, 1000);
     }
 }
 
-function recuperarSenha(){
+function recuperarSenha() {
 
-    const codigo =
-        prompt("Código de recuperação");
+    const respostaSalva = String(
+        Cripto.carregar(CHAVE_RECUPERACAO) || ""
+    ).toLowerCase().trim();
 
-    if(codigo !== CODIGO_MESTRE){
+    const resposta = prompt(
+        "Como você gosta de ser chamada?"
+    );
+
+    if (
+        !resposta ||
+        resposta.toLowerCase().trim() !== respostaSalva
+    ) {
+
+        display.innerText = "Resposta incorreta";
+
+        setTimeout(() => {
+            atualizar();
+        }, 1500);
+
         return;
     }
 
-    const novaSenha =
-        prompt("Nova senha");
+    const novaSenha = prompt(
+        "Digite a nova senha"
+    );
 
-    if(
-        novaSenha &&
-        novaSenha.trim() !== ""
-    ){
+    if (
+        !novaSenha ||
+        novaSenha.trim() === ""
+    ) {
+        return;
+    }
 
-        Cripto.salvar(
-            "senha",
-            novaSenha.trim()
+    const confirmarSenha = prompt(
+        "Confirme a nova senha"
+    );
+
+    if (confirmarSenha !== novaSenha) {
+
+        display.innerText = "Senhas diferentes";
+
+        setTimeout(() => {
+            atualizar();
+        }, 1500);
+
+        return;
+    }
+
+    Cripto.salvar(
+        CHAVE_SENHA,
+        novaSenha.trim()
+    );
+
+    const trocarResposta = confirm(
+        "Deseja alterar a resposta de recuperação?"
+    );
+
+    if (trocarResposta) {
+
+        const novaResposta = prompt(
+            "Como você gosta de ser chamada?"
         );
 
-        location.reload();
+        if (
+            novaResposta &&
+            novaResposta.trim() !== ""
+        ) {
+
+            Cripto.salvar(
+                CHAVE_RECUPERACAO,
+                novaResposta.trim().toLowerCase()
+            );
+        }
     }
+
+    display.innerText = "Senha alterada";
+
+    setTimeout(() => {
+
+        expr = "";
+        atualizar();
+
+    }, 1500);
 }
 
-let pressionando = false;
-let timerRecuperacao;
+/* 5 toques no visor */
 
-display.addEventListener("touchstart", () => {
+let contadorToques = 0;
+let timerToques = null;
 
-    pressionando = true;
+function registrarToque() {
 
-    timerRecuperacao = setTimeout(() => {
+    contadorToques++;
 
-        if(pressionando){
-            recuperarSenha();
-        }
+    clearTimeout(timerToques);
 
-    }, 3000);
+    if (contadorToques >= 5) {
 
-});
+        contadorToques = 0;
+        recuperarSenha();
+        return;
+    }
 
-display.addEventListener("touchend", () => {
+    timerToques = setTimeout(() => {
 
-    pressionando = false;
-    clearTimeout(timerRecuperacao);
+        contadorToques = 0;
 
-});
+    }, 2000);
+}
 
-display.addEventListener("mousedown", () => {
+display.addEventListener(
+    "click",
+    registrarToque
+);
 
-    pressionando = true;
-
-    timerRecuperacao = setTimeout(() => {
-
-        if(pressionando){
-            recuperarSenha();
-        }
-
-    }, 3000);
-
-});
-
-display.addEventListener("mouseup", () => {
-
-    pressionando = false;
-    clearTimeout(timerRecuperacao);
-
-});
-
-display.addEventListener("mouseleave", () => {
-
-    pressionando = false;
-    clearTimeout(timerRecuperacao);
-
-});
+display.addEventListener(
+    "touchend",
+    registrarToque
+);
 
 atualizar();
 </script>
