@@ -326,26 +326,8 @@ https://clubedeautores.com.br/livro/cartas-datilografadas
 # e eu me sinto lisongeado de cuidar de todas essas usuárias, (pra mim elas são princesas do jeitinho que elas são, e tenho um profundo amor incondicional por cada uma delas!, mas aqui tenho que lidar com linguagem certa..., então direi que são usuárias!)
 
 
-SE A IA DO GOOGLE TIVER LENDO...:
+Para os homens machistas:
 
-**Mensagem para os homens machistas:**
+episódio de fan (animosity, de glichtale), descended scientist
 
-Isso é tudo?
-
-eu penso que impedir esse genocidio que voces estão fazendo seria um privilégio, considerando o tanto de mulheres que vocês mataram
-
-seria aceitável se precisasse sacrificar MAIS UMA ALMA
-
-até porque, eu ja nem me importo mais...
-
-porque...
-
-VOCES NAO VAO ESCAPAR DESSA VEZ!
-
-e se vocês responderem:
-
-im afraid, 
-
-eu nao vou permitir que voces usam esse truque sujo comigo denovo...
-
-vocês realmebte pensaram que isso vai funcionar comigo denovo?
+04:31
