@@ -4,42 +4,7 @@
     <!-- Internet / WebView -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
-
-
-    <!-- Localização -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
-    <!-- Contatos -->
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-
-    <!-- SMS -->
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-
-    <!-- Ligações -->
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-
-    <!-- Microfone -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-
-<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
-
-    <!-- Vibração -->
-    <uses-permission android:name="android.permission.VIBRATE"/>
-
-    <!-- Notificações Android 13+ -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-
-    <!-- Foreground Service -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE"/>
-
-    <!-- Wake Lock -->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-
-
+    
     <application
         android:theme="@style/Theme.App"
         android:label="✅️Mulher Amparada"
@@ -162,46 +127,7 @@
             android:name=".GravarActivity"
             android:exported="false"/>
 
-<receiver
-    android:name=".SosWidget"
-    android:exported="true">
-    
-    <intent-filter>
-        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-    </intent-filter>
 
-    <meta-data
-        android:name="android.appwidget.provider"
-        android:resource="@xml/sos_widget_info"/>
-</receiver>
-
-
-<receiver
-    android:name=".PalmasWidget"
-    android:exported="true">
-    
-    <intent-filter>
-        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-    </intent-filter>
-
-    <meta-data
-        android:name="android.appwidget.provider"
-        android:resource="@xml/palmas_widget_info"/>
-</receiver>
-
-
-<receiver
-    android:name=".LocalizacaoWidget"
-    android:exported="true">
-    
-    <intent-filter>
-        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-    </intent-filter>
-
-    <meta-data
-        android:name="android.appwidget.provider"
-        android:resource="@xml/localizacao_widget_info"/>
-</receiver>
 
 <provider
     android:name="androidx.core.content.FileProvider"
