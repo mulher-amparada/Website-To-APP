@@ -1,1070 +1,328 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Mulher Amparada</title>
-
-
+<title>Neo Calc</title>
 
 <style>
-@font-face {
-  font-family: "Quicksand";
-  src: url("file:///android_asset/font.ttf") format("truetype");
-  font-weight: 700;
+
+/* Barra inteira */
+::-webkit-scrollbar{
+    width:10px;
 }
 
-:root{
+/* Fundo */
+::-webkit-scrollbar-track{
+    background:#000;
+}
 
-  --bg:#050505;
-  --card:#121212;
+/* Parte que desliza */
+::-webkit-scrollbar-thumb{
+    background:#000;
+    border-radius:999px;
+    border:2px solid #000;
+}
 
-  --pink:#ff4fa3;
-  --pink2:#ff77b7;
+/* Canto (quando há barra horizontal e vertical) */
+::-webkit-scrollbar-corner{
+    background:#000;
+}
 
-  --purple:#8b5cf6;
 
-  --white:#ffffff;
-  --soft:#ffffffbb;
-
-  --radius:38px;
+@font-face {
+  font-family: "Quicksand";
+  src: url("font.ttf") format("truetype");
 }
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Quicksand',sans-serif;
-  font-weight: 700 !important;
-}
-
-html{
-  scroll-behavior:smooth;
-    font-family:'Quicksand',sans-serif;
-    font-weight: 700 !important;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Quicksand', sans-serif;
 }
 
 body{
-
-  background: black;
-
-  color:white;
-
-  overflow-x:hidden;
-    font-family:'Quicksand',sans-serif;
-    font-weight: normal !important;
+    background:#000;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
 }
 
-/* MAIN */
-
-.mainUI{
-
-  width:100%;
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-
-  gap:80px;
-
-  padding:
-  35px 18px 140px;
+.calculadora{
+    width:100%;
+    max-width:360px;
 }
 
-/* HERO */
+.tela{
+    height:120px;
+    background:#111;
+    border:1px solid #222;
+    border-radius:24px;
 
-.hero{
-  width:100%;
-  max-width:720px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:flex-end;
 
-  margin-top:70px;
+    padding:24px;
 
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+    color:#fff;
+    font-size:42px;
+    font-weight:600;
 
-  text-align:center;
+    margin-bottom:16px;
+
+    overflow:hidden;
 }
 
-.heroTag{
-
-  display:inline-flex;
-
-  padding:10px 18px;
-
-  border-radius:999px;
-
-  background:
-  rgba(255,255,255,.06);
-
-  border:
-  1px solid rgba(255,255,255,.08);
-
-  color:#ffb4da;
-
-  font-size:13px;
-  font-weight:700;
-
-  letter-spacing:1px;
-
-  text-transform:uppercase;
-
-  margin-bottom:22px;
+.botoes{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
 }
 
-.heroTag1{
+button{
+    height:72px;
+    border:none;
+    border-radius:222px;
 
-  display:inline-flex;
+    background:#1b1b1b;
+    color:white;
 
-  padding:10px 18px;
+    font-size:24px;
+    font-weight:600;
 
-  border-radius:999px;
-
-  
-  color:blue;
-
-  font-size:20px;
-  font-weight:700;
-
-  letter-spacing:1px;
-
-  text-transform:uppercase;
-
-  margin-bottom:22px;
-  text-decoration: underline;
+    transition:.15s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.hero h1{
-
-  font-size:
-  clamp(36px,8vw,64px);
-
-  line-height:1.05;
-
-  margin-bottom:18px;
-
-  font-weight:800;
+button:active{
+    transform:scale(.95);
 }
 
-.hero p{
-
-  color:var(--soft);
-
-  line-height:1.7;
-
-  font-size:16px;
-
-  max-width:580px;
-
-  margin:auto;
+.acao{
+    background:#242424;
 }
 
-/* SECTION */
-
-.section{
-
-  width:100%;
-  max-width:420px;
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-
-  gap:20px;
+.igual{
+    background:#4f7cff;
 }
 
-.label{
 
-  font-size:13px;
-
-  text-transform:uppercase;
-
-  letter-spacing:1.8px;
-
-  color:#ffffff88;
-
-  font-weight:700;
+svg {
+width: 35px;
+height: 35px;
 }
-
-/* SOS */
-
-.panic{
-
-  width:100%;
-  min-height:260px;
-
-  border-radius:40px;
-
-  background:
-  linear-gradient(
-    145deg,
-    #ff1744,
-    #ff4d6d
-  );
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-
-  position:relative;
-
-  overflow:hidden;
-
-  box-shadow:
-  0 20px 60px rgba(255,40,90,.35);
-
-  transition:
-  transform .15s,
-  filter .15s;
-}
-
-.panic::before{
-
-  content:"";
-
-  position:absolute;
-
-  width:260px;
-  height:260px;
-
-  border-radius:50%;
-
-  background:
-  rgba(255,255,255,.08);
-
-  top:-120px;
-  right:-90px;
-}
-
-.panic span{
-
-  font-size:68px;
-
-  font-weight:800;
-
-  letter-spacing:3px;
-}
-
-.panic small{
-
-  margin-top:10px;
-
-  font-size:15px;
-
-  color:#ffffffd5;
-}
-
-.panic:active{
-
-  transform:scale(.97);
-
-  filter:brightness(1.08);
-}
-
-/* PALMA */
-
-.palma{
-
-  width:100%;
-
-  border-radius:40px;
-
-  background:
-  linear-gradient(
-    180deg,
-    #ff4fa3,
-    #ff2f92
-  );
-
-  padding:36px 24px;
-
-  text-align:center;
-
-  position:relative;
-
-  overflow:hidden;
-
-  box-shadow:
-  0 18px 45px rgba(255,79,163,.32);
-}
-
-.palma::before{
-
-  content:"";
-
-  position:absolute;
-
-  width:240px;
-  height:240px;
-
-  border-radius:50%;
-
-  background:
-  rgba(255,255,255,.06);
-
-  top:-120px;
-  right:-90px;
-}
-
-.palma-icon{
-
-  font-size:70px;
-
-  margin-bottom:18px;
-
-  animation:palma .9s infinite;
-}
-
-@keyframes palma{
-
-  0%{
-    transform:scale(1);
-  }
-
-  50%{
-    transform:scale(1.12);
-  }
-
-  100%{
-    transform:scale(1);
-  }
-}
-
-.palma h3{
-
-  font-size:30px;
-
-  margin-bottom:14px;
-}
-
-.palma p{
-
-  line-height:1.7;
-
-  color:#ffffffde;
-
-  margin-bottom:28px;
-}
-
-/* BUTTONS */
-
-.btn,
-.local,
-.btn1,
-.palma button{
-
-  width:100%;
-
-  min-height:58px;
-
-  border:none;
-
-  border-radius:999px;
-
-  font-size:16px;
-  font-weight:700;
-
-  color:white;
-
-  cursor:pointer;
-
-  transition:
-  transform .15s,
-  opacity .15s,
-  filter .15s;
-}
-
-.btn:active,
-.local:active,
-.btn1:active,
-.palma button:active{
-
-  transform:scale(.97);
-}
-
-#ativarPalmas{
-
-  background:white;
-
-  color:#ff2f92;
-}
-
-#desativarPalmas{
-
-  margin-top:14px;
-
-  background:#ff8cc4;
-}
-
-/* PROTEÇÃO */
-
-#protecao{
-
-  width:100%;
-
-  padding:30px 24px;
-
-  border-radius:32px;
-
-  text-align:center;
-
-  font-size:20px;
-  font-weight:700;
-
-  line-height:1.6;
-
-  cursor:pointer;
-
-  transition:.25s;
-}
-
-.ativo{
-
-  background:#2b103d;
-
-  color:#d88cff;
-
-  border:
-  2px solid #b84dff;
-
-  box-shadow:
-  0 10px 35px rgba(184,77,255,.25);
-}
-
-.desativado{
-
-  background:#161616;
-
-  color:#9b9b9b;
-
-  border:
-  2px solid #303030;
-}
-
-/* BOTÕES */
-
-.btn{
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-  text-decoration:none;
-}
-
-.policia{
-  background:#1e90ff;
-}
-
-.samu{
-  background:#ff9800;
-}
-
-.mulher{
-  background:#ff4fa3;
-}
-
-.zap{
-  background:#25D366;
-}
-
-.local{
-  background:#00b8b0;
-}
-
-.btn1{
-
-  background:
-  linear-gradient(
-    135deg,
-    #8b5cf6,
-    #a855f7
-  );
-}
-
-/* TOGGLE */
-
-svg{
-
-  width:28px;
-  height:28px;
-}
-
-.fade{
-
-  opacity:0;
-
-  transform:
-  translateY(20px);
-
-  animation:
-  fade .6s forwards;
-}
-
-@keyframes fade{
-
-  to{
-
-    opacity:1;
-
-    transform:none;
-  }
-}
-
-.info{
-  width: min(420px, 100%);
-  padding: 24px 22px;
-  border-radius: 26px;
-
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-
-  text-align: center;
-
-  animation: fade 0.6s ease forwards;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  margin-top: 0;
-}
-
-.info:hover{
-  transform: translateY(-4px);
-  box-shadow: 0 14px 40px rgba(0,0,0,0.45);
-}
-
-.info h3{
-  margin-bottom: 12px;
-  font-size: 1.2rem;
-  letter-spacing: 0.3px;
-  color: #fff;
-}
-
-.info p{
-  margin: 12px 0;
-  color: rgba(255,255,255,0.78);
-  line-height: 1.7;
-  font-size: 0.95rem;
-}
-
 </style>
 </head>
-
 <body>
 
-<div class="mainUI">
+<div class="calculadora">
 
+    <div class="tela" id="display">0</div>
 
-<div class="hero fade">
+<div class="botoes">
 
-  <div class="heroTag">
-    Mulher Amparada
-  </div>
-  
-    <div class="heroTag1" onclick="window.location.href='Dev.html'">
-    Perguntas e respostas
-  </div>
-  
-  </div>
- 
-  
-<section class="section fade">
+    <button onclick="limpar()" class="acao">C</button>
+    <button onclick="apagar()" class="acao">
+    <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
-  <div class="label">
-    Emergência
-  </div>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 
-  <div class="panic">
-    <span>SOS</span>
+<g id="SVGRepo_bgCarrier" stroke-width="0"/>
 
-    <small>
-      toque para pedir ajuda
-    </small>
-  </div>
+<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
 
-</section>
+<g id="SVGRepo_iconCarrier"> <path d="M11.142 20C8.91458 20 7.80085 20 6.87114 19.4986C5.94144 18.9971 5.35117 18.0781 4.17061 16.24L3.48981 15.18C2.4966 13.6336 2 12.8604 2 12C2 11.1396 2.4966 10.3664 3.48981 8.82001L4.17061 7.76001C5.35117 5.92191 5.94144 5.00286 6.87114 4.50143C7.80085 4 8.91458 4 11.142 4L13.779 4C17.6544 4 19.5921 4 20.7961 5.17157C22 6.34315 22 8.22876 22 12C22 15.7712 22 17.6569 20.7961 18.8284C19.5921 20 17.6544 20 13.779 20H11.142Z" stroke="#ffffff" stroke-width="1.5"/> <path d="M15.5 9.50002L10.5 14.5M10.5 9.5L15.5 14.5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/> </g>
 
-
-<section class="section fade">
-
-  <div class="label">
-    Barulho alto
-  </div>
-
-  <div class="palma">
-
-    <div class="palma-icon">
-      
-    </div>
-
-    <h3>
-      Proteção por som
-    </h3>
-
-    <p>
-      Ative ajuda automática ao detectar
-      sons altos e situações suspeitas.
-    </p>
-
-    <button id="ativarPalmas">
-      Ativar proteção
+</svg>
     </button>
+    <button onclick="calcular()" class="igual">=</button>
 
-    <button id="desativarPalmas">
-      Desativar
-    </button>
+    <button onclick="add('1')">1</button>
+    <button onclick="add('2')">2</button>
+    <button onclick="add('3')">3</button>
 
-  </div>
+    <button onclick="add('4')">4</button>
+    <button onclick="add('5')">5</button>
+    <button onclick="add('6')">6</button>
 
-</section>
+    <button onclick="add('7')">7</button>
+    <button onclick="add('8')">8</button>
+    <button onclick="add('9')">9</button>
 
-
-<section class="section fade">
-
-  <div class="label">
-    Movimento
-  </div>
-
-  <div id="protecao" class="desativado">
-
-     Balançar o celular
-    para pedir ajuda
-
-    <br><br>
-
-    DESATIVADO
-
-  </div>
-
-</section>
-
-
-<section class="section fade">
-
-  <div class="label">
-    Conteúdo protegido
-  </div>
-
-  <button class="btn1" onclick="iniciarBiometria()">
-     Acessar área protegida
-  </button>
-
-
-</section>
-
-<section class="section fade">
-
-  <div class="label">
-    Ajuda rápida
-  </div>
-
-  <button class="btn policia" onclick="ligar('190')">
-     Polícia (190)
-  </button>
-
-  <button class="btn samu" onclick="ligar('192')">
-     SAMU (192)
-  </button>
-
-  <button class="btn mulher" onclick="ligar('180')">
-     Central da Mulher (180)
-  </button>
-
-  <button class="btn zap" onclick="whatsapp180()">
-     WhatsApp 180
-  </button>
-
-</section>
-
-<section class="section fade">
-
-  <div class="label">
-    Localização
-  </div>
-
-  <button onclick="enviarLocalizacao()" class="local">
-     Enviar localização
-  </button>
-
-</section>
-
-<section class="section fade">
-
-  <div class="label">
-    Contatos de confiança
-  </div>
-
-  <button
-    class="btn"
-    style="background:#8a2be2;"
-    onclick="selecionarContato()">
-
-     Adicionar contato
-
-  </button>
-
-  <button
-    class="btn"
-    style="background:#dc143c;"
-    onclick="enviarSOSContatos()">
-
-    SOS contatos
-
-  </button>
-
-</section>
-
-  <section class="section fade">
-<div class="label">
-    Explicações 
-  </div>
-  <section class="info">
-
-
-  <h3>Para que serve:</h3>
-
-  <p><b>190 - Polícia</b><br>
-  Emergências como assalto, perigo imediato ou violência.</p>
-
-  <p><b>192 - SAMU</b><br>
-  Emergências médicas, acidentes ou pessoas passando mal.</p>
-
-  <p><b>180 - Central da Mulher</b><br>
-  Denúncias e apoio em casos de violência contra a mulher.</p>
-
-      <h3>Para que serve (bônus):</h3>
-  <p><b>188 - CVV = Centro de Valorização da Vida</b><br>
-Apoio emocional gratuito e sigiloso 24h para quem está em sofrimento ou precisa conversar.</p>
-</section>
-</section>
+    <button></button>
+    <button onclick="add('0')">0</button>
+    <button></button>
 
 </div>
 
 </div>
 
 <script>
+const CODIGO_MESTRE = "299792458";
 
+let senhaSalva = Cripto.carregar("senha");
 
-const panic = document.querySelector(".panic");
+if (!senhaSalva) {
 
-/* SOS */
+    const novaSenha = prompt("Crie uma senha");
 
-panic.addEventListener(
-"click",
-ativarSOS
-);
+    if (novaSenha && novaSenha.trim() !== "") {
 
-function ativarSOS(){
+        Cripto.salvar(
+            "senha",
+            novaSenha.trim()
+        );
 
-  navigator.vibrate?.(300);
+        location.reload();
 
-  panic.style.transform =
-  "scale(.96)";
+    } else {
 
-  setTimeout(()=>{
-
-    panic.style.transform =
-    "scale(1)";
-
-  },120);
-
-  if(
-    window.Android &&
-    Android.ligarDireto
-  ){
-
-    try{
-
-      Android.ligarDireto("180");
-
-      return;
-
-    }catch(e){
-
-      console.log(e);
+        location.reload();
     }
-  }
-
-  try{
-
-    window.location.href =
-    "tel:180";
-
-  }catch(e){
-
-    alert(
-      "Não foi possível iniciar ligação"
-    );
-  }
 }
 
-/* FUNÇÕES */
+let expr = "";
+const display = document.getElementById("display");
 
-function ligar(numero){
+function atualizar(){
 
-  window.location.href =
-  "tel:" + numero;
+    display.innerText =
+        expr.length > 0
+        ? "•".repeat(expr.length)
+        : "0";
 }
 
-function whatsapp180(){
+function add(numero){
 
-  window.location.href =
-  "https://wa.me/556196100180";
+    expr += numero;
+    atualizar();
 }
 
-function enviarLocalizacao(){
+function limpar(){
 
-  if(!navigator.geolocation){
+    expr = "";
+    atualizar();
+}
 
-    alert(
-      "Geolocalização não suportada"
-    );
+function apagar(){
 
-    return;
-  }
+    expr = expr.slice(0,-1);
+    atualizar();
+}
 
-  navigator.geolocation
-  .getCurrentPosition(
+function calcular(){
 
-    function(pos){
+    const senha = String(
+        Cripto.carregar("senha") || ""
+    ).trim();
 
-      const link =
-      `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+    const digitado = expr.trim();
 
-      window.location.href =
-      "https://wa.me/556196100180?text=" +
-      encodeURIComponent(
-        "🚨 SOCORRO! Estou aqui: " + link
-      );
-    },
+    if(digitado === senha){
 
-    function(){
+        window.location.href =
+            "file:///android_asset/index2.html";
 
-      alert(
-        "Não foi possível obter localização"
-      );
+    }else{
+
+        display.innerText = "Erro";
+
+        expr = "";
+
+        setTimeout(() => {
+            atualizar();
+        },1000);
     }
-  );
 }
 
-/* BIOMETRIA */
+function recuperarSenha(){
 
+    const codigo =
+        prompt("Código de recuperação");
 
-const ativar =
-document.getElementById(
-"ativarPalmas"
-);
+    if(codigo !== CODIGO_MESTRE){
+        return;
+    }
 
-const desativar =
-document.getElementById(
-"desativarPalmas"
-);
-
-ativar.onclick = ()=>{
-
-  Android.ativarPalmas();
-
-  ativar.innerText =
-  "Proteção ativada";
-};
-
-desativar.onclick = ()=>{
-
-  Android.desativarPalmas();
-
-  ativar.innerText =
-  "Ativar proteção";
-};
-
-const protecao =
-document.getElementById(
-"protecao"
-);
-
-let ativa = false;
-
-protecao.onclick = function(){
-
-  ativa = !ativa;
-
-  if(ativa){
-
-    protecao.classList
-    .remove("desativado");
-
-    protecao.classList
-    .add("ativo");
-
-    protecao.innerHTML =
-
-    ` Balançar o celular
-    para pedir ajuda
-
-    <br><br>
-
-    ATIVADO`;
+    const novaSenha =
+        prompt("Nova senha");
 
     if(
-      window.Android &&
-      Android.ativarProtecao
+        novaSenha &&
+        novaSenha.trim() !== ""
     ){
 
-      Android.ativarProtecao();
+        Cripto.salvar(
+            "senha",
+            novaSenha.trim()
+        );
+
+        location.reload();
     }
-
-  } else {
-
-    protecao.classList
-    .remove("ativo");
-
-    protecao.classList
-    .add("desativado");
-
-    protecao.innerHTML =
-
-    ` Balançar o celular
-    para pedir ajuda
-
-    <br><br>
-
-    DESATIVADO`;
-
-    if(
-      window.Android &&
-      Android.desativarProtecao
-    ){
-
-      Android.desativarProtecao();
-    }
-  }
 }
 
-/* PALMAS */
+let pressionando = false;
+let timerRecuperacao;
 
+display.addEventListener("touchstart", () => {
+
+    pressionando = true;
+
+    timerRecuperacao = setTimeout(() => {
+
+        if(pressionando){
+            recuperarSenha();
+        }
+
+    }, 3000);
+
+});
+
+display.addEventListener("touchend", () => {
+
+    pressionando = false;
+    clearTimeout(timerRecuperacao);
+
+});
+
+display.addEventListener("mousedown", () => {
+
+    pressionando = true;
+
+    timerRecuperacao = setTimeout(() => {
+
+        if(pressionando){
+            recuperarSenha();
+        }
+
+    }, 3000);
+
+});
+
+display.addEventListener("mouseup", () => {
+
+    pressionando = false;
+    clearTimeout(timerRecuperacao);
+
+});
+
+display.addEventListener("mouseleave", () => {
+
+    pressionando = false;
+    clearTimeout(timerRecuperacao);
+
+});
+
+atualizar();
 </script>
-
-
-<script>
-
-
-/* BIOMETRIA */
-
-function iniciarBiometria(){
-
-  if(
-    window.Android &&
-    Android.iniciarBiometriaMusica
-  ){
-
-    try{
-
-      Android.iniciarBiometriaMusica();
-
-    }catch(e){
-
-      window.location.href =
-      "file:///android_asset/user1/botao.html";
-    }
-
-  }else{
-
-    window.location.href =
-    "file:///android_asset/user1/botao.html";
-  }
-}
-
-/* CONTATOS */
-
-
-function ligar(numero){
-
-  window.location.href =
-  "tel:" + numero;
-}
-
-function whatsapp180(){
-
-  window.location.href =
-  "https://wa.me/556196100180";
-}
-
-function ligar(numero){
-
-  window.location.href =
-  "tel:" + numero;
-}
-
-function whatsapp180(){
-
-  window.location.href =
-  "https://wa.me/556196100180";
-}
-
-function enviarLocalizacao(){
-
-  if(!navigator.geolocation){
-
-    alert(
-      "Geolocalização não suportada"
-    );
-
-    return;
-  }
-
-  navigator.geolocation
-  .getCurrentPosition(
-
-    function(pos){
-
-      const link =
-      `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
-
-      window.location.href =
-      "https://wa.me/556196100180?text=" +
-      encodeURIComponent(
-        "🚨 SOCORRO! Estou aqui: " + link
-      );
-    },
-
-    function(){
-
-      alert(
-        "Não foi possível obter localização"
-      );
-    }
-  );
-}
-
-/* BIOMETRIA */
-
-
-function selecionarContato(){
-
-  if(
-    window.Android &&
-    Android.abrirContatos
-  ){
-
-    Android.abrirContatos();
-  }
-}
-
-function enviarSOSContatos(){
-
-  if(
-    window.Android &&
-    Android.enviarSOS
-  ){
-
-    Android.enviarSOS();
-  }
-}
-</script>
-
 
 </body>
 </html>
