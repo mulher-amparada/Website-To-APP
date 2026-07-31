@@ -54,7 +54,7 @@
         android:exported="true">
         
 <intent-filter>
-        <action android:name="com.assist.OPEN" />
+        <action android:name="com.webviewtemplate.webviewtemplate1.OPEN" />
         <category android:name="android.intent.category.DEFAULT" />
     </intent-filter>
 
