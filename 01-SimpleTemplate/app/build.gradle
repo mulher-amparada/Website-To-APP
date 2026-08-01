@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace 'com.webviewtemplate.webviewtemplate1'
-    compileSdk 34
+    namespace 'com.assist'
+    compileSdk 36
 
     defaultConfig {
-        applicationId "com.example.androidWebViewOfflineApplication1"
+        applicationId "com.assist"
         minSdk 23
-        targetSdk 34
+        targetSdk 36
 
         versionCode 1
         versionName "1.0"
@@ -54,9 +54,6 @@ android {
 }
 
 dependencies {
-
-    implementation("androidx.biometric:biometric:1.1.0")
-
 
 implementation("com.google.android.gms:play-services-location:21.3.0")
 implementation "androidx.security:security-crypto:1.1.0-alpha06"
