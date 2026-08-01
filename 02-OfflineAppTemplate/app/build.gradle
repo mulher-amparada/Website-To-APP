@@ -10,10 +10,10 @@ android {
     defaultConfig {
                 applicationId "com.mulheres"
         minSdk 23
-        targetSdk 34
+        targetSdk 36
 
-        versionCode 6
-        versionName "6"
+        versionCode 32
+        versionName "32"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
