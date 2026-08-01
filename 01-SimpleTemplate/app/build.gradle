@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.assistir'
+    namespace 'com.webviewtemplate.webviewtemplate1'
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.assistir"
+        applicationId "com.webviewtemplate.webviewtemplate1"
         minSdk 23
         targetSdk 36
 
