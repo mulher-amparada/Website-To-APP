@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.assist'
+    namespace 'com.assistir'
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.assist"
+        applicationId "com.assistir"
         minSdk 23
         targetSdk 36
 
@@ -54,6 +54,9 @@ android {
 }
 
 dependencies {
+
+    implementation("androidx.biometric:biometric:1.1.0")
+
 
 implementation("com.google.android.gms:play-services-location:21.3.0")
 implementation "androidx.security:security-crypto:1.1.0-alpha06"
