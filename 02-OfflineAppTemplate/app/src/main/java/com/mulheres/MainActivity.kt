@@ -730,6 +730,11 @@ fun ligarDireto(numero: String) {
     }
 }
 
+@JavascriptInterface
+fun sonsBiometriaAtivos(): Boolean {
+    return sonsBiometriaAtivados()
+}
+
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 super.onActivityResult(requestCode, resultCode, data)
 
