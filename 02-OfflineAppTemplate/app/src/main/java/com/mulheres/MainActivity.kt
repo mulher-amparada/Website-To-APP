@@ -1,5 +1,7 @@
 package com.mulheres
 
+import android.content.res.AssetFileDescriptor
+import android.media.MediaPlayer
 import com.mulheres.WebAppInterface
 import com.mulheres.Cripto
 import com.mulheres.PalmaService
@@ -552,21 +554,27 @@ val biometricManager = BiometricManager.from(this)
         ContextCompat.getMainExecutor(this),  
         object : BiometricPrompt.AuthenticationCallback() {  
 
-            override fun onAuthenticationSucceeded(  
-                result: BiometricPrompt.AuthenticationResult  
-            ) {  
-                super.onAuthenticationSucceeded(result)  
+            override fun onAuthenticationSucceeded(
+    result: BiometricPrompt.AuthenticationResult
+) {
+    super.onAuthenticationSucceeded(result)
 
-                
+    if (
+        result.authenticationType ==
+        BiometricPrompt.AUTHENTICATION_RESULT_TYPE_BIOMETRIC
+    ) {
+        tocarSomAsset("biometric.mp3")
+    } else {
+        tocarSomAsset("other.mp3")
+    }
 
-                when (destinoBiometria) {  
-                    1 -> carregarWebView1()  
-                    2 -> carregarWebView2()  
-                    3 -> carregarWebView3()  
-                    else -> carregarWebView4()  
-                }  
-            }  
-
+    when (destinoBiometria) {
+        1 -> carregarWebView1()
+        2 -> carregarWebView2()
+        3 -> carregarWebView3()
+        else -> carregarWebView4()
+    }
+}
             override fun onAuthenticationFailed() {  
                 super.onAuthenticationFailed()  
 
