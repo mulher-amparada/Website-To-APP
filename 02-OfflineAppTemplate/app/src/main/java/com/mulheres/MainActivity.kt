@@ -1,6 +1,5 @@
 package com.mulheres
 
-import android.media.MediaPlayer
 import com.mulheres.WebAppInterface
 import com.mulheres.Cripto
 import com.mulheres.PalmaService
@@ -553,25 +552,10 @@ val biometricManager = BiometricManager.from(this)
         ContextCompat.getMainExecutor(this),  
         object : BiometricPrompt.AuthenticationCallback() {  
 
-            override fun onAuthenticationSucceeded(
+        override fun onAuthenticationSucceeded(
     result: BiometricPrompt.AuthenticationResult
 ) {
     super.onAuthenticationSucceeded(result)
-
-    if (
-        result.authenticationType ==
-        BiometricPrompt.AUTHENTICATION_RESULT_TYPE_BIOMETRIC
-    ) {
-
-        tocarSomAsset("biometric.mp3")
-
-    } else if (
-        result.authenticationType ==
-        BiometricPrompt.AUTHENTICATION_RESULT_TYPE_DEVICE_CREDENTIAL
-    ) {
-
-        tocarSomAsset("other.mp3")
-    }
 
     when (destinoBiometria) {
         1 -> carregarWebView1()
@@ -580,6 +564,7 @@ val biometricManager = BiometricManager.from(this)
         else -> carregarWebView4()
     }
 }
+
             override fun onAuthenticationFailed() {  
                 super.onAuthenticationFailed()  
 
@@ -671,33 +656,7 @@ fun ligarDireto(numero: String) {
     }
 }
 
-private fun tocarSomAsset(nomeArquivo: String) {
-    try {
 
-        val afd = assets.openFd(nomeArquivo)
-
-        val player = MediaPlayer()
-
-        player.setDataSource(
-            afd.fileDescriptor,
-            afd.startOffset,
-            afd.length
-        )
-
-        afd.close()
-
-        player.prepare()
-
-        player.setOnCompletionListener { mp ->
-            mp.release()
-        }
-
-        player.start()
-
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-}
 
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 super.onActivityResult(requestCode, resultCode, data)
