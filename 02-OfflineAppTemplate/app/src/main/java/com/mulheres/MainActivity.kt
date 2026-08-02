@@ -1,7 +1,5 @@
 package com.mulheres
 
-import android.content.res.AssetFileDescriptor
-import android.media.MediaPlayer
 import com.mulheres.WebAppInterface
 import com.mulheres.Cripto
 import com.mulheres.PalmaService
@@ -459,36 +457,6 @@ ContactsContract.CommonDataKinds.Phone.CONTENT_URI
 startActivityForResult(intent, 1)
 }
 
-private fun sonsBiometriaAtivados(): Boolean {
-    return getSharedPreferences(
-        "config",
-        MODE_PRIVATE
-    ).getBoolean(
-        "sons_biometria",
-        false
-    )
-}
-
-@JavascriptInterface
-fun ativarSonsBiometria() {
-    getSharedPreferences(
-        "config",
-        MODE_PRIVATE
-    ).edit()
-        .putBoolean("sons_biometria", true)
-        .apply()
-}
-
-@JavascriptInterface
-fun desativarSonsBiometria() {
-    getSharedPreferences(
-        "config",
-        MODE_PRIVATE
-    ).edit()
-        .putBoolean("sons_biometria", false)
-        .apply()
-}
-
 @JavascriptInterface
 fun ativarPalmas() {
 if (!temPermissoesProtecao()) {
@@ -593,9 +561,15 @@ val biometricManager = BiometricManager.from(this)
         result.authenticationType ==
         BiometricPrompt.AUTHENTICATION_RESULT_TYPE_BIOMETRIC
     ) {
+
         tocarSomAsset("biometric.mp3")
-    } else {
-        tocarSomAsset("other.mp3")
+
+    } else if (
+        result.authenticationType ==
+        BiometricPrompt.AUTHENTICATION_RESULT_TYPE_DEVICE_CREDENTIAL
+    ) {
+
+        tocarSomAsset("senha.mp3")
     }
 
     when (destinoBiometria) {
@@ -635,40 +609,6 @@ val biometricManager = BiometricManager.from(this)
     biometricPrompt.authenticate(promptInfo)  
 }
 
-}
-
-private fun tocarSomAsset(nomeArquivo: String) {
-
-    if (!sonsBiometriaAtivados()) {
-        return
-    }
-
-    try {
-
-        val afd =
-            assets.openFd(nomeArquivo)
-
-        val player = MediaPlayer()
-
-        player.setDataSource(
-            afd.fileDescriptor,
-            afd.startOffset,
-            afd.length
-        )
-
-        afd.close()
-
-        player.prepare()
-
-        player.setOnCompletionListener {
-            it.release()
-        }
-
-        player.start()
-
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
 }
 
 @JavascriptInterface
@@ -730,9 +670,32 @@ fun ligarDireto(numero: String) {
     }
 }
 
-@JavascriptInterface
-fun sonsBiometriaAtivos(): Boolean {
-    return sonsBiometriaAtivados()
+private fun tocarSomAsset(nomeArquivo: String) {
+    try {
+
+        val afd = assets.openFd(nomeArquivo)
+
+        val player = MediaPlayer()
+
+        player.setDataSource(
+            afd.fileDescriptor,
+            afd.startOffset,
+            afd.length
+        )
+
+        afd.close()
+
+        player.prepare()
+
+        player.setOnCompletionListener {
+            it.release()
+        }
+
+        player.start()
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }
 
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
