@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.media.MediaPlayer
 import com.mulheres.WebAppInterface
 import com.mulheres.Cripto
 import com.mulheres.PalmaService
@@ -569,7 +570,7 @@ val biometricManager = BiometricManager.from(this)
         BiometricPrompt.AUTHENTICATION_RESULT_TYPE_DEVICE_CREDENTIAL
     ) {
 
-        tocarSomAsset("senha.mp3")
+        tocarSomAsset("other.mp3")
     }
 
     when (destinoBiometria) {
@@ -687,8 +688,8 @@ private fun tocarSomAsset(nomeArquivo: String) {
 
         player.prepare()
 
-        player.setOnCompletionListener {
-            it.release()
+        player.setOnCompletionListener { mp ->
+            mp.release()
         }
 
         player.start()
