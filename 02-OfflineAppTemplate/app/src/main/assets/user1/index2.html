@@ -717,6 +717,17 @@ svg{
   </button>
 
 </section>
+<section class="section fade">
+
+  <div class="label">
+    Sons da biometria
+  </div>
+
+  <button id="toggleSomBiometria" class="btn1">
+    🔕 Sons da biometria: DESATIVADOS
+  </button>
+
+</section>
 
   <section class="section fade">
 <div class="label">
@@ -1063,6 +1074,44 @@ function enviarSOSContatos(){
     Android.enviarSOS();
   }
 }
+
+let sonsBiometriaAtivos = false;
+
+const btnSomBiometria =
+document.getElementById(
+  "toggleSomBiometria"
+);
+
+btnSomBiometria.onclick = function(){
+
+  sonsBiometriaAtivos =
+  !sonsBiometriaAtivos;
+
+  if(sonsBiometriaAtivos){
+
+    btnSomBiometria.innerHTML =
+    "🎵 Sons da biometria: ATIVADOS";
+
+    if(
+      window.Android &&
+      Android.ativarSonsBiometria
+    ){
+      Android.ativarSonsBiometria();
+    }
+
+  }else{
+
+    btnSomBiometria.innerHTML =
+    "🔕 Sons da biometria: DESATIVADOS";
+
+    if(
+      window.Android &&
+      Android.desativarSonsBiometria
+    ){
+      Android.desativarSonsBiometria();
+    }
+  }
+};
 </script>
 
 
