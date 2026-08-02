@@ -724,7 +724,7 @@ svg{
   </div>
 
   <button id="toggleSomBiometria" class="btn1">
-    🔕 Sons da biometria: DESATIVADOS
+    Sons da biometria: DESATIVADOS
   </button>
 
 </section>
@@ -1082,15 +1082,43 @@ document.getElementById(
   "toggleSomBiometria"
 );
 
-btnSomBiometria.onclick = function(){
-
-  sonsBiometriaAtivos =
-  !sonsBiometriaAtivos;
+function atualizarBotaoSomBiometria(){
 
   if(sonsBiometriaAtivos){
 
     btnSomBiometria.innerHTML =
-    "🎵 Sons da biometria: ATIVADOS";
+    "Sons da biometria: ATIVADOS";
+
+  }else{
+
+    btnSomBiometria.innerHTML =
+    "Sons da biometria: DESATIVADOS";
+  }
+}
+
+try{
+
+  if(
+    window.Android &&
+    Android.sonsBiometriaAtivos
+  ){
+
+    sonsBiometriaAtivos =
+      Android.sonsBiometriaAtivos();
+  }
+
+}catch(e){
+  console.log(e);
+}
+
+atualizarBotaoSomBiometria();
+
+btnSomBiometria.onclick = function(){
+
+  sonsBiometriaAtivos =
+    !sonsBiometriaAtivos;
+
+  if(sonsBiometriaAtivos){
 
     if(
       window.Android &&
@@ -1101,9 +1129,6 @@ btnSomBiometria.onclick = function(){
 
   }else{
 
-    btnSomBiometria.innerHTML =
-    "🔕 Sons da biometria: DESATIVADOS";
-
     if(
       window.Android &&
       Android.desativarSonsBiometria
@@ -1111,6 +1136,8 @@ btnSomBiometria.onclick = function(){
       Android.desativarSonsBiometria();
     }
   }
+
+  atualizarBotaoSomBiometria();
 };
 </script>
 
