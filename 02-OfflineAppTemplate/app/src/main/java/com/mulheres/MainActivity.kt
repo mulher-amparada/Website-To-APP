@@ -459,6 +459,36 @@ ContactsContract.CommonDataKinds.Phone.CONTENT_URI
 startActivityForResult(intent, 1)
 }
 
+private fun sonsBiometriaAtivados(): Boolean {
+    return getSharedPreferences(
+        "config",
+        MODE_PRIVATE
+    ).getBoolean(
+        "sons_biometria",
+        false
+    )
+}
+
+@JavascriptInterface
+fun ativarSonsBiometria() {
+    getSharedPreferences(
+        "config",
+        MODE_PRIVATE
+    ).edit()
+        .putBoolean("sons_biometria", true)
+        .apply()
+}
+
+@JavascriptInterface
+fun desativarSonsBiometria() {
+    getSharedPreferences(
+        "config",
+        MODE_PRIVATE
+    ).edit()
+        .putBoolean("sons_biometria", false)
+        .apply()
+}
+
 @JavascriptInterface
 fun ativarPalmas() {
 if (!temPermissoesProtecao()) {
@@ -605,6 +635,40 @@ val biometricManager = BiometricManager.from(this)
     biometricPrompt.authenticate(promptInfo)  
 }
 
+}
+
+private fun tocarSomAsset(nomeArquivo: String) {
+
+    if (!sonsBiometriaAtivados()) {
+        return
+    }
+
+    try {
+
+        val afd =
+            assets.openFd(nomeArquivo)
+
+        val player = MediaPlayer()
+
+        player.setDataSource(
+            afd.fileDescriptor,
+            afd.startOffset,
+            afd.length
+        )
+
+        afd.close()
+
+        player.prepare()
+
+        player.setOnCompletionListener {
+            it.release()
+        }
+
+        player.start()
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }
 
 @JavascriptInterface
