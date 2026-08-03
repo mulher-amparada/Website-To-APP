@@ -764,11 +764,3 @@ locationClient.lastLocation.addOnSuccessListener { location ->
 }
 
 }
-
-private lateinit var tiltBrightness: TiltBrightnessController
-
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
-
-}
