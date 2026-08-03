@@ -74,10 +74,7 @@ super.onCreate(savedInstanceState)
     tiltBrightness =
         TiltBrightnessController(this, sensorManager)
 
-    webView.addJavascriptInterface(
-        TiltBrightnessController.WebAppInterface(tiltBrightness),
-        "TiltBrightness"
-    )
+    
     
 WindowCompat.setDecorFitsSystemWindows(window, false)  
 
@@ -196,6 +193,11 @@ webView.addJavascriptInterface(
     "Android"
 )
 
+webView.addJavascriptInterface(
+        TiltBrightnessController.WebAppInterface(tiltBrightness),
+        "TiltBrightness"
+    )
+    
 webView.addJavascriptInterface(
     Cripto(this),
     "Cripto"
