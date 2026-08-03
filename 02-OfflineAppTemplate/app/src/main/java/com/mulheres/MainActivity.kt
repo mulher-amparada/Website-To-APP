@@ -72,8 +72,11 @@ super.onCreate(savedInstanceState)
         getSystemService(SENSOR_SERVICE) as SensorManager
 
     tiltBrightness =
-        TiltBrightnessController(this, sensorManager)
-
+    TiltBrightnessController(
+        this,
+        sensorManager,
+        webView
+    )
     
     
 WindowCompat.setDecorFitsSystemWindows(window, false)  
