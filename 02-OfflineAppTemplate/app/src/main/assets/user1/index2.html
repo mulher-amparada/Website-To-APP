@@ -683,6 +683,18 @@ svg{
 <section class="section fade">
 
   <div class="label">
+     Brilho
+  </div>
+<button class="local" id="brilho">
+    Escurecimento por inclinação<br><br>DESATIVADO
+</button>
+
+
+</section>
+
+<section class="section fade">
+
+  <div class="label">
     Localização
   </div>
 
@@ -717,17 +729,7 @@ svg{
   </button>
 
 </section>
-<section class="section fade">
 
-  <div class="label">
-    Sons da biometria
-  </div>
-
-  <button id="toggleSomBiometria" class="btn1">
-    Sons da biometria: DESATIVADOS
-  </button>
-
-</section>
 
   <section class="section fade">
 <div class="label">
@@ -1074,73 +1076,38 @@ function enviarSOSContatos(){
     Android.enviarSOS();
   }
 }
-
-let sonsBiometriaAtivos = false;
-
-const btnSomBiometria =
-document.getElementById(
-  "toggleSomBiometria"
-);
-
-function atualizarBotaoSomBiometria(){
-
-  if(sonsBiometriaAtivos){
-
-    btnSomBiometria.innerHTML =
-    "Sons da biometria: ATIVADOS";
-
-  }else{
-
-    btnSomBiometria.innerHTML =
-    "Sons da biometria: DESATIVADOS";
-  }
-}
-
-try{
-
-  if(
-    window.Android &&
-    Android.sonsBiometriaAtivos
-  ){
-
-    sonsBiometriaAtivos =
-      Android.sonsBiometriaAtivos();
-  }
-
-}catch(e){
-  console.log(e);
-}
-
-atualizarBotaoSomBiometria();
-
-btnSomBiometria.onclick = function(){
-
-  sonsBiometriaAtivos =
-    !sonsBiometriaAtivos;
-
-  if(sonsBiometriaAtivos){
-
-    if(
-      window.Android &&
-      Android.ativarSonsBiometria
-    ){
-      Android.ativarSonsBiometria();
-    }
-
-  }else{
-
-    if(
-      window.Android &&
-      Android.desativarSonsBiometria
-    ){
-      Android.desativarSonsBiometria();
-    }
-  }
-
-  atualizarBotaoSomBiometria();
-};
 </script>
 
+<script>
+const btnBrilho = document.getElementById("brilho");
+
+btnBrilho.innerHTML =
+    'Escurecimento por inclinação<br><br>DESATIVADO';
+
+btnBrilho.addEventListener("click", () => {
+
+    btnBrilho.classList.toggle("active");
+
+    if (btnBrilho.classList.contains("active")) {
+
+        if (typeof TiltBrightness !== "undefined") {
+            TiltBrightness.startTiltBrightness();
+        }
+
+        btnBrilho.innerHTML =
+            'Escurecimento por inclinação<br><br>ATIVADO';
+
+    } else {
+
+        if (typeof TiltBrightness !== "undefined") {
+            TiltBrightness.stopTiltBrightness();
+        }
+
+        btnBrilho.innerHTML =
+            'Escurecimento por inclinação<br><br>DESATIVADO';
+    }
+});
+</script>
 
 </body>
 </html>
