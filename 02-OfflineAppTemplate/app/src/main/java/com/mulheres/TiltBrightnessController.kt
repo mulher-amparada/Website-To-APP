@@ -1,6 +1,6 @@
 package com.mulheres
 
-private val webView: WebView
+
 import android.app.Activity
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -11,6 +11,7 @@ import android.webkit.JavascriptInterface
 class TiltBrightnessController(
     private val activity: Activity,
     private val sensorManager: SensorManager,
+    private val webView: WebView
     private val webView: WebView
 ) : SensorEventListener {
 private var isDark = false
