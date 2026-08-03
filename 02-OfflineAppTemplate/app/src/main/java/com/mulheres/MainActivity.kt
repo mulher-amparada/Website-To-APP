@@ -54,6 +54,7 @@ companion object {
 private var acelerometro: Sensor? = null  
 var destinoBiometria: Int = 0  
 
+private lateinit var tiltBrightness: TiltBrightnessController
 private lateinit var locationClient: FusedLocationProviderClient  
 private var protecaoAtiva = false  
 
