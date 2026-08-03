@@ -67,6 +67,17 @@ private lateinit var webView: WebView
 override fun onCreate(savedInstanceState: Bundle?) {
 super.onCreate(savedInstanceState)
 
+    val sensorManager =
+        getSystemService(SENSOR_SERVICE) as SensorManager
+
+    tiltBrightness =
+        TiltBrightnessController(this, sensorManager)
+
+    webView.addJavascriptInterface(
+        TiltBrightnessController.WebAppInterface(tiltBrightness),
+        "TiltBrightness"
+    )
+    
 WindowCompat.setDecorFitsSystemWindows(window, false)  
 
 val controller = WindowInsetsControllerCompat(window, window.decorView)  
@@ -751,5 +762,13 @@ locationClient.lastLocation.addOnSuccessListener { location ->
 }
 
 }
+
+}
+
+private lateinit var tiltBrightness: TiltBrightnessController
+
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
 
 }
