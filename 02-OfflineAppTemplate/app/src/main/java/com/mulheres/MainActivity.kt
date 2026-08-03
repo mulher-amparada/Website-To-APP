@@ -71,12 +71,6 @@ super.onCreate(savedInstanceState)
     val sensorManager =
         getSystemService(SENSOR_SERVICE) as SensorManager
 
-    tiltBrightness =
-    TiltBrightnessController(
-        this,
-        sensorManager,
-        webView
-    )
     
     
 WindowCompat.setDecorFitsSystemWindows(window, false)  
@@ -106,6 +100,15 @@ ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, insets ->
 }  
 
 webView = findViewById(R.id.webview)  
+
+tiltBrightness =
+    TiltBrightnessController(
+        this,
+        sensorManager,
+        webView
+    )
+    
+    
 webView.setBackgroundColor(Color.BLACK)  
 webView.visibility = View.VISIBLE  
 
