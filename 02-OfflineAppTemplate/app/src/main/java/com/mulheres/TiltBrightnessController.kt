@@ -1,5 +1,6 @@
 package com.mulheres
 
+private val webView: WebView
 import android.app.Activity
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -12,7 +13,7 @@ class TiltBrightnessController(
     private val sensorManager: SensorManager,
     private val webView: WebView
 ) : SensorEventListener {
-
+private var isDark = false
     private val gravitySensor: Sensor? =
         sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
 
