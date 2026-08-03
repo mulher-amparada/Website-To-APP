@@ -1082,7 +1082,7 @@ function enviarSOSContatos(){
 const btnBrilho = document.getElementById("brilho");
 
 btnBrilho.innerHTML =
-    'Escurecimento por inclinação<br><br>DESATIVADO';
+    "Escurecimento por inclinação<br><br>DESATIVADO";
 
 btnBrilho.addEventListener("click", () => {
 
@@ -1095,7 +1095,7 @@ btnBrilho.addEventListener("click", () => {
         }
 
         btnBrilho.innerHTML =
-            'Escurecimento por inclinação<br><br>ATIVADO';
+            "Escurecimento por inclinação<br><br>ATIVADO";
 
     } else {
 
@@ -1103,8 +1103,11 @@ btnBrilho.addEventListener("click", () => {
             TiltBrightness.stopTiltBrightness();
         }
 
+        document.body.style.visibility = "visible";
+        document.body.style.opacity = "1";
+
         btnBrilho.innerHTML =
-            'Escurecimento por inclinação<br><br>DESATIVADO';
+            "Escurecimento por inclinação<br><br>DESATIVADO";
     }
 });
 </script>
