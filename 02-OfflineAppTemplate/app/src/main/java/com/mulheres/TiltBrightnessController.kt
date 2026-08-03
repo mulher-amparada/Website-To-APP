@@ -9,7 +9,8 @@ import android.webkit.JavascriptInterface
 
 class TiltBrightnessController(
     private val activity: Activity,
-    private val sensorManager: SensorManager
+    private val sensorManager: SensorManager,
+    private val webView: WebView
 ) : SensorEventListener {
 
     private val gravitySensor: Sensor? =
@@ -46,20 +47,52 @@ class TiltBrightnessController(
 
     override fun onSensorChanged(event: SensorEvent) {
 
-        if (!enabled) return
+    if (!enabled) return
 
-        val z = event.values[2]
+    val z = event.values[2]
 
-        activity.runOnUiThread {
+    activity.runOnUiThread {
 
-            if (z < 5f) {
-                setBrightness(darkBrightness)
-            } else {
-                restoreBrightness()
+        if (z < 5f) {
+
+            setBrightness(darkBrightness)
+
+            if (!isDark) {
+
+                isDark = true
+
+                webView.evaluateJavascript(
+                    """
+                    document.body.style.transition='opacity .5s';
+                    document.body.style.opacity='0';
+
+                    setTimeout(()=>{
+                        document.body.style.visibility='hidden';
+                    },500);
+                    """.trimIndent(),
+                    null
+                )
+            }
+
+        } else {
+
+            restoreBrightness()
+
+            if (isDark) {
+
+                isDark = false
+
+                webView.evaluateJavascript(
+                    """
+                    document.body.style.visibility='visible';
+                    document.body.style.opacity='1';
+                    """.trimIndent(),
+                    null
+                )
             }
         }
     }
-
+}
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
     private fun setBrightness(value: Float) {
