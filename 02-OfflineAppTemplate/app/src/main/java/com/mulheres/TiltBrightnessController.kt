@@ -82,9 +82,15 @@ class TiltBrightnessController(
 
         activity.runOnUiThread {
 
-            if (z < 5f) {
+            // brilho gradual conforme inclinação
+            val brightness =
+                ((z + 10f) / 20f)
+                    .coerceIn(darkBrightness, 1f)
 
-                setBrightness(darkBrightness)
+            setBrightness(brightness)
+
+            // muito inclinado
+            if (z < -8f) {
 
                 if (!isDark) {
 
@@ -107,8 +113,6 @@ class TiltBrightnessController(
                 }
 
             } else {
-
-                restoreBrightness()
 
                 if (isDark) {
 
@@ -150,6 +154,16 @@ class TiltBrightnessController(
         }
     }
 
+    private fun restoreBrightness() {
+
+        val params = activity.window.attributes
+
+        if (params.screenBrightness != normalBrightness) {
+            params.screenBrightness = normalBrightness
+            activity.window.attributes = params
+        }
+    }
+
     private fun enterFullscreen() {
 
         activity.window.addFlags(
@@ -170,16 +184,6 @@ class TiltBrightnessController(
 
         activity.window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_VISIBLE
-    }
-
-    private fun restoreBrightness() {
-
-        val params = activity.window.attributes
-
-        if (params.screenBrightness != normalBrightness) {
-            params.screenBrightness = normalBrightness
-            activity.window.attributes = params
-        }
     }
 
     class WebAppInterface(
