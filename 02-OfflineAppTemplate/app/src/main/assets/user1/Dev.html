@@ -200,45 +200,50 @@ E eu me inspiro em Martin Luther King para falar:</p>
 <script src="https://unpkg.com/compromise"></script>
 
 <script>
-function processarTexto() {
+async function carregarTexto() {
 
-    const elemento = document.getElementById('texto');
+    const elemento = document.getElementById("texto");
 
-    if (!elemento) return;
+    try {
 
-    const texto = elemento.innerText.trim();
+        const resposta = await fetch("texto.txt");
+        const texto = await resposta.text();
 
-    if (!texto) return;
+        const linhas = texto
+            .split("\n")
+            .map(l => l.trim())
+            .filter(Boolean);
 
-    const linhas = texto
-        .split('\n')
-        .map(l => l.trim())
-        .filter(Boolean);
+        if (!linhas.length) return;
 
-    if (!linhas.length) return;
+        elemento.innerHTML = "";
 
-    elemento.innerHTML = '';
+        const h2 = document.createElement("h2");
+        h2.textContent = linhas[0];
+        elemento.appendChild(h2);
 
-    const h2 = document.createElement('h2');
-    h2.textContent = linhas[0];
-    elemento.appendChild(h2);
+        const section = document.createElement("section");
 
-    const section = document.createElement('section');
+        linhas.slice(1).forEach(linha => {
 
-    linhas.slice(1).forEach(linha => {
+            const p = document.createElement("p");
+            p.textContent = linha;
 
-        const p = document.createElement('p');
-        p.textContent = linha;
+            section.appendChild(p);
 
-        section.appendChild(p);
+        });
 
-    });
+        elemento.appendChild(section);
 
-    elemento.appendChild(section);
+    } catch (erro) {
 
+        elemento.innerHTML =
+            "<p>Erro ao carregar texto.txt</p>";
+
+    }
 }
 
-processarTexto();
+carregarTexto();
 </script>
 
 </body>
