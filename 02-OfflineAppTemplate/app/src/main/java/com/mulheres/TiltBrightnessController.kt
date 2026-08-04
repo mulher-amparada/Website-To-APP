@@ -1,12 +1,12 @@
 package com.mulheres
 
-import android.view.View
-import android.view.WindowManager
 import android.app.Activity
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.view.View
+import android.view.WindowManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 
@@ -42,6 +42,7 @@ class TiltBrightnessController(
 
     fun stop() {
         enabled = false
+
         sensorManager.unregisterListener(this)
 
         restoreBrightness()
@@ -50,11 +51,19 @@ class TiltBrightnessController(
             isDark = false
 
             activity.runOnUiThread {
+
+                exitFullscreen()
+
                 webView.evaluateJavascript(
                     """
                     document.body.style.visibility='visible';
                     document.body.style.opacity='1';
                     """.trimIndent(),
+                    null
+                )
+
+                webView.evaluateJavascript(
+                    "window.dispatchEvent(new CustomEvent('tiltbrightness',{detail:'normal'}));",
                     null
                 )
             }
@@ -77,34 +86,35 @@ class TiltBrightnessController(
 
                 setBrightness(darkBrightness)
 
-            if (isDark) {
-    isDark = false
+                if (!isDark) {
 
-    activity.runOnUiThread {
+                    isDark = true
 
-        exitFullscreen()
+                    enterFullscreen()
 
-        webView.evaluateJavascript(
-            """
-            document.body.style.visibility='visible';
-            document.body.style.opacity='1';
-            """.trimIndent(),
-            null
-        )
+                    webView.evaluateJavascript(
+                        """
+                        document.body.style.visibility='hidden';
+                        document.body.style.opacity='0';
+                        """.trimIndent(),
+                        null
+                    )
 
-        webView.evaluateJavascript(
-            "window.dispatchEvent(new CustomEvent('tiltbrightness',{detail:'normal'}));",
-            null
-        )
-    }
-}
- else {
+                    webView.evaluateJavascript(
+                        "window.dispatchEvent(new CustomEvent('tiltbrightness',{detail:'dark'}));",
+                        null
+                    )
+                }
+
+            } else {
 
                 restoreBrightness()
 
                 if (isDark) {
 
                     isDark = false
+
+                    exitFullscreen()
 
                     webView.evaluateJavascript(
                         """
@@ -114,14 +124,11 @@ class TiltBrightnessController(
                         """.trimIndent(),
                         null
                     )
-                    
-                    exitFullscreen()
 
-webView.evaluateJavascript(
-    "window.dispatchEvent(new CustomEvent('tiltbrightness',{detail:'normal'}));",
-    null
-)
-
+                    webView.evaluateJavascript(
+                        "window.dispatchEvent(new CustomEvent('tiltbrightness',{detail:'normal'}));",
+                        null
+                    )
                 }
             }
         }
@@ -142,28 +149,28 @@ webView.evaluateJavascript(
             activity.window.attributes = params
         }
     }
-    
+
     private fun enterFullscreen() {
 
-    activity.window.addFlags(
-        WindowManager.LayoutParams.FLAG_FULLSCREEN
-    )
+        activity.window.addFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
 
-    activity.window.decorView.systemUiVisibility =
-        View.SYSTEM_UI_FLAG_FULLSCREEN or
-        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-}
+        activity.window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+    }
 
-private fun exitFullscreen() {
+    private fun exitFullscreen() {
 
-    activity.window.clearFlags(
-        WindowManager.LayoutParams.FLAG_FULLSCREEN
-    )
+        activity.window.clearFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
 
-    activity.window.decorView.systemUiVisibility =
-        View.SYSTEM_UI_FLAG_VISIBLE
-}
+        activity.window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_VISIBLE
+    }
 
     private fun restoreBrightness() {
 
