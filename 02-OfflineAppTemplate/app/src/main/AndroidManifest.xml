@@ -147,7 +147,6 @@ android:screenOrientation="portrait"
     android:targetActivity=".MainActivity"
     android:icon="@drawable/icon3"
     android:label="Calculadora"
-    android:label="✅️Mulher Amparada"
     android:enabled="false"
     android:exported="true">
 
