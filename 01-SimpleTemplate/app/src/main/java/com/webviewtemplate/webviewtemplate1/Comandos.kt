@@ -1,4 +1,4 @@
-package com.assist
+package com.webviewtemplate.webviewtemplate1
 
 import android.app.NotificationManager
 import android.app.NotificationChannel
