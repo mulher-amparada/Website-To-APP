@@ -686,7 +686,7 @@ svg{
      Brilho
   </div>
 <button style="background: white; color: orange; padding: 20px;" class="local" id="brilho">
-    Escurecimento por inclinação<br><br>DESATIVADO
+    Escurecer a tela<br><br>DESATIVADO
 </button>
 
 
@@ -1108,6 +1108,28 @@ btnBrilho.addEventListener("click", () => {
 
         btnBrilho.innerHTML =
             "Escurecimento por inclinação<br><br>DESATIVADO";
+    }
+});
+
+window.addEventListener("tiltbrightness", e => {
+
+    if (e.detail === "dark") {
+
+        btnBrilho.innerHTML =
+            "Escurecimento por inclinação<br><br>ATIVADO";
+
+    } else if (e.detail === "normal") {
+
+        document.body.style.visibility = "visible";
+        document.body.style.opacity = "1";
+
+        if (btnBrilho.classList.contains("active")) {
+            btnBrilho.innerHTML =
+                "Escurecimento por inclinação<br><br>ATIVADO";
+        } else {
+            btnBrilho.innerHTML =
+                "Escurecimento por inclinação<br><br>DESATIVADO";
+        }
     }
 });
 </script>
