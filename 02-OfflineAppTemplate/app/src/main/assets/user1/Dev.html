@@ -77,6 +77,8 @@ main{
     padding:25px;
     margin-bottom:25px;
     transition:.3s;
+    width: 100%;
+    overflow-x: scroll;
 }
 
 .card:hover{
@@ -120,15 +122,20 @@ img{
 
 <main>
 
-<div class="card">
 <h2>Quem é o desenvolvedor dos 3 aplicativos?</h2>
+
+<div class="card">
+
 <p>
 Os 3 aplicativos (o assistente de voz, o gerenciador de arquivos e o próprio mulher amparada), foram feitos por um desenvolvedor brasileiro, autista nível 1, menino de 15 anos, me considero de pele preta, chamado "Samuel De Oliveira Rigueiro"
 </p>
 </div>
 
+<h2>Qual é a trajetória do desenvolvedor?</h2>
+
 <div class="card" id="texto"></div>
 
+<h2>Como ele lidava com a escola?</h2>
 
 <div class="card">
 
@@ -151,8 +158,10 @@ Os 3 aplicativos (o assistente de voz, o gerenciador de arquivos e o próprio mu
 <p>tinha tudo isso de prova na sala do futuro (provas de recuperação era entre o 2 e 3 bimestre, e o resto do 1 ao 2 bimestre) + as 2 fisicas que ja fiz + os 20 resumos que ja fiz de geografia + 2 livros de biologia e português completo = completa exploração da escola!</p>
 </div>
 
-<div class="card">
 <h2>O que quero dizer para as mulheres?</h2>
+
+<div class="card">
+
 <p>atenção: quando digo que as usuárias são princesas, NÃO SIGNIFICA FRAGILIDADE, PELO CONTRÁRIO, QUERO DIZER QUE ELAS TEM UM VALOR TIPO DE REALEZA, E AINDA MAIS, TEM UM PODER DE REALEZA TAMBÉM, É UMA METÁFORA PARA DIZER QUE ELAS TEM VALOR E SÃO EMPODERADAS..., PARA SEMPRE!</p>
 <p>
 E eu me inspiro em Martin Luther King para falar:</p>
@@ -200,47 +209,48 @@ E eu me inspiro em Martin Luther King para falar:</p>
 <script src="https://unpkg.com/compromise"></script>
 
 <script>
-async function carregarTexto() {
+function carregarTexto() {
 
     const elemento = document.getElementById("texto");
 
-    try {
+    const xhr = new XMLHttpRequest();
 
-        const resposta = await fetch("texto.txt");
-        const texto = await resposta.text();
+    xhr.open("GET", "texto.txt", true);
 
-        const linhas = texto
-            .split("\n")
-            .map(l => l.trim())
-            .filter(Boolean);
+    xhr.onload = function () {
 
-        if (!linhas.length) return;
+        if (xhr.status === 200 || xhr.status === 0) {
 
-        elemento.innerHTML = "";
+            const linhas = xhr.responseText
+                .split(/\r?\n/)
+                .map(l => l.trim())
+                .filter(Boolean);
 
-        const h2 = document.createElement("h2");
-        h2.textContent = linhas[0];
-        elemento.appendChild(h2);
+            elemento.innerHTML = "";
 
-        const section = document.createElement("section");
+            linhas.forEach(linha => {
 
-        linhas.slice(1).forEach(linha => {
+                const p = document.createElement("p");
+                p.textContent = linha;
 
-            const p = document.createElement("p");
-            p.textContent = linha;
+                elemento.appendChild(p);
 
-            section.appendChild(p);
+            });
 
-        });
+        } else {
 
-        elemento.appendChild(section);
+            elemento.innerHTML =
+                "<p>Erro ao carregar texto.txt</p>";
+        }
+    };
 
-    } catch (erro) {
+    xhr.onerror = function () {
 
         elemento.innerHTML =
             "<p>Erro ao carregar texto.txt</p>";
+    };
 
-    }
+    xhr.send();
 }
 
 carregarTexto();
