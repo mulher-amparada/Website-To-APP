@@ -1,5 +1,7 @@
 package com.mulheres
 
+import android.view.View
+import android.view.WindowManager
 import android.app.Activity
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -75,24 +77,28 @@ class TiltBrightnessController(
 
                 setBrightness(darkBrightness)
 
-                if (!isDark) {
+            if (isDark) {
+    isDark = false
 
-                    isDark = true
+    activity.runOnUiThread {
 
-                    webView.evaluateJavascript(
-                        """
-                        document.body.style.transition='opacity .5s';
-                        document.body.style.opacity='0';
+        exitFullscreen()
 
-                        setTimeout(()=>{
-                            document.body.style.visibility='hidden';
-                        },500);
-                        """.trimIndent(),
-                        null
-                    )
-                }
+        webView.evaluateJavascript(
+            """
+            document.body.style.visibility='visible';
+            document.body.style.opacity='1';
+            """.trimIndent(),
+            null
+        )
 
-            } else {
+        webView.evaluateJavascript(
+            "window.dispatchEvent(new CustomEvent('tiltbrightness',{detail:'normal'}));",
+            null
+        )
+    }
+}
+ else {
 
                 restoreBrightness()
 
@@ -108,6 +114,14 @@ class TiltBrightnessController(
                         """.trimIndent(),
                         null
                     )
+                    
+                    exitFullscreen()
+
+webView.evaluateJavascript(
+    "window.dispatchEvent(new CustomEvent('tiltbrightness',{detail:'normal'}));",
+    null
+)
+
                 }
             }
         }
@@ -128,6 +142,28 @@ class TiltBrightnessController(
             activity.window.attributes = params
         }
     }
+    
+    private fun enterFullscreen() {
+
+    activity.window.addFlags(
+        WindowManager.LayoutParams.FLAG_FULLSCREEN
+    )
+
+    activity.window.decorView.systemUiVisibility =
+        View.SYSTEM_UI_FLAG_FULLSCREEN or
+        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+}
+
+private fun exitFullscreen() {
+
+    activity.window.clearFlags(
+        WindowManager.LayoutParams.FLAG_FULLSCREEN
+    )
+
+    activity.window.decorView.systemUiVisibility =
+        View.SYSTEM_UI_FLAG_VISIBLE
+}
 
     private fun restoreBrightness() {
 
