@@ -24,7 +24,6 @@ class TiltBrightnessController(
     private var enabled = false
 
     private var darkBrightness = 0.15f
-    private var normalBrightness = -1f
 
     fun start() {
         if (enabled) return
@@ -40,36 +39,6 @@ class TiltBrightnessController(
         }
     }
 
-    fun stop() {
-        enabled = false
-
-        sensorManager.unregisterListener(this)
-
-        restoreBrightness()
-
-        if (isDark) {
-            isDark = false
-
-            activity.runOnUiThread {
-
-                exitFullscreen()
-
-                webView.evaluateJavascript(
-                    """
-                    document.body.style.visibility='visible';
-                    document.body.style.opacity='1';
-                    """.trimIndent(),
-                    null
-                )
-
-                webView.evaluateJavascript(
-                    "window.dispatchEvent(new CustomEvent('tiltbrightness',{detail:'normal'}));",
-                    null
-                )
-            }
-        }
-    }
-
     fun setDarkBrightness(value: Float) {
         darkBrightness = value.coerceIn(0f, 1f)
     }
@@ -82,14 +51,12 @@ class TiltBrightnessController(
 
         activity.runOnUiThread {
 
-            // brilho gradual conforme inclinação
             val brightness =
                 ((z + 10f) / 20f)
                     .coerceIn(darkBrightness, 1f)
 
             setBrightness(brightness)
 
-            // muito inclinado
             if (z < -8f) {
 
                 if (!isDark) {
@@ -108,29 +75,6 @@ class TiltBrightnessController(
 
                     webView.evaluateJavascript(
                         "window.dispatchEvent(new CustomEvent('tiltbrightness',{detail:'dark'}));",
-                        null
-                    )
-                }
-
-            } else {
-
-                if (isDark) {
-
-                    isDark = false
-
-                    exitFullscreen()
-
-                    webView.evaluateJavascript(
-                        """
-                        document.body.style.visibility='visible';
-                        document.body.style.transition='opacity .5s';
-                        document.body.style.opacity='1';
-                        """.trimIndent(),
-                        null
-                    )
-
-                    webView.evaluateJavascript(
-                        "window.dispatchEvent(new CustomEvent('tiltbrightness',{detail:'normal'}));",
                         null
                     )
                 }
@@ -154,16 +98,6 @@ class TiltBrightnessController(
         }
     }
 
-    private fun restoreBrightness() {
-
-        val params = activity.window.attributes
-
-        if (params.screenBrightness != normalBrightness) {
-            params.screenBrightness = normalBrightness
-            activity.window.attributes = params
-        }
-    }
-
     private fun enterFullscreen() {
 
         activity.window.addFlags(
@@ -176,16 +110,6 @@ class TiltBrightnessController(
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
     }
 
-    private fun exitFullscreen() {
-
-        activity.window.clearFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-
-        activity.window.decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_VISIBLE
-    }
-
     class WebAppInterface(
         private val controller: TiltBrightnessController
     ) {
@@ -193,11 +117,6 @@ class TiltBrightnessController(
         @JavascriptInterface
         fun startTiltBrightness() {
             controller.start()
-        }
-
-        @JavascriptInterface
-        fun stopTiltBrightness() {
-            controller.stop()
         }
 
         @JavascriptInterface
