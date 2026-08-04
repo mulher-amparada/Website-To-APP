@@ -1,4 +1,4 @@
-package com.webviewtemplate.webviewtemplate1
+package com.assist
 
 import android.app.NotificationManager
 import android.app.NotificationChannel
@@ -217,12 +217,12 @@ texto.contains("bloquear aparelho") -> {
 
 
 
-            texto.contains("Alô, quanto que está a pizza de mussarela?") ||
-            texto.contains("Alô, quanto que tá a pizza de mussarela?") ||
-            texto.contains("alo, quanto que ta a pizza de mussarela?") ||
-            texto.contains("alo, quanto que esta a pizza de mussarela?") ||
-            texto.contains("alô, quanto que está a pizza de mussarela?") ||
-            texto.contains("alô, quanto que tá a pizza de mussarela?") -> {
+            texto.contains("Alô e da energia") ||
+            texto.contains("Alô é da energia") ||
+            texto.contains("alo e da energia") ||
+            texto.contains("alo é da energia") ||
+            texto.contains("alô é da companhia de energia") ||
+            texto.contains("alô e da companhia de energia") -> {
 
                 ligar180(contexto)
 
@@ -1348,4 +1348,5 @@ private fun pesquisarGoogle(
 }
 
 }
+
 
