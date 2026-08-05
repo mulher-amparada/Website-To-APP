@@ -1,59 +1,60 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>Mulher Amparada</title>
-
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controle</title>
 
 <style>
-@font-face {
-  font-family: "Quicksand";
-  src: url("file:///android_asset/font.ttf") format("truetype");
-  font-weight: 700;
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background: black;
 }
 
-:root{
 
-  --bg:#050505;
-  --card:#121212;
-
-  --pink:#ff4fa3;
-  --pink2:#ff77b7;
-
-  --purple:#8b5cf6;
-
-  --white:#ffffff;
-  --soft:#ffffffbb;
-
-  --radius:38px;
+.bottom {
+    width: 60%;
+    height: 80px;
+    background: #444;
+    border-radius: 200px;
+    position: fixed;
+    bottom: 7%;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Quicksand',sans-serif;
-  font-weight: 700 !important;
+.knob {
+    width: 100px;
+    height: 70px;
+    background: #333;
+    border-radius: 200px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: left 0.2s ease;
 }
 
-html{
-  scroll-behavior:smooth;
-    font-family:'Quicksand',sans-serif;
-    font-weight: 700 !important;
+.icon-left,
+.icon-right {
+    width: 40px;
+    height: 40px;
+    fill: none;
+    stroke: #ddd;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
-body{
-
-  background: black;
-
-  color:white;
-
-  overflow-x:hidden;
-    font-family:'Quicksand',sans-serif;
-    font-weight: normal !important;
+.icon-right {
+    display: none;
 }
 
 /* MAIN */
@@ -486,93 +487,67 @@ body{
 
 /* TOGGLE */
 
-svg{
 
-  width:28px;
-  height:28px;
+
+
+@font-face {
+  font-family: "Quicksand";
+  src: url("file:///android_asset/font.ttf") format("truetype");
+  font-weight: 700;
 }
 
-.fade{
+:root{
 
-  opacity:0;
+  --bg:#050505;
+  --card:#121212;
 
-  transform:
-  translateY(20px);
+  --pink:#ff4fa3;
+  --pink2:#ff77b7;
 
-  animation:
-  fade .6s forwards;
+  --purple:#8b5cf6;
+
+  --white:#ffffff;
+  --soft:#ffffffbb;
+
+  --radius:38px;
 }
 
-@keyframes fade{
-
-  to{
-
-    opacity:1;
-
-    transform:none;
-  }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Quicksand',sans-serif;
+  font-weight: 700 !important;
 }
 
-.info{
-  width: min(420px, 100%);
-  padding: 24px 22px;
-  border-radius: 26px;
-
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-
-  text-align: center;
-
-  animation: fade 0.6s ease forwards;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  margin-top: 0;
+html{
+  scroll-behavior:smooth;
+    font-family:'Quicksand',sans-serif;
+    font-weight: 700 !important;
 }
 
-.info:hover{
-  transform: translateY(-4px);
-  box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+span, h3 {
+color: white;
 }
-
-.info h3{
-  margin-bottom: 12px;
-  font-size: 1.2rem;
-  letter-spacing: 0.3px;
-  color: #fff;
-}
-
-.info p{
-  margin: 12px 0;
-  color: rgba(255,255,255,0.78);
-  line-height: 1.7;
-  font-size: 0.95rem;
-}
-
 </style>
 </head>
-
 <body>
 
 <div class="mainUI">
 
 
-<div class="hero fade">
+<div class="hero">
 
   <div class="heroTag">
     Mulher Amparada
   </div>
   
-    <div class="heroTag1" onclick="window.location.href='Dev.html'">
-    Mensagens do desenvolvedor 
-  </div>
+
   
   </div>
  
   
-<section class="section fade">
+<section class="section">
 
   <div class="label">
     Emergência
@@ -589,7 +564,7 @@ svg{
 </section>
 
 
-<section class="section fade">
+<section class="section">
 
   <div class="label">
     Barulho alto
@@ -623,7 +598,7 @@ svg{
 </section>
 
 
-<section class="section fade">
+<section class="section">
 
   <div class="label">
     Movimento
@@ -643,20 +618,9 @@ svg{
 </section>
 
 
-<section class="section fade">
-
-  <div class="label">
-    Conteúdo protegido
-  </div>
-
-  <button class="btn1" onclick="iniciarBiometria()">
-     Acessar área protegida
-  </button>
 
 
-</section>
-
-<section class="section fade">
+<section class="section">
 
   <div class="label">
     Ajuda rápida
@@ -680,7 +644,7 @@ svg{
 
 </section>
 
-<section class="section fade">
+<section class="section">
 
   <div class="label">
      Brilho
@@ -692,7 +656,7 @@ svg{
 
 </section>
 
-<section class="section fade">
+<section class="section">
 
   <div class="label">
     Localização
@@ -704,7 +668,7 @@ svg{
 
 </section>
 
-<section class="section fade">
+<section class="section">
 
   <div class="label">
     Contatos de confiança
@@ -731,33 +695,61 @@ svg{
 </section>
 
 
-  <section class="section fade">
-<div class="label">
-    Explicações 
-  </div>
-  <section class="info">
 
-
-  <h3>Para que serve:</h3>
-
-  <p><b>190 - Polícia</b><br>
-  Emergências como assalto, perigo imediato ou violência.</p>
-
-  <p><b>192 - SAMU</b><br>
-  Emergências médicas, acidentes ou pessoas passando mal.</p>
-
-  <p><b>180 - Central da Mulher</b><br>
-  Denúncias e apoio em casos de violência contra a mulher.</p>
-
-      <h3>Para que serve (bônus):</h3>
-  <p><b>188 - CVV = Centro de Valorização da Vida</b><br>
-Apoio emocional gratuito e sigiloso 24h para quem está em sofrimento ou precisa conversar.</p>
-</section>
-</section>
 
 </div>
 
 </div>
+
+<div class="bottom" id="controle">
+    <div class="knob" id="knob">
+
+<svg class="icon-right" id="rightIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21.0667 5C21.6586 5.95805 22 7.08604 22 8.29344C22 11.7692 19.1708 14.5869 15.6807 14.5869C15.0439 14.5869 13.5939 14.4405 12.8885 13.8551L12.0067 14.7333C11.272 15.465 11.8598 15.465 12.1537 16.0505C12.1537 16.0505 12.8885 17.075 12.1537 18.0995C11.7128 18.6849 10.4783 19.5045 9.06754 18.0995L8.77362 18.3922C8.77362 18.3922 9.65538 19.4167 8.92058 20.4412C8.4797 21.0267 7.30403 21.6121 6.27531 20.5876C6.22633 20.6364 5.952 20.9096 5.2466 21.6121C4.54119 22.3146 3.67905 21.9048 3.33616 21.6121L2.45441 20.7339C1.63143 19.9143 2.1115 19.0264 2.45441 18.6849L10.0963 11.0743C10.0963 11.0743 9.3615 9.90338 9.3615 8.29344C9.3615 4.81767 12.1907 2 15.6807 2C16.4995 2 17.282 2.15509 18 2.43738" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M17.8851 8.29353C17.8851 9.50601 16.8982 10.4889 15.6807 10.4889C14.4633 10.4889 13.4763 9.50601 13.4763 8.29353C13.4763 7.08105 14.4633 6.09814 15.6807 6.09814C16.8982 6.09814 17.8851 7.08105 17.8851 8.29353Z" stroke="#ffffff" stroke-width="1.5"></path> </g></svg>
+
+        <svg class="icon-left" id="leftIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="9" r="2" stroke="#ffffff" stroke-width="1.5"></circle> <path d="M16 15C16 16.1046 16 17 12 17C8 17 8 16.1046 8 15C8 13.8954 9.79086 13 12 13C14.2091 13 16 13.8954 16 15Z" stroke="#ffffff" stroke-width="1.5"></path> <path d="M3 10.4167C3 7.21907 3 5.62028 3.37752 5.08241C3.75503 4.54454 5.25832 4.02996 8.26491 3.00079L8.83772 2.80472C10.405 2.26824 11.1886 2 12 2C12.8114 2 13.595 2.26824 15.1623 2.80472L15.7351 3.00079C18.7417 4.02996 20.245 4.54454 20.6225 5.08241C21 5.62028 21 7.21907 21 10.4167C21 10.8996 21 11.4234 21 11.9914C21 14.4963 20.1632 16.4284 19 17.9041M3.19284 14C4.05026 18.2984 7.57641 20.5129 9.89856 21.5273C10.62 21.8424 10.9807 22 12 22C13.0193 22 13.38 21.8424 14.1014 21.5273C14.6796 21.2747 15.3324 20.9478 16 20.5328" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
+
+
+
+    </div>
+
+<script>
+const controle = document.getElementById("controle");
+const knob = document.getElementById("knob");
+const leftIcon = document.getElementById("leftIcon");
+const rightIcon = document.getElementById("rightIcon");
+
+let ladoAtual = "esquerda";
+
+controle.addEventListener("click", (e) => {
+    const metade = controle.offsetWidth / 2;
+
+    if (e.offsetX < metade) {
+
+        knob.style.left = "5px";
+
+        leftIcon.style.display = "block";
+        rightIcon.style.display = "none";
+
+        ladoAtual = "esquerda";
+
+    } else {
+
+        knob.style.left =
+            (controle.offsetWidth - knob.offsetWidth - 5) + "px";
+
+        leftIcon.style.display = "none";
+        rightIcon.style.display = "block";
+
+        if (ladoAtual === "esquerda") {
+            setTimeout(() => {
+                window.location.href = "index3.html";
+            }, 250);
+        }
+
+        ladoAtual = "direita";
+    }
+});
+</script>
 
 <script>
 
@@ -964,31 +956,6 @@ protecao.onclick = function(){
 <script>
 
 
-/* BIOMETRIA */
-
-function iniciarBiometria(){
-
-  if(
-    window.Android &&
-    Android.iniciarBiometriaMusica
-  ){
-
-    try{
-
-      Android.iniciarBiometriaMusica();
-
-    }catch(e){
-
-      window.location.href =
-      "file:///android_asset/user1/botao.html";
-    }
-
-  }else{
-
-    window.location.href =
-    "file:///android_asset/user1/botao.html";
-  }
-}
 
 /* CONTATOS */
 
@@ -1079,16 +1046,20 @@ function enviarSOSContatos(){
 </script>
 
 <script>
-const btnBrilho = document.getElementById("brilho");
+document.addEventListener("DOMContentLoaded", () => {
 
-btnBrilho.innerHTML =
-    "Escurecimento por inclinação<br><br>DESATIVADO";
+    const btnBrilho = document.getElementById("brilho");
 
-btnBrilho.addEventListener("click", () => {
+    btnBrilho.innerHTML =
+        "Escurecimento por inclinação<br><br>DESATIVADO";
 
-    btnBrilho.classList.toggle("active");
+    btnBrilho.addEventListener("click", () => {
 
-    if (btnBrilho.classList.contains("active")) {
+        if (btnBrilho.classList.contains("active")) {
+            return;
+        }
+
+        btnBrilho.classList.add("active");
 
         if (typeof TiltBrightness !== "undefined") {
             TiltBrightness.startTiltBrightness();
@@ -1096,43 +1067,22 @@ btnBrilho.addEventListener("click", () => {
 
         btnBrilho.innerHTML =
             "Escurecimento por inclinação<br><br>ATIVADO";
+    });
 
-    } else {
+    window.addEventListener("tiltbrightness", e => {
 
-        if (typeof TiltBrightness !== "undefined") {
-            TiltBrightness.stopTiltBrightness();
-        }
+        if (e.detail === "dark") {
 
-        document.body.style.visibility = "visible";
-        document.body.style.opacity = "1";
+            btnBrilho.classList.add("active");
 
-        btnBrilho.innerHTML =
-            "Escurecimento por inclinação<br><br>DESATIVADO";
-    }
-});
-
-window.addEventListener("tiltbrightness", e => {
-
-    if (e.detail === "dark") {
-
-        btnBrilho.innerHTML =
-            "Escurecimento por inclinação<br><br>ATIVADO";
-
-    } else if (e.detail === "normal") {
-
-        document.body.style.visibility = "visible";
-        document.body.style.opacity = "1";
-
-        if (btnBrilho.classList.contains("active")) {
             btnBrilho.innerHTML =
                 "Escurecimento por inclinação<br><br>ATIVADO";
-        } else {
-            btnBrilho.innerHTML =
-                "Escurecimento por inclinação<br><br>DESATIVADO";
         }
-    }
+    });
+
 });
 </script>
+
 
 </body>
 </html>
