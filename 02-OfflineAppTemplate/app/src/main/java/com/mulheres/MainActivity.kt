@@ -132,13 +132,16 @@ if (intent?.getBooleanExtra("ABRIR_LOCALIZACAO", false) == true) {
     abrirWhatsAppComLocalizacao()
 }
 
-onBackPressedDispatcher.addCallback(this) {
-    if (webView.canGoBack()) {
-        webView.goBack()
-    } else {
-        finish()
+onBackPressedDispatcher.addCallback(this,
+    object : androidx.activity.OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (webView.canGoBack()) {
+                webView.goBack()
+            }
+            // se não puder voltar, não faz nada
+        }
     }
-}
+)
 
 }
 
@@ -678,7 +681,11 @@ fun ligarDireto(numero: String) {
     }
 }
 
-
+override fun onBackPressed() {
+    if (webView.canGoBack()) {
+        webView.goBack()
+    }
+}
 
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 super.onActivityResult(requestCode, resultCode, data)
