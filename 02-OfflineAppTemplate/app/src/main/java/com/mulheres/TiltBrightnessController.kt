@@ -81,6 +81,15 @@ class TiltBrightnessController(
             }
         }
     }
+    
+    fun stop() {
+
+    enabled = false
+
+    sensorManager.unregisterListener(this)
+
+    isDark = false
+}
 
     override fun onAccuracyChanged(
         sensor: Sensor?,
@@ -123,5 +132,10 @@ class TiltBrightnessController(
         fun setDarkBrightness(value: Float) {
             controller.setDarkBrightness(value)
         }
+        
+        @JavascriptInterface
+fun stopTiltBrightness() {
+    controller.stop()
+}
     }
 }
