@@ -132,6 +132,14 @@ if (intent?.getBooleanExtra("ABRIR_LOCALIZACAO", false) == true) {
     abrirWhatsAppComLocalizacao()
 }
 
+onBackPressedDispatcher.addCallback(this) {
+    if (webView.canGoBack()) {
+        webView.goBack()
+    } else {
+        finish()
+    }
+}
+
 }
 
 override fun onRequestPermissionsResult(
@@ -155,13 +163,7 @@ if (requestCode == 100) {
 
 }
 
-onBackPressedDispatcher.addCallback(this) {
-    if (webView.canGoBack()) {
-        webView.goBack()
-    } else {
-        finish()
-    }
-}
+
 
 private fun abrirIntentSMS(mensagem: String) {
 val prefs = getSharedPreferences("contatos", MODE_PRIVATE)
