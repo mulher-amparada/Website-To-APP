@@ -529,6 +529,28 @@ html{
 span, h3 {
 color: white;
 }
+
+.local99 {
+    background: #222;
+    color: orange;
+    padding: 20px;
+    border-radius: 20px;
+    width:100%;
+
+  min-height:58px;
+border: 2px solid white;
+}
+
+.local999 {
+    border: 2px solid orange;
+    color: orange;
+    padding: 20px;
+    border-radius: 20px;
+    background: #222;
+    width:100%;
+  min-height:58px;
+
+}
 </style>
 </head>
 <body>
@@ -649,7 +671,7 @@ color: white;
   <div class="label">
      Brilho
   </div>
-<button style="background: white; color: orange; padding: 20px;" class="local" id="brilho">
+<button "class="local99" id="brilho">
     Escurecer a tela<br><br>DESATIVADO
 </button>
 
@@ -1050,18 +1072,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const btnBrilho = document.getElementById("brilho");
 
+    btnBrilho.classList.add("local99");
+
     btnBrilho.innerHTML =
         "Escurecimento por inclinação<br><br>DESATIVADO";
 
     btnBrilho.addEventListener("click", () => {
 
-        if (btnBrilho.classList.contains("active")) {
+        if (btnBrilho.classList.contains("local999")) {
+
+            btnBrilho.classList.remove("local999");
+            btnBrilho.classList.add("local99");
+
+            btnBrilho.innerHTML =
+                "Escurecimento por inclinação<br><br>DESATIVADO";
+
+            if (typeof TiltBrightness !== "undefined" &&
+                typeof TiltBrightness.stopTiltBrightness === "function") {
+                TiltBrightness.stopTiltBrightness();
+            }
+
             return;
         }
 
-        btnBrilho.classList.add("active");
+        btnBrilho.classList.remove("local99");
+        btnBrilho.classList.add("local999");
 
-        if (typeof TiltBrightness !== "undefined") {
+        if (typeof TiltBrightness !== "undefined" &&
+            typeof TiltBrightness.startTiltBrightness === "function") {
             TiltBrightness.startTiltBrightness();
         }
 
@@ -1073,7 +1111,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (e.detail === "dark") {
 
-            btnBrilho.classList.add("active");
+            btnBrilho.classList.remove("local99");
+            btnBrilho.classList.add("local999");
 
             btnBrilho.innerHTML =
                 "Escurecimento por inclinação<br><br>ATIVADO";
@@ -1082,7 +1121,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
-
 
 </body>
 </html>
