@@ -89,6 +89,10 @@ class TiltBrightnessController(
     sensorManager.unregisterListener(this)
 
     isDark = false
+
+    activity.runOnUiThread {
+        setBrightness(1f)
+    }
 }
 
     override fun onAccuracyChanged(
