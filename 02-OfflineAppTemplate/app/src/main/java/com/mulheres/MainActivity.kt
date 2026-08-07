@@ -155,12 +155,12 @@ if (requestCode == 100) {
 
 }
 
-override fun onBackPressed() {
-if (webView.canGoBack()) {
-webView.goBack()
-} else {
-finish()
-}
+onBackPressedDispatcher.addCallback(this) {
+    if (webView.canGoBack()) {
+        webView.goBack()
+    } else {
+        finish()
+    }
 }
 
 private fun abrirIntentSMS(mensagem: String) {
