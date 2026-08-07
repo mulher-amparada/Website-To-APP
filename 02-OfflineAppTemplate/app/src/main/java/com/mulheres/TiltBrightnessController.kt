@@ -101,6 +101,13 @@ fun stop() {
             params.screenBrightness = it
             activity.window.attributes = params
         }
+
+        activity.window.clearFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+
+        activity.window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_VISIBLE
     }
 }
 
