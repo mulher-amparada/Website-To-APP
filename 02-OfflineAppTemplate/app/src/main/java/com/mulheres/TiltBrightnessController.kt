@@ -22,22 +22,26 @@ class TiltBrightnessController(
         sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
 
     private var enabled = false
+private var originalBrightness: Float? = null
 
     private var darkBrightness = 0.15f
 
     fun start() {
-        if (enabled) return
 
-        enabled = true
+    if (enabled) return
 
-        gravitySensor?.let {
-            sensorManager.registerListener(
-                this,
-                it,
-                SensorManager.SENSOR_DELAY_NORMAL
-            )
-        }
+    originalBrightness = activity.window.attributes.screenBrightness
+
+    enabled = true
+
+    gravitySensor?.let {
+        sensorManager.registerListener(
+            this,
+            it,
+            SensorManager.SENSOR_DELAY_NORMAL
+        )
     }
+}
 
     fun setDarkBrightness(value: Float) {
         darkBrightness = value.coerceIn(0f, 1f)
@@ -82,7 +86,7 @@ class TiltBrightnessController(
         }
     }
     
-    fun stop() {
+fun stop() {
 
     enabled = false
 
@@ -91,7 +95,12 @@ class TiltBrightnessController(
     isDark = false
 
     activity.runOnUiThread {
-        setBrightness(1f)
+
+        originalBrightness?.let {
+            val params = activity.window.attributes
+            params.screenBrightness = it
+            activity.window.attributes = params
+        }
     }
 }
 
