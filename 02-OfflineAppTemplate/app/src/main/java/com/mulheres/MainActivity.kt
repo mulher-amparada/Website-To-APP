@@ -146,27 +146,77 @@ onBackPressedDispatcher.addCallback(this,
 }
 
 override fun onRequestPermissionsResult(
-requestCode: Int,
-permissions: Array<out String>,
-grantResults: IntArray
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
 ) {
-super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    super.onRequestPermissionsResult(
+        requestCode,
+        permissions,
+        grantResults
+    )
 
-if (requestCode == 100) {  
-    carregarWebView3()  
+    // Permissões gerais do aplicativo
+    if (requestCode == 100) {
 
-    if (!temPermissoes()) {  
-        Toast.makeText(  
-            this,  
-            "Algumas permissões não foram concedidas.",  
-            Toast.LENGTH_LONG  
-        ).show()  
-    }  
+        carregarWebView3()
+
+        if (!temPermissoes()) {
+
+            Toast.makeText(
+                this,
+                "Algumas permissões não foram concedidas.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+
+    // Permissão de notificações dos lembretes de água
+    if (requestCode == 1001) {
+
+        val permitido =
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+            (
+                grantResults.isNotEmpty() &&
+                grantResults[0] ==
+                    PackageManager.PERMISSION_GRANTED
+            )
+
+        if (permitido) {
+
+            // Permissão concedida:
+            // agora os lembretes podem ser ativados.
+            WaterReminderScheduler.schedule(this)
+
+            webView.evaluateJavascript(
+                """
+                if (
+                    typeof lembretesAguaResultado === 'function'
+                ) {
+                    lembretesAguaResultado(true);
+                }
+                """.trimIndent(),
+                null
+            )
+
+        } else {
+
+            // Usuário recusou a permissão.
+            // O JS sabe que não foi ativado.
+            webView.evaluateJavascript(
+                """
+                if (
+                    typeof lembretesAguaResultado === 'function'
+                ) {
+                    lembretesAguaResultado(false);
+                }
+                """.trimIndent(),
+                null
+            )
+        }
+    }
 }
-
-}
-
-
 
 private fun abrirIntentSMS(mensagem: String) {
 val prefs = getSharedPreferences("contatos", MODE_PRIVATE)
