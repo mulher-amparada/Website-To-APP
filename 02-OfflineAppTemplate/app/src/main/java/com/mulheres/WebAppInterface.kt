@@ -33,6 +33,30 @@ class WebAppInterface(
         }
     }
     
+    @JavascriptInterface
+fun iniciarLembretesAgua() {
+    activity.runOnUiThread {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    activity,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    1001
+                )
+                return@runOnUiThread
+            }
+        }
+
+        WaterReminderScheduler.schedule(activity)
+    }
+}
+
 @JavascriptInterface
 fun obterApps(): String {
 
