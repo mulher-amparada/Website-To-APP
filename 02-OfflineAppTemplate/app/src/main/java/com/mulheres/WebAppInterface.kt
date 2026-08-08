@@ -3,7 +3,7 @@ package com.mulheres
 import org.json.JSONArray
 import android.Manifest
 import android.os.Build
-import android.webkit.WebView
+import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import org.json.JSONObject
@@ -38,117 +38,7 @@ class WebAppInterface(
         }
     }
     
-    @JavascriptInterface
-fun testarNotificacaoAgua() {
-    activity.runOnUiThread {
 
-        try {
-            WaterReminderScheduler.schedule(activity)
-
-            activity.findViewById<WebView>(R.id.webview)
-                ?.evaluateJavascript(
-                    "lembretesAguaResultado(true);",
-                    null
-                )
-
-            android.widget.Toast.makeText(
-                activity,
-                "Scheduler executado",
-                android.widget.Toast.LENGTH_SHORT
-            ).show()
-
-        } catch (e: Exception) {
-
-            android.widget.Toast.makeText(
-                activity,
-                "ERRO: ${e.message}",
-                android.widget.Toast.LENGTH_LONG
-            ).show()
-
-            android.util.Log.e(
-                "WATER_DEBUG",
-                "Erro ao agendar lembrete",
-                e
-            )
-
-            activity.findViewById<WebView>(R.id.webview)
-                ?.evaluateJavascript(
-                    "lembretesAguaResultado(false);",
-                    null
-                )
-        }
-    }
-}
-    
-@JavascriptInterface
-fun iniciarLembretesAgua() {
-    activity.runOnUiThread {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-
-            if (
-                ContextCompat.checkSelfPermission(
-                    activity,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-
-                ActivityCompat.requestPermissions(
-                    activity,
-                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    1001
-                )
-
-                return@runOnUiThread
-            }
-        }
-
-        WaterReminderScheduler.schedule(activity)
-
-        activity.findViewById<WebView>(R.id.webview)
-            ?.evaluateJavascript(
-                "lembretesAguaResultado(true);",
-                null
-            )
-    }
-}
-
-
-@JavascriptInterface
-fun pararLembretesAgua() {
-
-    WaterReminderScheduler.cancel(activity)
-
-    activity.runOnUiThread {
-
-        activity.findViewById<WebView>(R.id.webview)
-            ?.evaluateJavascript(
-                "lembretesAguaResultado(false);",
-                null
-            )
-    }
-}
-
-
-@JavascriptInterface
-fun verificarLembretesAgua() {
-
-    val prefs = activity.getSharedPreferences(
-        "water_reminders",
-        Context.MODE_PRIVATE
-    )
-
-    val ativo = prefs.getBoolean("ativos", false)
-
-    activity.runOnUiThread {
-
-        activity.findViewById<WebView>(R.id.webview)
-            ?.evaluateJavascript(
-                "lembretesAguaResultado($ativo);",
-                null
-            )
-    }
-}
 
 @JavascriptInterface
 fun obterApps(): String {
