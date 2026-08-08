@@ -38,6 +38,48 @@ class WebAppInterface(
         }
     }
     
+    @JavascriptInterface
+fun testarNotificacaoAgua() {
+    activity.runOnUiThread {
+
+        try {
+            WaterReminderScheduler.schedule(activity)
+
+            activity.findViewById<WebView>(R.id.webview)
+                ?.evaluateJavascript(
+                    "lembretesAguaResultado(true);",
+                    null
+                )
+
+            android.widget.Toast.makeText(
+                activity,
+                "Scheduler executado",
+                android.widget.Toast.LENGTH_SHORT
+            ).show()
+
+        } catch (e: Exception) {
+
+            android.widget.Toast.makeText(
+                activity,
+                "ERRO: ${e.message}",
+                android.widget.Toast.LENGTH_LONG
+            ).show()
+
+            android.util.Log.e(
+                "WATER_DEBUG",
+                "Erro ao agendar lembrete",
+                e
+            )
+
+            activity.findViewById<WebView>(R.id.webview)
+                ?.evaluateJavascript(
+                    "lembretesAguaResultado(false);",
+                    null
+                )
+        }
+    }
+}
+    
 @JavascriptInterface
 fun iniciarLembretesAgua() {
     activity.runOnUiThread {
