@@ -6,6 +6,18 @@
 <title>Controle</title>
 
 <style>
+
+@keyframes fade{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
 html, body {
     margin: 0;
     width: 100%;
@@ -71,6 +83,8 @@ html, body {
 
   padding:
   35px 18px 140px;
+  
+  animation:fade .5s ease;
 }
 
 /* HERO */
