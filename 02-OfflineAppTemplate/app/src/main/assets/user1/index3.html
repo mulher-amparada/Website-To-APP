@@ -403,7 +403,7 @@ font-size: 26px;
 </div>
 
 <button class="waterButton" id="waterButton" onclick="alternarLembreteAgua()">
-    <span id="waterIcon">💧</span>
+    <span id="waterIcon"></span>
     <span id="waterText">Ativar lembrete de água</span>
 </button>
 
@@ -514,71 +514,48 @@ controle.addEventListener("click", (e) => {
 
 function iniciarBiometria(){
 
-  if(
-    window.Android &&
-    Android.iniciarBiometriaMusica
-  ){
+    if(
+        window.Android &&
+        Android.iniciarBiometriaMusica
+    ){
 
-    try{
+        try{
 
-      Android.iniciarBiometriaMusica();
+            Android.iniciarBiometriaMusica();
 
-    }catch(e){
+        }catch(e){
 
-      window.location.href =
-      "file:///android_asset/user1/botao.html";
+            window.location.href =
+            "file:///android_asset/user1/botao.html";
+        }
+
+    }else{
+
+        window.location.href =
+        "file:///android_asset/user1/botao.html";
     }
-
-  }else{
-
-    window.location.href =
-    "file:///android_asset/user1/botao.html";
-  }
 }
+
 
 let aguaAtiva = false;
 
 
-/*
- * Clicou no botão
- */
 function alternarLembreteAgua() {
 
     if (
         window.Android &&
-        typeof Android.iniciarLembretesAgua === "function" &&
-        typeof Android.pararLembretesAgua === "function"
+        typeof Android.testarNotificacaoAgua === "function"
     ) {
 
-        if (!aguaAtiva) {
-
-            // Tenta ativar.
-            // O botão só será alterado quando
-            // o Kotlin confirmar o resultado.
-            Android.iniciarLembretesAgua();
-
-        } else {
-
-            // Desativar
-            Android.pararLembretesAgua();
-        }
+        Android.testarNotificacaoAgua();
 
     } else {
 
-        console.log(
-            "Interface Android não disponível."
-        );
+        console.log("Interface Android não disponível.");
     }
 }
 
 
-/*
- * O Kotlin chama esta função quando
- * souber o resultado real.
- *
- * true  = ativado
- * false = desativado / permissão recusada
- */
 function lembretesAguaResultado(ativo) {
 
     aguaAtiva = ativo === true;
@@ -602,7 +579,7 @@ function lembretesAguaResultado(ativo) {
 
         button.classList.remove("desativado");
 
-        icon.textContent = "💧";
+        icon.textContent = "";
         text.textContent =
             "Lembrete de água ativado";
 
@@ -610,11 +587,12 @@ function lembretesAguaResultado(ativo) {
 
         button.classList.add("desativado");
 
-        icon.textContent = "💧";
+        icon.textContent = "";
         text.textContent =
             "Ativar lembrete de água";
     }
 }
+
 </script>
 
 </body>
