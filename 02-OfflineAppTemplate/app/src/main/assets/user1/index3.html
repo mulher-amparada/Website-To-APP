@@ -328,7 +328,7 @@ font-size: 26px;
 
 .waterButton {
 
-    width: 90%;
+    width: 100%;
     min-height: 64px;
 
     border: none;
@@ -403,7 +403,7 @@ font-size: 26px;
 </div>
 
 <button class="waterButton" id="waterButton" onclick="alternarLembreteAgua()">
-    <span id="waterIcon"></span>
+    <span id="waterIcon">💧</span>
     <span id="waterText">Ativar lembrete de água</span>
 </button>
 
@@ -538,74 +538,81 @@ function iniciarBiometria(){
 
 let aguaAtiva = false;
 
+
+/*
+ * Clicou no botão
+ */
 function alternarLembreteAgua() {
 
-    const button = document.getElementById("waterButton");
-    const text = document.getElementById("waterText");
-    const icon = document.getElementById("waterIcon");
+    if (
+        window.Android &&
+        typeof Android.iniciarLembretesAgua === "function" &&
+        typeof Android.pararLembretesAgua === "function"
+    ) {
 
-    if (!aguaAtiva) {
+        if (!aguaAtiva) {
 
-        // ATIVAR
-        if (
-            window.Android &&
-            typeof Android.iniciarLembretesAgua === "function"
-        ) {
-
-            try {
-
-                Android.iniciarLembretesAgua();
-
-                aguaAtiva = true;
-
-                button.classList.remove("desativado");
-
-                icon.textContent = "";
-                text.textContent = "Lembrete de água ativado";
-
-            } catch (e) {
-
-                console.error(
-                    "Erro ao ativar lembrete:",
-                    e
-                );
-            }
+            // Tenta ativar.
+            // O botão só será alterado quando
+            // o Kotlin confirmar o resultado.
+            Android.iniciarLembretesAgua();
 
         } else {
 
-            console.log(
-                "Interface Android não disponível."
-            );
+            // Desativar
+            Android.pararLembretesAgua();
         }
 
     } else {
 
-        // DESATIVAR
-        if (
-            window.Android &&
-            typeof Android.pararLembretesAgua === "function"
-        ) {
+        console.log(
+            "Interface Android não disponível."
+        );
+    }
+}
 
-            try {
 
-                Android.pararLembretesAgua();
+/*
+ * O Kotlin chama esta função quando
+ * souber o resultado real.
+ *
+ * true  = ativado
+ * false = desativado / permissão recusada
+ */
+function lembretesAguaResultado(ativo) {
 
-                aguaAtiva = false;
+    aguaAtiva = ativo === true;
 
-                button.classList.add("desativado");
+    const button =
+        document.getElementById("waterButton");
 
-                icon.textContent = "";
-                text.textContent = "Ativar lembrete de água";
+    const text =
+        document.getElementById("waterText");
 
-            } catch (e) {
+    const icon =
+        document.getElementById("waterIcon");
 
-                console.error(
-                    "Erro ao desativar lembrete:",
-                    e
-                );
-            }
 
-        }
+    if (!button || !text || !icon) {
+        return;
+    }
+
+
+    if (aguaAtiva) {
+
+        button.classList.remove("desativado");
+
+        icon.textContent = "💧";
+        text.textContent =
+            "Lembrete de água ativado";
+
+    } else {
+
+        button.classList.add("desativado");
+
+        icon.textContent = "💧";
+        text.textContent =
+            "Ativar lembrete de água";
     }
 }
 </script>
