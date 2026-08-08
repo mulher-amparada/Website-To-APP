@@ -21,8 +21,16 @@ class WaterReminderReceiver : BroadcastReceiver() {
         intent: Intent?
     ) {
 
+        // Reagenda os horários do próximo dia
+        if (intent?.action == "com.mulheres.RESCHEDULE_WATER") {
+            WaterReminderScheduler.schedule(context)
+            return
+        }
+
+        // Cria o canal da notificação
         createChannel(context)
 
+        // Ao tocar na notificação, abre o aplicativo
         val openAppIntent = Intent(
             context,
             MainActivity::class.java
@@ -42,7 +50,9 @@ class WaterReminderReceiver : BroadcastReceiver() {
         )
             .setSmallIcon(R.drawable.ic_water)
             .setContentTitle("💧 Hora de beber água")
-            .setContentText("Que tal beber um pouco de água agora?")
+            .setContentText(
+                "Que tal beber um pouco de água agora?"
+            )
             .setStyle(
                 NotificationCompat.BigTextStyle()
                     .bigText(
@@ -51,7 +61,9 @@ class WaterReminderReceiver : BroadcastReceiver() {
                     )
             )
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_REMINDER)
+            .setCategory(
+                NotificationCompat.CATEGORY_REMINDER
+            )
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
