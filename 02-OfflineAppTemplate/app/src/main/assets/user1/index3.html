@@ -325,6 +325,52 @@ margin-left: 5%;
 .protect {
 font-size: 26px;
 }
+
+.waterButton {
+
+    width: 90%;
+    min-height: 64px;
+
+    border: none;
+    border-radius: 999px;
+
+    background: #168cff;
+
+    color: white;
+
+    font-family: 'Quicksand', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease,
+        background .25s ease,
+        opacity .2s ease;
+}
+
+.waterButton:active {
+    transform: scale(.97);
+}
+
+.waterButton.desativado {
+    background: #333;
+}
+
+#waterIcon {
+    font-size: 22px;
+}
+
+#waterText {
+    font-size: 16px;
+}
 </style>
 </head>
 <body>
@@ -351,6 +397,15 @@ font-size: 26px;
         <button class="bigButton" onclick="iniciarBiometria()">
 <span class="protect">Acessar área <br> protegida </span>
         </button>
+
+<div class="label">
+    Lembrete de água
+</div>
+
+<button class="waterButton" id="waterButton" onclick="alternarLembreteAgua()">
+    <span id="waterIcon"></span>
+    <span id="waterText">Ativar lembrete de água</span>
+</button>
 
         <div class="label">
             Explicações
@@ -479,6 +534,79 @@ function iniciarBiometria(){
     window.location.href =
     "file:///android_asset/user1/botao.html";
   }
+}
+
+let aguaAtiva = false;
+
+function alternarLembreteAgua() {
+
+    const button = document.getElementById("waterButton");
+    const text = document.getElementById("waterText");
+    const icon = document.getElementById("waterIcon");
+
+    if (!aguaAtiva) {
+
+        // ATIVAR
+        if (
+            window.Android &&
+            typeof Android.iniciarLembretesAgua === "function"
+        ) {
+
+            try {
+
+                Android.iniciarLembretesAgua();
+
+                aguaAtiva = true;
+
+                button.classList.remove("desativado");
+
+                icon.textContent = "";
+                text.textContent = "Lembrete de água ativado";
+
+            } catch (e) {
+
+                console.error(
+                    "Erro ao ativar lembrete:",
+                    e
+                );
+            }
+
+        } else {
+
+            console.log(
+                "Interface Android não disponível."
+            );
+        }
+
+    } else {
+
+        // DESATIVAR
+        if (
+            window.Android &&
+            typeof Android.pararLembretesAgua === "function"
+        ) {
+
+            try {
+
+                Android.pararLembretesAgua();
+
+                aguaAtiva = false;
+
+                button.classList.add("desativado");
+
+                icon.textContent = "";
+                text.textContent = "Ativar lembrete de água";
+
+            } catch (e) {
+
+                console.error(
+                    "Erro ao desativar lembrete:",
+                    e
+                );
+            }
+
+        }
+    }
 }
 </script>
 
