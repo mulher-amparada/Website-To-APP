@@ -6,6 +6,18 @@
 <title>Controle</title>
 
 <style>
+
+@keyframes fade{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
 html, body {
     margin: 0;
     width: 100%;
@@ -71,6 +83,7 @@ html, body {
 
   padding:
   35px 18px 140px;
+  animation:fade .5s ease;
 }
 
 /* HERO */
@@ -325,52 +338,6 @@ margin-left: 5%;
 .protect {
 font-size: 26px;
 }
-
-.waterButton {
-
-    width: 100%;
-    min-height: 64px;
-
-    border: none;
-    border-radius: 999px;
-
-    background: #168cff;
-
-    color: white;
-
-    font-family: 'Quicksand', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 10px;
-
-    cursor: pointer;
-
-    transition:
-        transform .15s ease,
-        background .25s ease,
-        opacity .2s ease;
-}
-
-.waterButton:active {
-    transform: scale(.97);
-}
-
-.waterButton.desativado {
-    background: #333;
-}
-
-#waterIcon {
-    font-size: 22px;
-}
-
-#waterText {
-    font-size: 16px;
-}
 </style>
 </head>
 <body>
@@ -397,15 +364,6 @@ font-size: 26px;
         <button class="bigButton" onclick="iniciarBiometria()">
 <span class="protect">Acessar área <br> protegida </span>
         </button>
-
-<div class="label">
-    Lembrete de água
-</div>
-
-<button class="waterButton" id="waterButton" onclick="alternarLembreteAgua()">
-    <span id="waterIcon"></span>
-    <span id="waterText">Ativar lembrete de água</span>
-</button>
 
         <div class="label">
             Explicações
@@ -514,85 +472,27 @@ controle.addEventListener("click", (e) => {
 
 function iniciarBiometria(){
 
-    if(
-        window.Android &&
-        Android.iniciarBiometriaMusica
-    ){
+  if(
+    window.Android &&
+    Android.iniciarBiometriaMusica
+  ){
 
-        try{
+    try{
 
-            Android.iniciarBiometriaMusica();
+      Android.iniciarBiometriaMusica();
 
-        }catch(e){
+    }catch(e){
 
-            window.location.href =
-            "file:///android_asset/user1/botao.html";
-        }
-
-    }else{
-
-        window.location.href =
-        "file:///android_asset/user1/botao.html";
+      window.location.href =
+      "file:///android_asset/user1/botao.html";
     }
+
+  }else{
+
+    window.location.href =
+    "file:///android_asset/user1/botao.html";
+  }
 }
-
-
-let aguaAtiva = false;
-
-
-function alternarLembreteAgua() {
-
-    if (
-        window.Android &&
-        typeof Android.testarNotificacaoAgua === "function"
-    ) {
-
-        Android.testarNotificacaoAgua();
-
-    } else {
-
-        console.log("Interface Android não disponível.");
-    }
-}
-
-
-function lembretesAguaResultado(ativo) {
-
-    aguaAtiva = ativo === true;
-
-    const button =
-        document.getElementById("waterButton");
-
-    const text =
-        document.getElementById("waterText");
-
-    const icon =
-        document.getElementById("waterIcon");
-
-
-    if (!button || !text || !icon) {
-        return;
-    }
-
-
-    if (aguaAtiva) {
-
-        button.classList.remove("desativado");
-
-        icon.textContent = "";
-        text.textContent =
-            "Lembrete de água ativado";
-
-    } else {
-
-        button.classList.add("desativado");
-
-        icon.textContent = "";
-        text.textContent =
-            "Ativar lembrete de água";
-    }
-}
-
 </script>
 
 </body>
