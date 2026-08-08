@@ -3,7 +3,7 @@ package com.mulheres
 import org.json.JSONArray
 import android.Manifest
 import android.os.Build
-import android.content.pm.PackageManager
+
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import org.json.JSONObject
