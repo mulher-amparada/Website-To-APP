@@ -8,6 +8,17 @@
 <title>Meus Acessos</title>
 
 <style>
+@keyframes fade{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
 /* Barra inteira */
 ::-webkit-scrollbar{
     width:10px;
@@ -81,7 +92,7 @@ body{
     overflow-x:hidden;
     overflow-y:auto;
     display: flex;
-    
+    animation:fade .5s ease;
 
 }
 
