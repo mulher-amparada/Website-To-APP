@@ -38,9 +38,11 @@ class WebAppInterface(
         }
     }
     
-    @JavascriptInterface
+@JavascriptInterface
 fun iniciarLembretesAgua() {
+
     activity.runOnUiThread {
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
             if (
@@ -54,12 +56,31 @@ fun iniciarLembretesAgua() {
                     arrayOf(Manifest.permission.POST_NOTIFICATIONS),
                     1001
                 )
+
                 return@runOnUiThread
             }
         }
 
         WaterReminderScheduler.schedule(activity)
+
+        activity.findViewById<WebView>(R.id.webview)
+            ?.evaluateJavascript(
+                "if(typeof lembretesAguaResultado === 'function') lembretesAguaResultado(true);",
+                null
+            )
     }
+}
+
+@JavascriptInterface
+fun pararLembretesAgua() {
+
+    WaterReminderScheduler.cancel(activity)
+
+    activity.findViewById<WebView>(R.id.webview)
+        ?.evaluateJavascript(
+            "if(typeof lembretesAguaResultado === 'function') lembretesAguaResultado(false);",
+            null
+        )
 }
 
 @JavascriptInterface
