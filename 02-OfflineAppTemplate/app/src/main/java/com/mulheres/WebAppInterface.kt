@@ -40,7 +40,6 @@ class WebAppInterface(
     
 @JavascriptInterface
 fun iniciarLembretesAgua() {
-
     activity.runOnUiThread {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -51,6 +50,7 @@ fun iniciarLembretesAgua() {
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
+
                 ActivityCompat.requestPermissions(
                     activity,
                     arrayOf(Manifest.permission.POST_NOTIFICATIONS),
@@ -65,22 +65,47 @@ fun iniciarLembretesAgua() {
 
         activity.findViewById<WebView>(R.id.webview)
             ?.evaluateJavascript(
-                "if(typeof lembretesAguaResultado === 'function') lembretesAguaResultado(true);",
+                "lembretesAguaResultado(true);",
                 null
             )
     }
 }
+
 
 @JavascriptInterface
 fun pararLembretesAgua() {
 
     WaterReminderScheduler.cancel(activity)
 
-    activity.findViewById<WebView>(R.id.webview)
-        ?.evaluateJavascript(
-            "if(typeof lembretesAguaResultado === 'function') lembretesAguaResultado(false);",
-            null
-        )
+    activity.runOnUiThread {
+
+        activity.findViewById<WebView>(R.id.webview)
+            ?.evaluateJavascript(
+                "lembretesAguaResultado(false);",
+                null
+            )
+    }
+}
+
+
+@JavascriptInterface
+fun verificarLembretesAgua() {
+
+    val prefs = activity.getSharedPreferences(
+        "water_reminders",
+        Context.MODE_PRIVATE
+    )
+
+    val ativo = prefs.getBoolean("ativos", false)
+
+    activity.runOnUiThread {
+
+        activity.findViewById<WebView>(R.id.webview)
+            ?.evaluateJavascript(
+                "lembretesAguaResultado($ativo);",
+                null
+            )
+    }
 }
 
 @JavascriptInterface
