@@ -220,7 +220,7 @@ android:screenOrientation="portrait"
 
 <service
     android:name=".AbrirAppTile"
-    android:label="Abrir app do mulher amparada"
+    android:label="Abrir app de contas"
     android:icon="@drawable/icone_tile"
     android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
     android:exported="true">
