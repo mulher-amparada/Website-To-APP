@@ -401,6 +401,15 @@ body{
     display:block;
 }
 
+.emoji svg{
+    width:34px;
+    height:34px;
+
+    object-fit:contain;
+
+    display:block;
+}
+
 /* =========================
    TEXTO
    ========================= */
@@ -609,6 +618,11 @@ button:focus-visible{
         width:28px;
         height:28px;
     }
+    
+    .emoji svg{
+        width:28px;
+        height:28px;
+    }
 
     .btn span{
         padding-left:68px;
@@ -783,11 +797,11 @@ button:focus-visible{
 
             <button class="btn" onclick="Android.abrirPorIntent()">
                 <div class="left">
-
-                        <img src="assist.png" alt="">
 <div class="emoji">
-                    <span>Assistente de voz</span>
+                        <img src="assist.png" alt="">
                                         </div>
+                    <span>Assistente de voz</span>
+
                 </div>
             </button>
 
