@@ -6,788 +6,1234 @@
 <title>Controle</title>
 
 <style>
-
-@keyframes fade{
-  from{
-    opacity:0;
-    transform:translateY(20px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+@font-face {
+    font-family: "Quicksand";
+    src: url("font.ttf") format("truetype");
+    font-weight: 400 800;
 }
 
-html, body {
+:root {
+    --bg: #07080c;
+    --surface: #101218;
+    --surface-2: #151720;
+    --surface-3: #1b1e28;
+
+    --white: #fff;
+    --text: #f7f7fa;
+    --soft: #969baa;
+    --muted: #626877;
+
+    --pink: #ff3f82;
+    --pink-light: #ff6b9f;
+
+    --red: #ff4054;
+    --red-dark: #d9273d;
+
+    --purple: #8b5cf6;
+    --blue: #4f8cff;
+    --green: #32d477;
+    --orange: #ff9f43;
+    --cyan: #27c9c1;
+
+    --border: rgba(255,255,255,.075);
+    --border-strong: rgba(255,255,255,.13);
+
+    --radius: 24px;
+    --radius-small: 17px;
+}
+
+* {
+    box-sizing: border-box;
     margin: 0;
+    padding: 0;
+
+    font-family: "Quicksand", sans-serif;
+    font-weight: 700;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
+
+    background: var(--bg);
+
+    scroll-behavior: smooth;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+margin-top: 5%;
     overflow-x: hidden;
+
     background: black;
+
+    color: var(--text);
 }
 
+/* =====================================================
+   ANIMAÇÕES
+   ===================================================== */
 
-.bottom {
-    width: 60%;
-    height: 80px;
-    background: #444;
-    border-radius: 200px;
-    position: fixed;
-    bottom: 7%;
-    left: 50%;
-    transform: translateX(-50%);
+@keyframes pageIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.knob {
-    width: 100px;
-    height: 70px;
-    background: #333;
+@keyframes sosGlow {
+    0%, 100% {
+        box-shadow:
+            0 18px 50px rgba(255,64,84,.18),
+            0 0 0 0 rgba(255,64,84,0);
+    }
+
+    50% {
+        box-shadow:
+            0 18px 55px rgba(255,64,84,.27),
+            0 0 0 9px rgba(255,64,84,.035);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes statusPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .45;
+    }
+}
+
+@keyframes floatingPill {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* =====================================================
+   LAYOUT
+   ===================================================== */
+
+.mainUI {
+    width: 100%;
+    max-width: 680px;
+
+    margin: auto;
+
+    padding:
+        24px
+        18px
+        125px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 34px;
+
+    animation: pageIn .5s ease;
+}
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.hero {
+    width: 100%;
+
+    margin-top: 3px;
+
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+}
+
+.heroTag {
+    width: fit-content;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 13px;
+
+    padding: 7px 11px;
+
     border-radius: 200px;
+
+    color: #ff78a8;
+
+    background:
+        rgba(255,63,130,.08);
+
+    border:
+        1px solid rgba(255,63,130,.13);
+
+    font-size: 11px;
+
+    letter-spacing: 1.3px;
+
+    text-transform: uppercase;
+}
+
+.heroTag::before {
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--pink);
+
+    box-shadow:
+        0 0 10px rgba(255,63,130,.85);
+}
+
+.hero h1 {
+    color: var(--white);
+
+    font-size:
+        clamp(36px, 9vw, 54px);
+
+    line-height: .98;
+
+    letter-spacing: -1.8px;
+}
+
+.hero p {
+    margin-top: 13px;
+
+    color: var(--soft);
+
+    font-size: 14px;
+
+    line-height: 1.65;
+}
+
+/* =====================================================
+   SEÇÕES
+   ===================================================== */
+
+.section {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 11px;
+
+    animation:
+        pageIn .5s ease both;
+}
+
+.section:nth-of-type(1) {
+    animation-delay: .04s;
+}
+
+.section:nth-of-type(2) {
+    animation-delay: .08s;
+}
+
+.section:nth-of-type(3) {
+    animation-delay: .12s;
+}
+
+.section:nth-of-type(4) {
+    animation-delay: .16s;
+}
+
+.section:nth-of-type(5) {
+    animation-delay: .20s;
+}
+
+.section:nth-of-type(6) {
+    animation-delay: .24s;
+}
+
+.label {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    padding-left: 3px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    letter-spacing: 1.8px;
+
+    text-transform: uppercase;
+}
+
+.label::before {
+    content: "";
+
+    width: 4px;
+    height: 4px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--pink);
+
+    box-shadow:
+        0 0 8px rgba(255,63,130,.5);
+}
+
+/* =====================================================
+   SOS
+   ===================================================== */
+
+.panic {
+    width: 100%;
+    height: 300px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 30px;
+
+    cursor: pointer;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(255,255,255,.15),
+            transparent 40%
+        ),
+        linear-gradient(
+            145deg,
+            #ff465a,
+            #e92d43
+        );
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    animation:
+        sosGlow 3s ease-in-out infinite;
+
+    transition:
+        transform .15s ease,
+        filter .15s ease;
+}
+
+.panic::before {
+    content: "";
+
     position: absolute;
-    top: 5px;
-    left: 5px;
+
+    width: 370px;
+    height: 370px;
+
+    top: -245px;
+    right: -135px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.075);
+}
+
+
+
+.panic span {
+    position: relative;
+
+    z-index: 2;
+
+    color: white;
+
+    font-size:
+        clamp(62px, 17vw, 88px);
+
+    line-height: .9;
+
+    letter-spacing: 5px;
+
+    text-shadow:
+        0 5px 20px rgba(0,0,0,.17);
+}
+
+.panic small {
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 17px;
+
+    color: rgba(255,255,255,.78);
+
+    font-size: 12px;
+
+    letter-spacing: .5px;
+}
+
+.panic:active {
+    transform: scale(.965);
+
+    filter: brightness(1.08);
+}
+
+/* =====================================================
+   CARTÃO DE SOM
+   ===================================================== */
+
+.palma {
+    width: 100%;
+
+    padding: 24px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: var(--radius);
+
+    background:
+        linear-gradient(
+            145deg,
+            #161820,
+            #0f1117
+        );
+
+    border:
+        1px solid var(--border);
+
+    box-shadow:
+        0 16px 40px rgba(0,0,0,.25);
+}
+
+.palma::before {
+    content: "";
+
+    position: absolute;
+
+    width: 240px;
+    height: 240px;
+
+    top: -160px;
+    right: -90px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,63,130,.065);
+}
+
+.palma-icon {
+    width: 50px;
+    height: 50px;
+
+    margin-bottom: 18px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    transition: left 0.2s ease;
+    border-radius: 16px;
+
+    background:
+        rgba(255,63,130,.09);
+
+    color: var(--pink);
+
+    font-size: 25px;
+
+    animation:
+        pulse 1.8s ease-in-out infinite;
 }
 
-.icon-left,
-.icon-right {
-    width: 40px;
-    height: 40px;
-    fill: none;
-    stroke: #ddd;
-    stroke-width: 2.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+.palma h3 {
+    color: white;
+
+    font-size: 22px;
+
+    line-height: 1.15;
+
+    margin-bottom: 9px;
 }
 
-.icon-right {
-    display: none;
+.palma p {
+    max-width: 500px;
+
+    margin-bottom: 21px;
+
+    color: var(--soft);
+
+    font-size: 13px;
+
+    line-height: 1.65;
 }
 
-/* MAIN */
-
-.mainUI{
-
-  width:100%;
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-
-  gap:80px;
-
-  padding:
-  35px 18px 140px;
-  
-  
-}
-
-/* HERO */
-
-.hero{
-  width:100%;
-  max-width:720px;
-
-  margin-top:70px;
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-
-  text-align:center;
-}
-
-.heroTag{
-
-  display:inline-flex;
-
-  padding:10px 18px;
-
-  border-radius:999px;
-
-  background:
-  rgba(255,255,255,.06);
-
-  border:
-  1px solid rgba(255,255,255,.08);
-
-  color:#ffb4da;
-
-  font-size:13px;
-  font-weight:700;
-
-  letter-spacing:1px;
-
-  text-transform:uppercase;
-
-  margin-bottom:22px;
-}
-
-.heroTag1{
-
-  display:inline-flex;
-
-  padding:10px 18px;
-
-  border-radius:999px;
-
-  
-  color:blue;
-
-  font-size:20px;
-  font-weight:700;
-
-  letter-spacing:1px;
-
-  text-transform:uppercase;
-
-  margin-bottom:22px;
-  text-decoration: underline;
-}
-
-.hero h1{
-
-  font-size:
-  clamp(36px,8vw,64px);
-
-  line-height:1.05;
-
-  margin-bottom:18px;
-
-  font-weight:800;
-}
-
-.hero p{
-
-  color:var(--soft);
-
-  line-height:1.7;
-
-  font-size:16px;
-
-  max-width:580px;
-
-  margin:auto;
-}
-
-/* SECTION */
-
-.section{
-
-  width:100%;
-  max-width:420px;
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-
-  gap:20px;
-  animation:fade .5s ease;
-  
-}
-
-.label{
-
-  font-size:13px;
-
-  text-transform:uppercase;
-
-  letter-spacing:1.8px;
-
-  color:#ffffff88;
-
-  font-weight:700;
-}
-
-/* SOS */
-
-.panic{
-
-  width:100%;
-  min-height:260px;
-
-  border-radius:40px;
-
-  background:
-  linear-gradient(
-    145deg,
-    #ff1744,
-    #ff4d6d
-  );
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-
-  position:relative;
-
-  overflow:hidden;
-
-  box-shadow:
-  0 20px 60px rgba(255,40,90,.35);
-
-  transition:
-  transform .15s,
-  filter .15s;
-}
-
-.panic::before{
-
-  content:"";
-
-  position:absolute;
-
-  width:260px;
-  height:260px;
-
-  border-radius:50%;
-
-  background:
-  rgba(255,255,255,.08);
-
-  top:-120px;
-  right:-90px;
-}
-
-.panic span{
-
-  font-size:68px;
-
-  font-weight:800;
-
-  letter-spacing:3px;
-}
-
-.panic small{
-
-  margin-top:10px;
-
-  font-size:15px;
-
-  color:#ffffffd5;
-}
-
-.panic:active{
-
-  transform:scale(.97);
-
-  filter:brightness(1.08);
-}
-
-/* PALMA */
-
-.palma{
-
-  width:100%;
-
-  border-radius:40px;
-
-  background:
-  linear-gradient(
-    180deg,
-    #ff4fa3,
-    #ff2f92
-  );
-
-  padding:36px 24px;
-
-  text-align:center;
-
-  position:relative;
-
-  overflow:hidden;
-
-  box-shadow:
-  0 18px 45px rgba(255,79,163,.32);
-}
-
-.palma::before{
-
-  content:"";
-
-  position:absolute;
-
-  width:240px;
-  height:240px;
-
-  border-radius:50%;
-
-  background:
-  rgba(255,255,255,.06);
-
-  top:-120px;
-  right:-90px;
-}
-
-.palma-icon{
-
-  font-size:70px;
-
-  margin-bottom:18px;
-
-  animation:palma .9s infinite;
-}
-
-@keyframes palma{
-
-  0%{
-    transform:scale(1);
-  }
-
-  50%{
-    transform:scale(1.12);
-  }
-
-  100%{
-    transform:scale(1);
-  }
-}
-
-.palma h3{
-
-  font-size:30px;
-
-  margin-bottom:14px;
-}
-
-.palma p{
-
-  line-height:1.7;
-
-  color:#ffffffde;
-
-  margin-bottom:28px;
-}
-
-/* BUTTONS */
+/* =====================================================
+   BOTÕES
+   ===================================================== */
 
 .btn,
 .local,
 .btn1,
-.palma button{
+.palma button {
+    width: 100%;
+    min-height: 56px;
 
-  width:100%;
+    padding: 14px 17px;
 
-  min-height:58px;
+    border: 0;
+    border-radius: 160px;
 
-  border:none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  border-radius:999px;
+    color: white;
 
-  font-size:16px;
-  font-weight:700;
+    font-family: "Quicksand", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
 
-  color:white;
+    cursor: pointer;
 
-  cursor:pointer;
-
-  transition:
-  transform .15s,
-  opacity .15s,
-  filter .15s;
+    transition:
+        transform .14s ease,
+        filter .14s ease,
+        box-shadow .2s ease;
 }
 
 .btn:active,
 .local:active,
 .btn1:active,
-.palma button:active{
+.palma button:active {
+    transform: scale(.965);
 
-  transform:scale(.97);
+    filter: brightness(1.08);
 }
 
-#ativarPalmas{
+/* =====================================================
+   EMERGÊNCIA
+   ===================================================== */
 
-  background:white;
+.policia {
+    background:
+        linear-gradient(135deg, #4d8cff, #326ed8);
 
-  color:#ff2f92;
+    box-shadow:
+        0 9px 24px rgba(77,140,255,.12);
 }
 
-#desativarPalmas{
+.samu {
+    background:
+        linear-gradient(135deg, #ffa94d, #df7d19);
 
-  margin-top:14px;
-
-  background:#ff8cc4;
+    box-shadow:
+        0 9px 24px rgba(255,169,77,.10);
 }
 
-/* PROTEÇÃO */
+.mulher {
+    background:
+        linear-gradient(135deg, #ff4e90, #dc2f6d);
 
-#protecao{
-
-  width:100%;
-
-  padding:30px 24px;
-
-  border-radius:32px;
-
-  text-align:center;
-
-  font-size:20px;
-  font-weight:700;
-
-  line-height:1.6;
-
-  cursor:pointer;
-
-  transition:.25s;
+    box-shadow:
+        0 9px 24px rgba(255,78,144,.11);
 }
 
-.ativo{
+.zap {
+    background:
+        linear-gradient(135deg, #35d477, #20af5b);
 
-  background:#2b103d;
-
-  color:#d88cff;
-
-  border:
-  2px solid #b84dff;
-
-  box-shadow:
-  0 10px 35px rgba(184,77,255,.25);
+    box-shadow:
+        0 9px 24px rgba(53,212,119,.10);
 }
 
-.desativado{
+/* =====================================================
+   PROTEÇÃO POR SOM
+   ===================================================== */
 
-  background:#161616;
+#ativarPalmas {
+    background:
+        linear-gradient(
+            135deg,
+            var(--pink),
+            #e52e70
+        );
 
-  color:#9b9b9b;
-
-  border:
-  2px solid #303030;
+    box-shadow:
+        0 9px 25px rgba(255,63,130,.15);
 }
 
-/* BOTÕES */
+#desativarPalmas {
+    margin-top: 9px;
 
-.btn{
+    color: #8d93a1;
 
-  display:flex;
-  justify-content:center;
-  align-items:center;
+    background:
+        rgba(255,255,255,.045);
 
-  text-decoration:none;
+    border:
+        1px solid var(--border);
 }
 
-.policia{
-  background:#1e90ff;
+/* =====================================================
+   MOVIMENTO
+   ===================================================== */
+
+#protecao {
+    width: 100%;
+    min-height: 140px;
+
+    padding: 25px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: var(--radius);
+
+    text-align: center;
+
+    font-size: 14px;
+
+    line-height: 1.55;
+
+    cursor: pointer;
+
+    transition:
+        background .25s ease,
+        border .25s ease,
+        box-shadow .25s ease,
+        color .25s ease,
+        transform .15s ease;
 }
 
-.samu{
-  background:#ff9800;
+#protecao:active {
+    transform: scale(.98);
 }
 
-.mulher{
-  background:#ff4fa3;
+.desativado {
+    color: #777d8b;
+
+    background:
+        linear-gradient(
+            145deg,
+            #11131a,
+            #0d0f14
+        );
+
+    border:
+        1px solid var(--border);
 }
 
-.zap{
-  background:#25D366;
+.ativo {
+    color: #c9adff;
+
+    background:
+        linear-gradient(
+            145deg,
+            #211636,
+            #151021
+        );
+
+    border:
+        1px solid rgba(139,92,246,.42);
+
+    box-shadow:
+        0 15px 40px rgba(139,92,246,.12);
 }
 
-.local{
-  background:#00b8b0;
+.ativo::after {
+    content: "";
+
+    position: absolute;
+
+    width: 8px;
+    height: 8px;
+
+    top: 18px;
+    right: 18px;
+
+    border-radius: 50%;
+
+    background: #a878ff;
+
+    box-shadow:
+        0 0 12px rgba(168,120,255,.8);
+
+    animation:
+        statusPulse 1.5s infinite;
 }
 
-.btn1{
+/* =====================================================
+   BRILHO
+   ===================================================== */
 
-  background:
-  linear-gradient(
-    135deg,
-    #8b5cf6,
-    #a855f7
-  );
-}
+.local99,
+.local999 {
+    width: 100%;
+    min-height: 92px;
 
-/* TOGGLE */
+    padding: 20px;
 
+    border-radius: var(--radius-small);
 
+    font-size: 14px;
 
+    line-height: 1.5;
 
-@font-face {
-  font-family: "Quicksand";
-  src: url("file:///android_asset/font.ttf") format("truetype");
-  font-weight: 700;
-}
+    text-align: center;
 
-:root{
+    cursor: pointer;
 
-  --bg:#050505;
-  --card:#121212;
-
-  --pink:#ff4fa3;
-  --pink2:#ff77b7;
-
-  --purple:#8b5cf6;
-
-  --white:#ffffff;
-  --soft:#ffffffbb;
-
-  --radius:38px;
-}
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Quicksand',sans-serif;
-  font-weight: 700 !important;
-}
-
-html{
-  scroll-behavior:smooth;
-    font-family:'Quicksand',sans-serif;
-    font-weight: 700 !important;
-}
-
-span, h3 {
-color: white;
+    transition:
+        .25s ease;
 }
 
 .local99 {
-    background: #222;
-    color: white;
-    padding: 20px;
-    border-radius: 20px;
-    width:100%;
+    color: #858c9b;
 
-  min-height:58px;
-border: 2px solid white;
+    background:
+        linear-gradient(
+            145deg,
+            #11131a,
+            #0d0f14
+        );
+
+    border:
+        1px solid var(--border);
 }
 
 .local999 {
-    border: 2px solid orange;
-    color: orange;
-    padding: 20px;
-    border-radius: 20px;
-    background: #222;
-    width:100%;
-  min-height:58px;
+    color: var(--orange);
 
+    background:
+        linear-gradient(
+            145deg,
+            #211b0e,
+            #15120c
+        );
+
+    border:
+        1px solid rgba(255,159,67,.38);
+
+    box-shadow:
+        0 12px 35px rgba(255,159,67,.07);
+}
+
+/* =====================================================
+   LOCALIZAÇÃO
+   ===================================================== */
+
+.local {
+    background:
+        linear-gradient(
+            135deg,
+            #26c8c1,
+            #14958f
+        );
+
+    box-shadow:
+        0 9px 25px rgba(39,201,193,.10);
+}
+
+/* =====================================================
+   CONTATOS
+   ===================================================== */
+
+.btn[onclick="selecionarContato()"] {
+    background:
+        linear-gradient(
+            135deg,
+            #8b5cf6,
+            #6f42d8
+        );
+
+    box-shadow:
+        0 9px 25px rgba(139,92,246,.11);
+}
+
+.btn[onclick="enviarSOSContatos()"] {
+    background:
+        linear-gradient(
+            135deg,
+            #ed3d55,
+            #bd253b
+        );
+
+    box-shadow:
+        0 9px 25px rgba(237,61,85,.11);
+}
+/* =========================================
+   PÍRULA
+   ========================================= */
+
+.pirula {
+    position: fixed;
+margin-top: 5%;
+    z-index: 999999;
+
+    top: 24px;
+    right: 24px;
+
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border-radius: 50%;
+
+    background: #444;
+
+    border: 1px solid rgba(255,255,255,.15);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.35);
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    animation:
+        floatingPill 4s ease-in-out infinite;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+}
+
+
+/* =========================================
+   ÍCONE — SEMPRE CENTRALIZADO
+   ========================================= */
+
+.pirula .icon {
+    width: 56px;
+    height: 56px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background-image:
+        url("user1.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    border:
+        2px solid rgba(255,255,255,.18);
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.35),
+        0 0 18px rgba(255,192,203,.15);
+
+    pointer-events: none;
+}
+
+
+/* =========================================
+   TOQUE
+   ========================================= */
+
+.pirula:active {
+    transform: scale(.92);
+
+    filter: brightness(1.15);
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,.4),
+        0 0 25px rgba(255,192,203,.2);
+}
+
+
+/* =========================================
+   CELULARES PEQUENOS
+   ========================================= */
+
+@media (max-width: 420px) {
+
+    .pirula {
+        top: 16px;
+        right: 16px;
+
+        width: 64px;
+        height: 64px;
+    }
+
+    .pirula .icon {
+        width: 52px;
+        height: 52px;
+    }
+}
+/* =====================================================
+   SELEÇÃO
+   ===================================================== */
+
+::selection {
+    color: white;
+
+    background:
+        rgba(255,63,130,.35);
+}
+
+/* =====================================================
+   TOUCH / ACESSIBILIDADE
+   ===================================================== */
+
+button,
+.panic,
+#protecao {
+    user-select: none;
+    -webkit-user-select: none;
+
+    touch-action: manipulation;
+}
+
+button:focus-visible,
+.panic:focus-visible,
+#protecao:focus-visible {
+    outline:
+        2px solid rgba(255,63,130,.7);
+
+    outline-offset: 3px;
+}
+
+/* =====================================================
+   CELULARES PEQUENOS
+   ===================================================== */
+
+@media (max-width: 420px) {
+
+    .mainUI {
+        padding:
+            20px
+            14px
+            110px;
+
+        gap: 30px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    .panic {
+        height: 245px;
+
+        border-radius: 26px;
+    }
+
+    .panic span {
+        font-size: 60px;
+    }
+
+    .palma {
+        padding: 21px;
+    }
+
+    .pirula {
+        top: 16px;
+        right: 16px;
+
+        width: 64px;
+        height: 64px;
+    }
+
+    .pirula .icon {
+        width: 48px;
+        height: 48px;
+
+        top: 8px;
+        left: 8px;
+    }
+
+    .pirula.active {
+        top: 12px;
+        right: 12px;
+
+        width: calc(100vw - 24px);
+        height: calc(100vh - 24px);
+
+        padding: 20px;
+
+        border-radius: 26px;
+    }
+
+    .pirula.active .icon {
+        width: 60px;
+        height: 60px;
+
+        top: 18px;
+        left: 18px;
+    }
+
+    .menu {
+        margin-top: 78px;
+    }
+}
+
+/* =====================================================
+   TELAS MAIORES
+   ===================================================== */
+
+@media (min-width: 600px) {
+
+    .mainUI {
+        padding-left: 28px;
+        padding-right: 28px;
+    }
+
+    .hero,
+    .section {
+        max-width: 620px;
+    }
+}
+
+.local999 {
+    position: relative;
+}
+
+.local999::after {
+    content: "";
+
+    position: absolute;
+
+    width: 8px;
+    height: 8px;
+
+    top: 18px;
+    right: 18px;
+
+    border-radius: 50%;
+
+    background: var(--orange);
+
+    box-shadow:
+        0 0 12px rgba(255,159,67,.8);
+
+    animation:
+        statusPulse 1.5s infinite;
 }
 </style>
 </head>
 <body>
 
+
 <div class="mainUI">
 
 
-<div class="hero">
-
-  <div class="heroTag">
-    Mulher Amparada
-  </div>
-  
-
-  
-  </div>
- 
-  
-<section class="section">
-
-  <div class="label">
-    Emergência
-  </div>
-
-  <div class="panic">
-    <span>SOS</span>
-
-    <small>
-      toque para pedir ajuda
-    </small>
-  </div>
-
-</section>
-
-
-<section class="section">
-
-  <div class="label">
-    Barulho alto
-  </div>
-
-  <div class="palma">
-
-    <div class="palma-icon">
-      
-    </div>
-
-    <h3>
-      Proteção por som
-    </h3>
-
-    <p>
-      Ative ajuda automática ao detectar
-      sons altos e situações suspeitas.
-    </p>
-
-    <button id="ativarPalmas">
-      Ativar proteção
-    </button>
-
-    <button id="desativarPalmas">
-      Desativar
-    </button>
-
-  </div>
-
-</section>
-
-
-<section class="section">
-
-  <div class="label">
-    Movimento
-  </div>
-
-  <div id="protecao" class="desativado">
-
-     Balançar o celular
-    para pedir ajuda
-
-    <br><br>
-
-    DESATIVADO
-
-  </div>
-
-</section>
-
-
-
-
-<section class="section">
-
-  <div class="label">
-    Ajuda rápida
-  </div>
-
-  <button class="btn policia" onclick="ligar('190')">
-     Polícia (190)
-  </button>
-
-  <button class="btn samu" onclick="ligar('192')">
-     SAMU (192)
-  </button>
-
-  <button class="btn mulher" onclick="ligar('180')">
-     Central da Mulher (180)
-  </button>
-
-  <button class="btn zap" onclick="whatsapp180()">
-     WhatsApp 180
-  </button>
-
-</section>
-
-<section class="section">
-
-  <div class="label">
-     Brilho
-  </div>
-<button "class="local99" id="brilho">
-    Escurecer a tela<br><br>DESATIVADO
-</button>
-
-
-</section>
-
-<section class="section">
-
-  <div class="label">
-    Localização
-  </div>
-
-  <button onclick="enviarLocalizacao()" class="local">
-     Enviar localização
-  </button>
-
-</section>
-
-<section class="section">
-
-  <div class="label">
-    Contatos de confiança
-  </div>
-
-  <button
-    class="btn"
-    style="background:#8a2be2;"
-    onclick="selecionarContato()">
-
-     Adicionar contato
-
-  </button>
-
-  <button
-    class="btn"
-    style="background:#dc143c;"
-    onclick="enviarSOSContatos()">
-
-    SOS contatos
-
-  </button>
-
-</section>
-
-
-
-
+    <!-- PAINEL FLUTUANTE -->
+<div class="pirula" onclick="window.location.href='index3.html'">
+    <div class="icon"></div>
 </div>
 
-</div>
+    <div class="hero">
 
-<div class="bottom" id="controle">
-    <div class="knob" id="knob">
-
-<svg class="icon-right" id="rightIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21.0667 5C21.6586 5.95805 22 7.08604 22 8.29344C22 11.7692 19.1708 14.5869 15.6807 14.5869C15.0439 14.5869 13.5939 14.4405 12.8885 13.8551L12.0067 14.7333C11.272 15.465 11.8598 15.465 12.1537 16.0505C12.1537 16.0505 12.8885 17.075 12.1537 18.0995C11.7128 18.6849 10.4783 19.5045 9.06754 18.0995L8.77362 18.3922C8.77362 18.3922 9.65538 19.4167 8.92058 20.4412C8.4797 21.0267 7.30403 21.6121 6.27531 20.5876C6.22633 20.6364 5.952 20.9096 5.2466 21.6121C4.54119 22.3146 3.67905 21.9048 3.33616 21.6121L2.45441 20.7339C1.63143 19.9143 2.1115 19.0264 2.45441 18.6849L10.0963 11.0743C10.0963 11.0743 9.3615 9.90338 9.3615 8.29344C9.3615 4.81767 12.1907 2 15.6807 2C16.4995 2 17.282 2.15509 18 2.43738" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M17.8851 8.29353C17.8851 9.50601 16.8982 10.4889 15.6807 10.4889C14.4633 10.4889 13.4763 9.50601 13.4763 8.29353C13.4763 7.08105 14.4633 6.09814 15.6807 6.09814C16.8982 6.09814 17.8851 7.08105 17.8851 8.29353Z" stroke="#ffffff" stroke-width="1.5"></path> </g></svg>
-
-        <svg class="icon-left" id="leftIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="9" r="2" stroke="#ffffff" stroke-width="1.5"></circle> <path d="M16 15C16 16.1046 16 17 12 17C8 17 8 16.1046 8 15C8 13.8954 9.79086 13 12 13C14.2091 13 16 13.8954 16 15Z" stroke="#ffffff" stroke-width="1.5"></path> <path d="M3 10.4167C3 7.21907 3 5.62028 3.37752 5.08241C3.75503 4.54454 5.25832 4.02996 8.26491 3.00079L8.83772 2.80472C10.405 2.26824 11.1886 2 12 2C12.8114 2 13.595 2.26824 15.1623 2.80472L15.7351 3.00079C18.7417 4.02996 20.245 4.54454 20.6225 5.08241C21 5.62028 21 7.21907 21 10.4167C21 10.8996 21 11.4234 21 11.9914C21 14.4963 20.1632 16.4284 19 17.9041M3.19284 14C4.05026 18.2984 7.57641 20.5129 9.89856 21.5273C10.62 21.8424 10.9807 22 12 22C13.0193 22 13.38 21.8424 14.1014 21.5273C14.6796 21.2747 15.3324 20.9478 16 20.5328" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
-
-
+        <div class="heroTag">
+            Mulher Amparada
+        </div>
 
     </div>
 
-<script>
-const controle = document.getElementById("controle");
-const knob = document.getElementById("knob");
-const leftIcon = document.getElementById("leftIcon");
-const rightIcon = document.getElementById("rightIcon");
 
-let ladoAtual = "esquerda";
+    <section class="section">
 
-controle.addEventListener("click", (e) => {
-    const metade = controle.offsetWidth / 2;
+        <div class="label">
+            Emergência
+        </div>
 
-    if (e.offsetX < metade) {
+        <div class="panic">
 
-        knob.style.left = "5px";
+            <span>SOS</span>
 
-        leftIcon.style.display = "block";
-        rightIcon.style.display = "none";
+            <small>
+                toque para pedir ajuda
+            </small>
 
-        ladoAtual = "esquerda";
+        </div>
 
-    } else {
+    </section>
 
-        knob.style.left =
-            (controle.offsetWidth - knob.offsetWidth - 5) + "px";
 
-        leftIcon.style.display = "none";
-        rightIcon.style.display = "block";
+    <section class="section">
 
-        if (ladoAtual === "esquerda") {
-            setTimeout(() => {
-                window.location.href = "index3.html";
-            }, 250);
-        }
+        <div class="label">
+            Barulho alto
+        </div>
 
-        ladoAtual = "direita";
-    }
-});
-</script>
+        <div class="palma">
+
+            <div class="palma-icon"></div>
+
+            <h3>
+                Proteção por som
+            </h3>
+
+            <p>
+                Ative ajuda automática ao detectar
+                sons altos e situações suspeitas.
+            </p>
+
+            <button id="ativarPalmas">
+                Ativar proteção
+            </button>
+
+            <button id="desativarPalmas">
+                Desativar
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <section class="section">
+
+        <div class="label">
+            Movimento
+        </div>
+
+        <div id="protecao" class="desativado">
+
+            Balançar o celular
+            para pedir ajuda
+
+            <br><br>
+
+            DESATIVADO
+
+        </div>
+
+    </section>
+
+
+    <section class="section">
+
+        <div class="label">
+            Ajuda rápida
+        </div>
+
+        <button class="btn policia" onclick="ligar('190')">
+            Polícia (190)
+        </button>
+
+        <button class="btn samu" onclick="ligar('192')">
+            SAMU (192)
+        </button>
+
+        <button class="btn mulher" onclick="ligar('180')">
+            Central da Mulher (180)
+        </button>
+
+        <button class="btn zap" onclick="whatsapp180()">
+            WhatsApp 180
+        </button>
+
+    </section>
+
+
+    <section class="section">
+
+        <div class="label">
+            Brilho
+        </div>
+
+        <button class="local99" id="brilho">
+            Escurecer a tela
+            <br><br>
+            DESATIVADO
+        </button>
+
+    </section>
+
+
+    <section class="section">
+
+        <div class="label">
+            Localização
+        </div>
+
+        <button onclick="enviarLocalizacao()" class="local">
+            Enviar localização
+        </button>
+
+    </section>
+
+
+    <section class="section">
+
+        <div class="label">
+            Contatos de confiança
+        </div>
+
+        <button
+            class="btn"
+            style="background:#8a2be2;"
+            onclick="selecionarContato()">
+
+            Adicionar contato
+
+        </button>
+
+        <button
+            class="btn"
+            style="background:#dc143c;"
+            onclick="enviarSOSContatos()">
+
+            SOS contatos
+
+        </button>
+
+    </section>
+
+</div>
+
+
 
 <script>
 
@@ -1136,6 +1582,164 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+</script>
+
+<script>
+
+const pirula = document.getElementById("pirula");
+const overlay = document.getElementById("pirulaOverlay");
+
+let pirulaAberta = false;
+
+
+/* =========================================
+   ABRIR / FECHAR
+   ========================================= */
+
+function abrirPirula() {
+
+    pirula.classList.add("active");
+
+    pirulaAberta = true;
+
+    document.body.classList.add("pirulaAberta");
+}
+
+
+function fecharPirula() {
+
+    pirula.classList.remove("active");
+
+    pirulaAberta = false;
+
+    document.body.classList.remove("pirulaAberta");
+}
+
+
+function alternarPirula() {
+
+    if (pirulaAberta) {
+
+        fecharPirula();
+
+    } else {
+
+        abrirPirula();
+
+    }
+}
+
+
+/* =========================================
+   CLIQUE NA PÍRULA
+   ========================================= */
+
+pirula.addEventListener("click", function(e) {
+
+    /*
+     * Se clicou em um botão,
+     * deixa o botão executar sua função.
+     */
+    if (e.target.closest(".menu button")) {
+        return;
+    }
+
+    /*
+     * Se clicou no ícone,
+     * abre/fecha.
+     */
+    if (e.target.closest(".icon")) {
+
+        alternarPirula();
+
+    }
+
+});
+
+
+/* =========================================
+   CLIQUE NO FUNDO
+   ========================================= */
+
+overlay.addEventListener("click", function() {
+
+    fecharPirula();
+
+});
+
+
+/* =========================================
+   BOTÃO VOLTAR DO ANDROID
+   ========================================= */
+
+document.addEventListener("backbutton", function() {
+
+    if (pirulaAberta) {
+
+        fecharPirula();
+
+    }
+
+});
+
+
+/* =========================================
+   EXEMPLOS DOS BOTÕES
+   ========================================= */
+
+function acao1() {
+
+    fecharPirula();
+
+    console.log("Início");
+
+}
+
+
+function acao2() {
+
+    fecharPirula();
+
+    console.log("Configurações");
+
+}
+
+
+function acao3() {
+
+    fecharPirula();
+
+    console.log("Proteção");
+
+}
+
+
+function acao4() {
+
+    fecharPirula();
+
+    console.log("Localização");
+
+}
+
+
+function acao5() {
+
+    fecharPirula();
+
+    console.log("Contatos");
+
+}
+
+
+function acao6() {
+
+    fecharPirula();
+
+    console.log("Ajuda");
+
+}
+
 </script>
 
 </body>

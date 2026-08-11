@@ -3,307 +3,616 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>Neo Calc</title>
 
 <style>
 
-/* Barra inteira */
-::-webkit-scrollbar{
-    width:10px;
-}
-
-/* Fundo */
-::-webkit-scrollbar-track{
-    background:#000;
-}
-
-/* Parte que desliza */
-::-webkit-scrollbar-thumb{
-    background:#000;
-    border-radius:999px;
-    border:2px solid #000;
-}
-
-/* Canto (quando há barra horizontal e vertical) */
-::-webkit-scrollbar-corner{
-    background:#000;
-}
-
-
 @font-face {
-  font-family: "Quicksand";
-  src: url("font.ttf") format("truetype");
+    font-family:"Quicksand";
+    src:url("font.ttf") format("truetype");
+    font-weight:400 800;
+}
+
+:root{
+    --bg:#000;
+    --panel:#101010;
+    --display:#080808;
+    --button:#1d1d1d;
+    --action:#303030;
+    --operator:#4f7cff;
+    --text:#fff;
 }
 
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:'Quicksand', sans-serif;
+    font-family:"Quicksand",sans-serif;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    width:100%;
+    min-height:100%;
+    background:var(--bg);
 }
 
 body{
-    background:#000;
     min-height:100vh;
     display:flex;
-    justify-content:center;
     align-items:center;
-    padding:20px;
+    justify-content:center;
+    padding:16px;
 }
 
 .calculadora{
     width:100%;
-    max-width:360px;
+    max-width:380px;
 }
 
+/* VISOR */
+
 .tela{
+    width:100%;
     height:120px;
-    background:#111;
-    border:1px solid #222;
-    border-radius:24px;
+position: relative;
+    top:-65px;
+    padding:20px;
 
     display:flex;
     align-items:flex-end;
     justify-content:flex-end;
 
-    padding:24px;
+    background:var(--display);
+    
+    border-radius:22px;
 
-    color:#fff;
+    color:var(--text);
     font-size:42px;
     font-weight:600;
 
-    margin-bottom:16px;
-
     overflow:hidden;
+    white-space:nowrap;
+    user-select:none;
 }
+
+/* GRID REAL 4x5 */
 
 .botoes{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
+    grid-template-columns:repeat(4,1fr);
+    grid-template-rows:repeat(5,1fr);
+    gap:10px;
+    width: 95%;
+    margin-left: 2.5%;
+    margin-top: 70px;
 }
 
-button{
-    height:72px;
-    border:none;
-    border-radius:222px;
+/* BOTÕES */
 
-    background:#1b1b1b;
+button{
+    width:100%;
+    height:72px;
+
+    border:0;
+    border-radius:200px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:var(--button);
     color:white;
 
-    font-size:24px;
+    font-size:23px;
     font-weight:600;
 
-    transition:.15s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    box-shadow:none;
+
+    transition:
+        background .1s ease,
+        transform .1s ease;
 }
 
 button:active{
-    transform:scale(.95);
+    transform:scale(.94);
+    background:#292929;
 }
+
+/* AÇÕES */
 
 .acao{
-    background:#242424;
+    background:var(--action);
 }
 
+/* OPERADORES */
+
+.operador,
 .igual{
-    background:#4f7cff;
+    background:var(--operator);
 }
 
-
-svg {
-width: 35px;
-height: 35px;
+.operador:active,
+.igual:active{
+    background:#638cff;
 }
+
+/* ZERO */
+
+
+
+/* SVG */
+
+svg{
+    width:28px;
+    height:28px;
+    pointer-events:none;
+}
+
+/* RESPONSIVO */
+
+@media(max-width:420px){
+
+    body{
+        padding:12px;
+    }
+
+    .tela{
+        height:110px;
+        font-size:38px;
+    }
+
+    .botoes{
+        gap:9px;
+    }
+
+    button{
+        height:68px;
+        font-size:21px;
+    }
+
+    svg{
+        width:26px;
+        height:26px;
+    }
+
+/* ZERO */
+
+.zero{
+    width:100%;
+    height:72px;
+
+    border:0;
+    border-radius:200px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:0;
+
+    background:var(--button);
+    color:white;
+
+    font-size:23px;
+    font-weight:600;
+
+    box-shadow:none;
+
+    transition:
+        background .1s ease,
+        transform .1s ease;
+}
+
 </style>
 </head>
+
 <body>
 
 <div class="calculadora">
 
-    <div class="tela" id="display">0</div>
+    <div
+        class="tela"
+        id="display"
+        tabindex="0"
+        aria-label="Visor da calculadora"
+    >0</div>
 
-<div class="botoes">
+    <div class="botoes">
 
-    <button onclick="limpar()" class="acao">C</button>
-    <button onclick="apagar()" class="acao">
-    <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+        <!-- LINHA 1 -->
 
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <button
+            onclick="limpar()"
+            class="acao"
+        >AC</button>
 
-<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+        <button
+            onclick="apagar()"
+            class="acao"
+            aria-label="Apagar"
+        >
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                    d="M11.142 20C8.91458 20 7.80085 20 6.87114 19.4986C5.94144 18.9971 5.35117 18.0781 4.17061 16.24L3.48981 15.18C2.4966 13.6336 2 12.8604 2 12C2 11.1396 2.4966 10.3664 3.48981 8.82001L4.17061 7.76001C5.35117 5.92191 5.94144 5.00286 6.87114 4.50143C7.80085 4 8.91458 4 11.142 4L13.779 4C17.6544 4 19.5921 4 20.7961 5.17157C22 6.34315 22 8.22876 22 12C22 15.7712 22 17.6569 20.7961 18.8284C19.5921 20 17.6544 20 13.779 20H11.142Z"
+                    stroke="white"
+                    stroke-width="1.5"
+                />
+                <path
+                    d="M15.5 9.50002L10.5 14.5M10.5 9.5L15.5 14.5"
+                    stroke="white"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                />
+            </svg>
+        </button>
 
-<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+        <button
+            onclick="porcentagem()"
+            class="acao"
+        >%</button>
 
-<g id="SVGRepo_iconCarrier"> <path d="M11.142 20C8.91458 20 7.80085 20 6.87114 19.4986C5.94144 18.9971 5.35117 18.0781 4.17061 16.24L3.48981 15.18C2.4966 13.6336 2 12.8604 2 12C2 11.1396 2.4966 10.3664 3.48981 8.82001L4.17061 7.76001C5.35117 5.92191 5.94144 5.00286 6.87114 4.50143C7.80085 4 8.91458 4 11.142 4L13.779 4C17.6544 4 19.5921 4 20.7961 5.17157C22 6.34315 22 8.22876 22 12C22 15.7712 22 17.6569 20.7961 18.8284C19.5921 20 17.6544 20 13.779 20H11.142Z" stroke="#ffffff" stroke-width="1.5"/> <path d="M15.5 9.50002L10.5 14.5M10.5 9.5L15.5 14.5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/> </g>
+        <button
+            onclick="operacao('/')"
+            class="operador"
+        >÷</button>
 
-</svg>
-    </button>
-    <button onclick="calcular()" class="igual">=</button>
 
-    <button onclick="add('1')">1</button>
-    <button onclick="add('2')">2</button>
-    <button onclick="add('3')">3</button>
+        <!-- LINHA 2 -->
 
-    <button onclick="add('4')">4</button>
-    <button onclick="add('5')">5</button>
-    <button onclick="add('6')">6</button>
+        <button onclick="add('7')">7</button>
+        <button onclick="add('8')">8</button>
+        <button onclick="add('9')">9</button>
 
-    <button onclick="add('7')">7</button>
-    <button onclick="add('8')">8</button>
-    <button onclick="add('9')">9</button>
+        <button
+            onclick="operacao('*')"
+            class="operador"
+        >×</button>
 
-    <button></button>
-    <button onclick="add('0')">0</button>
-    <button></button>
 
-</div>
+        <!-- LINHA 3 -->
+
+        <button onclick="add('4')">4</button>
+        <button onclick="add('5')">5</button>
+        <button onclick="add('6')">6</button>
+
+        <button
+            onclick="operacao('-')"
+            class="operador"
+        >−</button>
+
+
+        <!-- LINHA 4 -->
+
+        <button onclick="add('1')">1</button>
+        <button onclick="add('2')">2</button>
+        <button onclick="add('3')">3</button>
+
+        <button
+            onclick="operacao('+')"
+            class="operador"
+        >+</button>
+
+
+        <!-- LINHA 5 -->
+        <button
+            
+            class="zero"
+        >()</button>
+        
+        <button
+            onclick="add('0')"
+            class="zero"
+        >0</button>
+
+        <button onclick="add('.')">.</button>
+
+        <button
+            onclick="calcular()"
+            class="igual"
+        >=</button>
+
+    </div>
 
 </div>
 
 <script>
-const CHAVE_SENHA = "senha";
-const CHAVE_RECUPERACAO = "nome_recuperacao";
 
-let senhaSalva = Cripto.carregar(CHAVE_SENHA);
+const CHAVE_SENHA="senha";
+const CHAVE_RECUPERACAO="nome_recuperacao";
 
-if (!senhaSalva) {
+const display=document.getElementById("display");
 
-    const novaSenha = prompt("Crie uma senha");
+let expr="";
+let contadorToques=0;
+let timerToques=null;
 
-    if (novaSenha && novaSenha.trim() !== "") {
 
-        const resposta = prompt(
-            "Como você gosta de ser chamada?"
-        );
+/* SENHA */
 
-        if (resposta && resposta.trim() !== "") {
+function inicializarSenha(){
 
-            Cripto.salvar(
-                CHAVE_SENHA,
-                novaSenha.trim()
-            );
+    let senhaSalva="";
 
-            Cripto.salvar(
-                CHAVE_RECUPERACAO,
-                resposta.trim().toLowerCase()
-            );
+    try{
+        senhaSalva=String(
+            Cripto.carregar(CHAVE_SENHA)||""
+        ).trim();
+    }catch(e){
+        senhaSalva="";
+    }
 
-            location.reload();
+    if(senhaSalva){
+        atualizar();
+        return;
+    }
 
-        } else {
+    const novaSenha=prompt("Crie uma senha");
 
-            location.reload();
-        }
-
-    } else {
-
+    if(!novaSenha || !novaSenha.trim()){
         location.reload();
+        return;
     }
-}
 
-let expr = "";
-const display = document.getElementById("display");
-
-function atualizar() {
-
-    display.innerText =
-        expr.length > 0
-        ? "•".repeat(expr.length)
-        : "0";
-}
-
-function add(numero) {
-
-    expr += numero;
-    atualizar();
-}
-
-function limpar() {
-
-    expr = "";
-    atualizar();
-}
-
-function apagar() {
-
-    expr = expr.slice(0, -1);
-    atualizar();
-}
-
-function calcular() {
-
-    const senha = String(
-        Cripto.carregar(CHAVE_SENHA) || ""
-    ).trim();
-
-    if (expr.trim() === senha) {
-
-        window.location.href =
-            "file:///android_asset/user1/index2.html";
-
-    } else {
-
-        display.innerText = "Erro";
-
-        expr = "";
-
-        setTimeout(() => {
-            atualizar();
-        }, 1000);
-    }
-}
-
-function recuperarSenha() {
-
-    const respostaSalva = String(
-        Cripto.carregar(CHAVE_RECUPERACAO) || ""
-    ).toLowerCase().trim();
-
-    const resposta = prompt(
+    const resposta=prompt(
         "Como você gosta de ser chamada?"
     );
 
-    if (
+    if(!resposta || !resposta.trim()){
+        location.reload();
+        return;
+    }
+
+    try{
+
+        Cripto.salvar(
+            CHAVE_SENHA,
+            novaSenha.trim()
+        );
+
+        Cripto.salvar(
+            CHAVE_RECUPERACAO,
+            resposta.trim().toLowerCase()
+        );
+
+    }catch(e){
+
+        alert("Não foi possível salvar os dados.");
+        return;
+    }
+
+    location.reload();
+}
+
+
+/* VISOR */
+
+function atualizar(){
+
+    display.innerText =
+        expr.length
+        ? expr
+        : "0";
+}
+
+/* NÚMEROS */
+
+function add(valor){
+
+    if(valor==="."){
+
+        const parteAtual=
+            expr.split(/[+\-*/]/).pop();
+
+        if(parteAtual.includes(".")){
+            return;
+        }
+    }
+
+    expr+=valor;
+    atualizar();
+}
+
+
+/* OPERAÇÕES */
+
+function operacao(op){
+
+    if(!expr){
+
+        if(op==="-"){
+            expr="-";
+            atualizar();
+        }
+
+        return;
+    }
+
+    if(/[+\-*/]$/.test(expr)){
+
+        expr=
+            expr.slice(0,-1)+op;
+
+    }else{
+
+        expr+=op;
+    }
+
+    atualizar();
+}
+
+
+/* PORCENTAGEM */
+
+function porcentagem(){
+
+    if(!expr)return;
+
+    expr=expr.replace(
+        /(\d+(?:\.\d+)?)$/,
+        "($1/100)"
+    );
+
+    atualizar();
+}
+
+
+/* LIMPAR */
+
+function limpar(){
+
+    expr="";
+    atualizar();
+}
+
+
+/* APAGAR */
+
+function apagar(){
+
+    expr=
+        expr.slice(0,-1);
+
+    atualizar();
+}
+
+
+/* CALCULAR */
+
+function calcular(){
+
+    const senha=
+        String(
+            Cripto.carregar(CHAVE_SENHA)||""
+        ).trim();
+
+    if(
+        expr.trim()!=="" &&
+        expr.trim()===senha
+    ){
+
+        window.location.href=
+            "file:///android_asset/user1/index2.html";
+
+        return;
+    }
+
+    try{
+
+        const resultado=
+            Function(
+                '"use strict";return ('+
+                expr+
+                ')'
+            )();
+
+        if(
+            typeof resultado==="number" &&
+            Number.isFinite(resultado)
+        ){
+
+            display.innerText=
+                String(resultado);
+
+            expr=
+                String(resultado);
+
+            return;
+        }
+
+    }catch(e){}
+
+    mostrarMensagem("Erro");
+
+    expr="";
+}
+
+
+/* MENSAGEM */
+
+function mostrarMensagem(
+    texto,
+    tempo=1000
+){
+
+    display.innerText=texto;
+
+    clearTimeout(
+        mostrarMensagem.timer
+    );
+
+    mostrarMensagem.timer=
+        setTimeout(
+            atualizar,
+            tempo
+        );
+}
+
+
+/* RECUPERAÇÃO */
+
+function recuperarSenha(){
+
+    let respostaSalva="";
+
+    try{
+
+        respostaSalva=
+            String(
+                Cripto.carregar(
+                    CHAVE_RECUPERACAO
+                )||""
+            )
+            .toLowerCase()
+            .trim();
+
+    }catch(e){
+
+        mostrarMensagem("Erro",1500);
+        return;
+    }
+
+    const resposta=
+        prompt(
+            "Como você gosta de ser chamada?"
+        );
+
+    if(
         !resposta ||
-        resposta.toLowerCase().trim() !== respostaSalva
-    ) {
+        resposta.toLowerCase().trim()!==respostaSalva
+    ){
 
-        display.innerText = "Resposta incorreta";
-
-        setTimeout(() => {
-            atualizar();
-        }, 1500);
+        mostrarMensagem(
+            "Resposta incorreta",
+            1500
+        );
 
         return;
     }
 
-    const novaSenha = prompt(
-        "Digite a nova senha"
-    );
+    const novaSenha=
+        prompt("Digite a nova senha");
 
-    if (
+    if(
         !novaSenha ||
-        novaSenha.trim() === ""
-    ) {
+        !novaSenha.trim()
+    ){
         return;
     }
 
-    const confirmarSenha = prompt(
-        "Confirme a nova senha"
-    );
+    const confirmarSenha=
+        prompt("Confirme a nova senha");
 
-    if (confirmarSenha !== novaSenha) {
+    if(confirmarSenha!==novaSenha){
 
-        display.innerText = "Senhas diferentes";
-
-        setTimeout(() => {
-            atualizar();
-        }, 1500);
+        mostrarMensagem(
+            "Senhas diferentes",
+            1500
+        );
 
         return;
     }
@@ -313,61 +622,62 @@ function recuperarSenha() {
         novaSenha.trim()
     );
 
-    const trocarResposta = confirm(
-        "Deseja alterar a resposta de recuperação?"
-    );
-
-    if (trocarResposta) {
-
-        const novaResposta = prompt(
-            "Como você gosta de ser chamada?"
+    const trocarResposta=
+        confirm(
+            "Deseja alterar a resposta de recuperação?"
         );
 
-        if (
+    if(trocarResposta){
+
+        const novaResposta=
+            prompt(
+                "Como você gosta de ser chamada?"
+            );
+
+        if(
             novaResposta &&
-            novaResposta.trim() !== ""
-        ) {
+            novaResposta.trim()
+        ){
 
             Cripto.salvar(
                 CHAVE_RECUPERACAO,
-                novaResposta.trim().toLowerCase()
+                novaResposta
+                    .trim()
+                    .toLowerCase()
             );
         }
     }
 
-    display.innerText = "Senha alterada";
+    mostrarMensagem(
+        "Senha alterada",
+        1500
+    );
 
-    setTimeout(() => {
-
-        expr = "";
-        atualizar();
-
-    }, 1500);
+    expr="";
 }
 
-/* 5 toques no visor */
 
-let contadorToques = 0;
-let timerToques = null;
+/* CINCO TOQUES */
 
-function registrarToque() {
+function registrarToque(){
 
     contadorToques++;
 
     clearTimeout(timerToques);
 
-    if (contadorToques >= 5) {
+    if(contadorToques>=5){
 
-        contadorToques = 0;
+        contadorToques=0;
         recuperarSenha();
         return;
     }
 
-    timerToques = setTimeout(() => {
-
-        contadorToques = 0;
-
-    }, 2000);
+    timerToques=setTimeout(
+        ()=>{
+            contadorToques=0;
+        },
+        2000
+    );
 }
 
 display.addEventListener(
@@ -375,12 +685,53 @@ display.addEventListener(
     registrarToque
 );
 
-display.addEventListener(
-    "touchend",
-    registrarToque
+
+/* TECLADO */
+
+document.addEventListener(
+    "keydown",
+    e=>{
+
+        if(/^\d$/.test(e.key)){
+
+            add(e.key);
+
+        }else if(
+            ["+","-","*","/"].includes(e.key)
+        ){
+
+            operacao(e.key);
+
+        }else if(e.key==="."){
+
+            add(".");
+
+        }else if(e.key==="Backspace"){
+
+            apagar();
+
+        }else if(e.key==="Escape"){
+
+            limpar();
+
+        }else if(
+            e.key==="Enter" ||
+            e.key==="="
+        ){
+
+            calcular();
+
+        }else if(e.key==="%"){
+
+            porcentagem();
+        }
+    }
 );
 
+
+inicializarSenha();
 atualizar();
+
 </script>
 
 </body>
