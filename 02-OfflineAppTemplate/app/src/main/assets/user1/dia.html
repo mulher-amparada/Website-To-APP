@@ -252,18 +252,20 @@ body {
 }
 
 .progress {
+    position: relative;
+
     height: 8px;
 
     background: #222229;
 
     border-radius: 20px;
 
-    overflow: hidden;
-
     margin-top: 18px;
 }
 
 .progress-bar {
+    position: relative;
+
     height: 100%;
     width: 0%;
 
@@ -274,9 +276,33 @@ body {
             var(--purple)
         );
 
+    border-radius: 20px;
+
     transition: width .3s ease;
 }
 
+.progress-bar::after {
+    content: "";
+
+    position: absolute;
+
+    right: -6px;
+    top: 50%;
+
+    width: 14px;
+    height: 14px;
+
+    transform: translateY(-50%);
+
+    border-radius: 50%;
+
+    background: var(--pink-light);
+
+    border: 3px solid var(--pink);
+
+    box-shadow:
+        0 0 12px rgba(255,142,175,.7);
+}
 
 /* =========================================================
    UPGRADES
