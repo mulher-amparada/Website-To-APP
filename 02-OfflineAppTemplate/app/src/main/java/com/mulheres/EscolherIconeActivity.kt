@@ -3,6 +3,7 @@ package com.mulheres
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -21,27 +22,27 @@ class EscolherIconeActivity : AppCompatActivity() {
         // Tela fullscreen
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        val controller = WindowInsetsControllerCompat(
-            window,
-            window.decorView
-        )
+val controller = WindowInsetsControllerCompat(
+    window,
+    window.decorView
+)
 
-        controller.show(WindowInsetsCompat.Type.systemBars())
-        controller.systemBarsBehavior =
-            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+controller.hide(WindowInsetsCompat.Type.systemBars())
 
-        controller.isAppearanceLightStatusBars = false
-        controller.isAppearanceLightNavigationBars = false
+controller.systemBarsBehavior =
+    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
-        window.statusBarColor = android.graphics.Color.TRANSPARENT
-        window.navigationBarColor = android.graphics.Color.TRANSPARENT
+controller.isAppearanceLightStatusBars = false
+controller.isAppearanceLightNavigationBars = false
 
-        if (android.os.Build.VERSION.SDK_INT >= 29) {
-            window.isNavigationBarContrastEnforced = false
-        }
+window.statusBarColor = android.graphics.Color.TRANSPARENT
+window.navigationBarColor = android.graphics.Color.TRANSPARENT
 
+if (android.os.Build.VERSION.SDK_INT >= 29) {
+    window.isNavigationBarContrastEnforced = false
+}
 
-        setContentView(R.layout.activity_escolher_icone)
+setContentView(R.layout.activity_escolher_icone)
 
 val raiz = findViewById<View>(
     android.R.id.content
