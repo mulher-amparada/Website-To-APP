@@ -71,33 +71,38 @@ super.onCreate(savedInstanceState)
     val sensorManager =
         getSystemService(SENSOR_SERVICE) as SensorManager
 
+    WindowCompat.setDecorFitsSystemWindows(window, false)
+
+val controller = WindowInsetsControllerCompat(
+    window,
+    window.decorView
+)
+
+controller.hide(WindowInsetsCompat.Type.systemBars())
+
+controller.systemBarsBehavior =
+    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+controller.isAppearanceLightStatusBars = false
+controller.isAppearanceLightNavigationBars = false
+
+window.statusBarColor = Color.TRANSPARENT
+window.navigationBarColor = Color.TRANSPARENT
+
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+    window.isNavigationBarContrastEnforced = false
+}
+
+setContentView(R.layout.activity_main)
+
+ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, insets ->
+
+    // Não adiciona espaço para status/navigation bar
+    view.setPadding(0, 0, 0, 0)
+
+    insets
+}
     
-    
-WindowCompat.setDecorFitsSystemWindows(window, false)  
-
-val controller = WindowInsetsControllerCompat(window, window.decorView)  
-controller.show(WindowInsetsCompat.Type.systemBars())  
-controller.systemBarsBehavior =  
-    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE  
-controller.isAppearanceLightStatusBars = false  
-controller.isAppearanceLightNavigationBars = false  
-
-window.statusBarColor = Color.BLACK  
-window.navigationBarColor = Color.BLACK  
-
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {  
-    window.isNavigationBarContrastEnforced = false  
-}  
-
-setContentView(R.layout.activity_main)  
-
-WindowCompat.setDecorFitsSystemWindows(window, false)  
-
-ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, insets ->  
-    insets.getInsets(WindowInsetsCompat.Type.systemBars())  
-    view.setPadding(0, 0, 0, 0)  
-    insets  
-}  
 
 webView = findViewById(R.id.webview)  
 
