@@ -2,7 +2,7 @@ package com.mulheres
 
 import android.app.Activity
 import android.graphics.Typeface
-import android.view.View
+import android.graphics.Color
 import android.view.ViewGroup
 import android.widget.TextView
 import android.content.Intent
