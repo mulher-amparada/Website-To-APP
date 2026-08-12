@@ -7,7 +7,7 @@
 
 <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
 >
 
 <meta
@@ -25,7 +25,7 @@
 <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
+>
 
 <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -37,7 +37,9 @@
    RESET
 ========================================================= */
 
-* {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
 }
@@ -46,28 +48,35 @@ html,
 body {
     width: 100%;
     height: 100%;
+    min-width: 0;
+    min-height: 0;
+
     margin: 0;
-}
-
-body {
-
-    font-family: "Quicksand", Arial, sans-serif;
-
-    color: #fff;
-
-    background:
-        radial-gradient(
-            circle at top,
-            #19191e 0%,
-            #08080a 55%,
-            #000 100%
-        );
+    padding: 0;
 
     overflow: hidden;
 
-    user-select: none;
+    background: #050507;
+}
 
+body {
+    position: fixed;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    color: #fff;
+
+    font-family: "Quicksand", Arial, sans-serif;
+
+    user-select: none;
     -webkit-user-select: none;
+
+    overscroll-behavior: none;
+
+    touch-action: manipulation;
 }
 
 
@@ -88,31 +97,6 @@ body {
 
 
 /* =========================================================
-   SCROLLBAR
-========================================================= */
-
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-
-    background: rgba(255,255,255,.12);
-
-    border-radius: 999px;
-
-    border: 2px solid transparent;
-
-    background-clip: padding-box;
-}
-
-
-/* =========================================================
    FUNDO
 ========================================================= */
 
@@ -123,6 +107,9 @@ body {
     inset: 0;
 
     z-index: -10;
+
+    width: 100%;
+    height: 100%;
 
     background:
         radial-gradient(
@@ -138,13 +125,10 @@ body {
 
     background-repeat: no-repeat;
 
-    transform: scale(1.03);
+    transform: translateZ(0) scale(1.03);
+
+    pointer-events: none;
 }
-
-
-/* =========================================================
-   CAMADA ESCURA
-========================================================= */
 
 #background::after {
 
@@ -164,23 +148,82 @@ body {
 
 
 /* =========================================================
-   CONTAINER
+   APP
 ========================================================= */
 
 .app {
 
-    position: relative;
+    position: fixed;
+
+    inset: 0;
 
     width: 100%;
-    height: 100%;
+
+    /*
+        dvh funciona melhor em WebView moderno.
+        vh fica como fallback.
+    */
+
+    height: 100vh;
+    height: 100dvh;
+
+    min-height: 0;
+
+    overflow: hidden;
 
     padding:
-        max(12px, env(safe-area-inset-top))
-        max(12px, env(safe-area-inset-right))
-        max(12px, env(safe-area-inset-bottom))
-        max(12px, env(safe-area-inset-left));
 
-    animation: pageIn .7s ease both;
+        max(8px, env(safe-area-inset-top))
+
+        max(8px, env(safe-area-inset-right))
+
+        max(8px, env(safe-area-inset-bottom))
+
+        max(8px, env(safe-area-inset-left));
+
+    animation: pageIn .6s ease both;
+}
+
+
+/* =========================================================
+   ÁREA PRINCIPAL
+========================================================= */
+
+.map-wrapper {
+
+    position: absolute;
+
+    top:
+        calc(
+            max(8px, env(safe-area-inset-top)) + 64px
+        );
+
+    right:
+        max(8px, env(safe-area-inset-right));
+
+    bottom:
+        max(8px, env(safe-area-inset-bottom));
+
+    left:
+        max(8px, env(safe-area-inset-left));
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+
+    border-radius: 22px;
+
+    background: #111;
+
+    box-shadow:
+        0 20px 70px rgba(0,0,0,.65),
+        0 0 0 1px rgba(255,255,255,.08);
+
+    isolation: isolate;
+
+    animation:
+        mapIn .7s cubic-bezier(.2,.8,.2,1) both;
 }
 
 
@@ -192,27 +235,19 @@ body {
 
     position: absolute;
 
-    top: max(76px, calc(64px + env(safe-area-inset-top)));
+    inset: 0;
 
-    left: max(10px, env(safe-area-inset-left));
+    width: 100%;
+    height: 100%;
 
-    right: max(10px, env(safe-area-inset-right));
-
-    bottom: max(10px, env(safe-area-inset-bottom));
-
-    border-radius: 24px;
-
-    overflow: hidden;
+    min-width: 0;
+    min-height: 0;
 
     background: #111;
 
-    box-shadow:
-        0 20px 70px rgba(0,0,0,.65),
-        0 0 0 1px rgba(255,255,255,.08);
+    overflow: hidden;
 
-    animation: mapIn .8s cubic-bezier(.2,.8,.2,1) both;
-
-    isolation: isolate;
+    outline: none;
 }
 
 
@@ -224,15 +259,24 @@ body {
 
     position: absolute;
 
-    top: max(10px, calc(10px + env(safe-area-inset-top)));
+    top:
+        max(
+            8px,
+            env(safe-area-inset-top)
+        );
 
     left: 50%;
 
     transform: translateX(-50%);
 
-    z-index: 2000;
+    z-index: 5000;
 
-    width: min(92%, 520px);
+    width: min(
+        calc(100% - 24px),
+        520px
+    );
+
+    height: 54px;
 
     min-height: 54px;
 
@@ -242,17 +286,21 @@ body {
 
     justify-content: space-between;
 
-    gap: 12px;
+    gap: 10px;
 
-    padding: 8px 10px 8px 16px;
+    padding:
+        7px
+        9px
+        7px
+        14px;
 
     border:
         1px solid rgba(255,255,255,.11);
 
-    border-radius: 18px;
+    border-radius: 17px;
 
     background:
-        rgba(10,10,13,.72);
+        rgba(10,10,13,.78);
 
     backdrop-filter:
         blur(22px)
@@ -265,7 +313,10 @@ body {
     box-shadow:
         0 12px 35px rgba(0,0,0,.35);
 
-    animation: headerIn .65s ease both;
+    overflow: hidden;
+
+    animation:
+        headerIn .6s ease both;
 }
 
 
@@ -275,13 +326,17 @@ body {
 
 .title {
 
+    min-width: 0;
+
+    flex: 1 1 auto;
+
     display: flex;
 
     align-items: center;
 
-    gap: 10px;
+    gap: 9px;
 
-    min-width: 0;
+    overflow: hidden;
 }
 
 .title-icon {
@@ -295,7 +350,7 @@ body {
 
     place-items: center;
 
-    border-radius: 12px;
+    border-radius: 11px;
 
     color: #ff8fc7;
 
@@ -312,18 +367,27 @@ body {
 }
 
 .title-text {
+
     min-width: 0;
+
+    overflow: hidden;
 }
 
 .title-name {
 
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
     font-size: 16px;
+
+    line-height: 18px;
 
     font-weight: 700;
 
     letter-spacing: .2px;
-
-    white-space: nowrap;
 }
 
 .title-status {
@@ -334,19 +398,25 @@ body {
 
     gap: 5px;
 
-    margin-top: 2px;
+    margin-top: 1px;
 
     color: rgba(255,255,255,.48);
 
     font-size: 10px;
 
+    line-height: 12px;
+
     font-weight: 500;
+
+    white-space: nowrap;
 }
 
 .status-dot {
 
     width: 6px;
     height: 6px;
+
+    flex: 0 0 6px;
 
     border-radius: 50%;
 
@@ -355,15 +425,18 @@ body {
     box-shadow:
         0 0 10px rgba(125,255,178,.7);
 
-    animation: pulse 2s infinite;
+    animation:
+        pulse 2s infinite;
 }
 
 
 /* =========================================================
-   BOTÕES
+   AÇÕES DO CABEÇALHO
 ========================================================= */
 
 .header-actions {
+
+    flex: 0 0 auto;
 
     display: flex;
 
@@ -377,9 +450,13 @@ body {
     width: 38px;
     height: 38px;
 
+    flex: 0 0 38px;
+
     display: grid;
 
     place-items: center;
+
+    padding: 0;
 
     border: 0;
 
@@ -390,14 +467,18 @@ body {
     background:
         rgba(255,255,255,.055);
 
-    border:
-        1px solid rgba(255,255,255,.07);
+    outline: none;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.07);
 
     cursor: pointer;
 
-    font-family: inherit;
+    font-family: Arial, sans-serif;
 
     font-size: 17px;
+
+    touch-action: manipulation;
 
     transition:
         transform .18s ease,
@@ -405,19 +486,12 @@ body {
         color .18s ease;
 }
 
-.icon-button:hover {
-
-    background:
-        rgba(255,255,255,.10);
-
-    color: #fff;
-
-    transform: translateY(-1px);
-}
-
 .icon-button:active {
 
     transform: scale(.92);
+
+    background:
+        rgba(255,255,255,.12);
 }
 
 
@@ -429,9 +503,9 @@ body {
 
     position: absolute;
 
-    right: 22px;
+    right: 14px;
 
-    bottom: 22px;
+    bottom: 14px;
 
     z-index: 1500;
 
@@ -439,38 +513,47 @@ body {
 
     flex-direction: column;
 
+    align-items: center;
+
     gap: 8px;
 
-    animation: controlsIn .7s .2s ease both;
+    pointer-events: none;
+
+    animation:
+        controlsIn .7s .2s ease both;
 }
 
 .map-button {
 
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
+
+    flex: 0 0 44px;
 
     display: grid;
 
     place-items: center;
 
+    padding: 0;
+
     border: 0;
 
-    border-radius: 15px;
+    border-radius: 14px;
 
     color: #fff;
 
     background:
-        rgba(10,10,13,.78);
-
-    border:
-        1px solid rgba(255,255,255,.10);
-
-    backdrop-filter: blur(15px);
-
-    -webkit-backdrop-filter: blur(15px);
+        rgba(10,10,13,.82);
 
     box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.10),
         0 8px 25px rgba(0,0,0,.35);
+
+    backdrop-filter:
+        blur(15px);
+
+    -webkit-backdrop-filter:
+        blur(15px);
 
     cursor: pointer;
 
@@ -478,28 +561,43 @@ body {
 
     font-size: 20px;
 
+    line-height: 1;
+
+    outline: none;
+
+    pointer-events: auto;
+
+    touch-action: manipulation;
+
     transition:
-        transform .18s ease,
-        background .18s ease;
-}
-
-.map-button:hover {
-
-    background:
-        rgba(30,30,35,.9);
-
-    transform: translateY(-2px);
+        transform .15s ease,
+        background .15s ease;
 }
 
 .map-button:active {
 
-    transform: scale(.91);
+    transform: scale(.90);
+
+    background:
+        rgba(35,35,40,.95);
 }
 
 
 /* =========================================================
    LEAFLET
 ========================================================= */
+
+.leaflet-container {
+
+    width: 100%;
+    height: 100%;
+
+    background: #111;
+
+    font-family: "Quicksand", Arial, sans-serif;
+
+    outline: none;
+}
 
 .leaflet-control-zoom {
 
@@ -508,32 +606,44 @@ body {
 
 .leaflet-control-attribution {
 
-    margin: 0 8px 8px 0 !important;
+    margin:
+        0
+        7px
+        7px
+        0 !important;
 
-    padding: 3px 7px !important;
+    padding:
+        3px
+        7px !important;
 
     border-radius: 8px;
 
-    color: rgba(255,255,255,.55) !important;
+    color:
+        rgba(255,255,255,.55) !important;
 
     background:
-        rgba(0,0,0,.55) !important;
+        rgba(0,0,0,.58) !important;
 
-    backdrop-filter: blur(8px);
+    backdrop-filter:
+        blur(8px);
 
-    -webkit-backdrop-filter: blur(8px);
+    -webkit-backdrop-filter:
+        blur(8px);
 
     font-size: 9px !important;
+
+    line-height: 12px !important;
 }
 
 .leaflet-control-attribution a {
 
-    color: rgba(255,255,255,.75) !important;
+    color:
+        rgba(255,255,255,.75) !important;
 }
 
 
 /* =========================================================
-   MARCADOR PERSONALIZADO
+   MARCADOR
 ========================================================= */
 
 .custom-marker {
@@ -542,6 +652,8 @@ body {
 
     width: 18px;
     height: 18px;
+
+    pointer-events: none;
 }
 
 .marker-core {
@@ -554,13 +666,15 @@ body {
     width: 9px;
     height: 9px;
 
-    transform: translate(-50%, -50%);
+    transform:
+        translate(-50%, -50%);
 
     border-radius: 50%;
 
     background: #ff8fc7;
 
-    border: 2px solid #fff;
+    border:
+        2px solid #fff;
 
     box-shadow:
         0 0 15px rgba(255,105,180,.9);
@@ -574,14 +688,16 @@ body {
 
     border-radius: 50%;
 
-    border: 1px solid rgba(255,143,199,.7);
+    border:
+        1px solid rgba(255,143,199,.7);
 
-    animation: markerPulse 2s infinite;
+    animation:
+        markerPulse 2s infinite;
 }
 
 
 /* =========================================================
-   MARCADOR DO USUÁRIO
+   LOCALIZAÇÃO DO USUÁRIO
 ========================================================= */
 
 .user-location {
@@ -593,7 +709,8 @@ body {
 
     background: #6eb5ff;
 
-    border: 3px solid #fff;
+    border:
+        3px solid #fff;
 
     box-shadow:
         0 0 0 7px rgba(110,181,255,.18),
@@ -607,39 +724,52 @@ body {
 
 .toast {
 
-    position: absolute;
+    position: fixed;
 
     left: 50%;
 
-    bottom: 22px;
+    bottom:
+        calc(
+            max(16px, env(safe-area-inset-bottom)) + 16px
+        );
 
     transform:
         translate(-50%, 20px);
 
-    z-index: 3000;
+    z-index: 9000;
 
-    max-width: calc(100% - 40px);
+    width: max-content;
 
-    padding: 11px 16px;
+    max-width:
+        calc(100% - 40px);
+
+    padding:
+        11px
+        16px;
 
     border-radius: 13px;
 
-    color: rgba(255,255,255,.92);
+    color:
+        rgba(255,255,255,.92);
 
     background:
-        rgba(12,12,15,.88);
+        rgba(12,12,15,.90);
 
     border:
         1px solid rgba(255,255,255,.10);
 
-    backdrop-filter: blur(18px);
+    backdrop-filter:
+        blur(18px);
 
-    -webkit-backdrop-filter: blur(18px);
+    -webkit-backdrop-filter:
+        blur(18px);
 
     box-shadow:
         0 12px 35px rgba(0,0,0,.4);
 
     font-size: 12px;
+
+    line-height: 16px;
 
     text-align: center;
 
@@ -680,7 +810,7 @@ body {
 
     from {
         opacity: 0;
-        transform: scale(.97);
+        transform: scale(.985);
     }
 
     to {
@@ -694,7 +824,7 @@ body {
     from {
         opacity: 0;
         transform:
-            translate(-50%, -15px);
+            translate(-50%, -12px);
     }
 
     to {
@@ -708,12 +838,14 @@ body {
 
     from {
         opacity: 0;
-        transform: translateX(20px);
+        transform:
+            translateX(15px);
     }
 
     to {
         opacity: 1;
-        transform: translateX(0);
+        transform:
+            translateX(0);
     }
 }
 
@@ -756,34 +888,59 @@ body {
 
 @media (max-width: 600px) {
 
-    #map {
+    .app {
 
-        top: max(72px, calc(60px + env(safe-area-inset-top)));
-
-        left: 7px;
-
-        right: 7px;
-
-        bottom: max(7px, env(safe-area-inset-bottom));
-
-        border-radius: 21px;
+        padding:
+            max(6px, env(safe-area-inset-top))
+            max(6px, env(safe-area-inset-right))
+            max(6px, env(safe-area-inset-bottom))
+            max(6px, env(safe-area-inset-left));
     }
 
     .header {
 
-        width: calc(100% - 20px);
+        width:
+            calc(
+                100% -
+                max(12px, env(safe-area-inset-left)) -
+                max(12px, env(safe-area-inset-right))
+            );
+
+        height: 52px;
 
         min-height: 52px;
 
-        padding-left: 13px;
+        padding:
+            6px
+            7px
+            6px
+            11px;
+
+        border-radius: 16px;
     }
 
-    .title-name {
-        font-size: 15px;
+    .map-wrapper {
+
+        top:
+            calc(
+                max(6px, env(safe-area-inset-top)) + 60px
+            );
+
+        right:
+            max(6px, env(safe-area-inset-right));
+
+        bottom:
+            max(6px, env(safe-area-inset-bottom));
+
+        left:
+            max(6px, env(safe-area-inset-left));
+
+        border-radius: 19px;
     }
 
-    .title-status {
-        font-size: 9px;
+    .title {
+
+        gap: 8px;
     }
 
     .title-icon {
@@ -792,6 +949,24 @@ body {
         height: 32px;
 
         flex-basis: 32px;
+
+        border-radius: 10px;
+
+        font-size: 16px;
+    }
+
+    .title-name {
+
+        font-size: 15px;
+
+        line-height: 17px;
+    }
+
+    .title-status {
+
+        font-size: 9px;
+
+        line-height: 11px;
     }
 
     .icon-button {
@@ -799,23 +974,32 @@ body {
         width: 36px;
         height: 36px;
 
+        flex-basis: 36px;
+
+        border-radius: 11px;
+
         font-size: 16px;
     }
 
     .map-controls {
 
-        right: 15px;
+        right: 11px;
 
-        bottom: 17px;
+        bottom: 11px;
+
+        gap: 7px;
     }
 
     .map-button {
 
-        width: 44px;
-        height: 44px;
+        width: 43px;
+        height: 43px;
 
-        border-radius: 14px;
+        flex-basis: 43px;
+
+        border-radius: 13px;
     }
+
 }
 
 
@@ -825,16 +1009,94 @@ body {
 
 @media (max-width: 360px) {
 
+    .header {
+
+        padding-left: 9px;
+    }
+
     .header-actions .icon-button:last-child {
 
         display: none;
     }
 
     .title-status {
+
         display: none;
     }
+
+    .title-icon {
+
+        width: 30px;
+        height: 30px;
+
+        flex-basis: 30px;
+    }
+
+    .map-wrapper {
+
+        top:
+            calc(
+                max(6px, env(safe-area-inset-top)) + 58px
+            );
+    }
+
 }
 
+
+/* =========================================================
+   ALTURA MUITO PEQUENA / LANDSCAPE
+========================================================= */
+
+@media (max-height: 500px) {
+
+    .header {
+
+        height: 46px;
+
+        min-height: 46px;
+
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    .title-icon {
+
+        width: 30px;
+        height: 30px;
+
+        flex-basis: 30px;
+    }
+
+    .icon-button {
+
+        width: 34px;
+        height: 34px;
+
+        flex-basis: 34px;
+    }
+
+    .map-wrapper {
+
+        top:
+            calc(
+                max(5px, env(safe-area-inset-top)) + 52px
+            );
+    }
+
+    .map-button {
+
+        width: 40px;
+        height: 40px;
+
+        flex-basis: 40px;
+    }
+
+}
+
+svg {
+width: 25px;
+height: 25px;
+}
 </style>
 
 </head>
@@ -858,7 +1120,7 @@ body {
         <div class="title">
 
             <div class="title-icon">
-                ◉
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
             </div>
 
             <div class="title-text">
@@ -887,8 +1149,9 @@ body {
                 id="locateButton"
                 aria-label="Minha localização"
                 title="Minha localização"
+                type="button"
             >
-                ⌖
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 8.70938C3 7.23584 3 6.49907 3.39264 6.06935C3.53204 5.91678 3.70147 5.79466 3.89029 5.71066C4.42213 5.47406 5.12109 5.70705 6.51901 6.17302C7.58626 6.52877 8.11989 6.70665 8.6591 6.68823C8.85714 6.68147 9.05401 6.65511 9.24685 6.60952C9.77191 6.48541 10.2399 6.1734 11.176 5.54937L12.5583 4.62778C13.7574 3.82843 14.3569 3.42876 15.0451 3.3366C15.7333 3.24444 16.4168 3.47229 17.7839 3.92799L18.9487 4.31624C19.9387 4.64625 20.4337 4.81126 20.7169 5.20409C21 5.59692 21 6.11871 21 7.16229V15.2907C21 16.7642 21 17.501 20.6074 17.9307C20.468 18.0833 20.2985 18.2054 20.1097 18.2894C19.5779 18.526 18.8789 18.293 17.481 17.827C16.4137 17.4713 15.8801 17.2934 15.3409 17.3118C15.1429 17.3186 14.946 17.3449 14.7532 17.3905C14.2281 17.5146 13.7601 17.8266 12.824 18.4507L11.4417 19.3722C10.2426 20.1716 9.64311 20.5713 8.95493 20.6634C8.26674 20.7556 7.58319 20.5277 6.21609 20.072L5.05132 19.6838C4.06129 19.3538 3.56627 19.1888 3.28314 18.7959C3 18.4031 3 17.8813 3 16.8377V8.70938Z" stroke="#ffffff" stroke-width="1.5"></path> <path d="M9 6.63867V20.5" stroke="#ffffff" stroke-width="1.5"></path> <path d="M15 3V17" stroke="#ffffff" stroke-width="1.5"></path> </g></svg>
             </button>
 
             <button
@@ -896,8 +1159,9 @@ body {
                 id="resetButton"
                 aria-label="Voltar ao centro"
                 title="Voltar ao centro"
+                type="button"
             >
-                ⌂
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M5 9.77746V16.2C5 17.8802 5 18.7203 5.32698 19.362C5.6146 19.9265 6.07354 20.3854 6.63803 20.673C7.27976 21 8.11984 21 9.8 21H14.2C15.8802 21 16.7202 21 17.362 20.673C17.9265 20.3854 18.3854 19.9265 18.673 19.362C19 18.7203 19 17.8802 19 16.2V5.00002M21 12L15.5668 5.96399C14.3311 4.59122 13.7133 3.90484 12.9856 3.65144C12.3466 3.42888 11.651 3.42893 11.0119 3.65159C10.2843 3.90509 9.66661 4.59157 8.43114 5.96452L3 12M14 21V15H10V21" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
             </button>
 
         </div>
@@ -906,46 +1170,53 @@ body {
 
 
     <!-- =====================================================
-         MAPA
+         ÁREA DO MAPA
     ====================================================== -->
 
-    <main id="map"></main>
+    <main class="map-wrapper">
+
+        <div id="map"></div>
 
 
-    <!-- =====================================================
-         CONTROLES
-    ====================================================== -->
+        <!-- =================================================
+             CONTROLES
+        ================================================== -->
 
-    <div class="map-controls">
+        <div class="map-controls">
 
-        <button
-            class="map-button"
-            id="zoomIn"
-            aria-label="Aumentar zoom"
-            title="Aumentar zoom"
-        >
-            +
-        </button>
+            <button
+                class="map-button"
+                id="zoomIn"
+                aria-label="Aumentar zoom"
+                title="Aumentar zoom"
+                type="button"
+            >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 4C11.4477 4 11 4.44772 11 5V11H5C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13H11V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13H19C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11H13V5C13 4.44772 12.5523 4 12 4Z" fill="#ffffff"></path> </g></svg>
+            </button>
 
-        <button
-            class="map-button"
-            id="zoomOut"
-            aria-label="Diminuir zoom"
-            title="Diminuir zoom"
-        >
-            −
-        </button>
+            <button
+                class="map-button"
+                id="zoomOut"
+                aria-label="Diminuir zoom"
+                title="Diminuir zoom"
+                type="button"
+            >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 12C4 11.4477 4.44772 11 5 11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H5C4.44772 13 4 12.5523 4 12Z" fill="#ffffff"></path> </g></svg>
+            </button>
 
-        <button
-            class="map-button"
-            id="myLocation"
-            aria-label="Encontrar localização"
-            title="Encontrar localização"
-        >
-            ◎
-        </button>
+            <button
+                class="map-button"
+                id="myLocation"
+                aria-label="Encontrar localização"
+                title="Encontrar localização"
+                type="button"
+            >
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 4"></path> </g></svg>
+            </button>
 
-    </div>
+        </div>
+
+    </main>
 
 
     <!-- =====================================================
@@ -955,6 +1226,7 @@ body {
     <div
         id="toast"
         class="toast"
+        aria-live="polite"
     ></div>
 
 
@@ -1014,10 +1286,12 @@ L.tileLayer(
 
         updateWhenIdle: true,
 
+        updateWhenZooming: false,
+
         keepBuffer: 2,
 
         attribution:
-            '&copy; OpenStreetMap contributors'
+            "&copy; OpenStreetMap contributors"
 
     }
 ).addTo(map);
@@ -1033,11 +1307,8 @@ const markerIcon = L.divIcon({
 
     html: `
         <div class="custom-marker">
-
             <div class="marker-ring"></div>
-
             <div class="marker-core"></div>
-
         </div>
     `,
 
@@ -1066,34 +1337,40 @@ const pontos = [
 const markers = [];
 
 
-pontos.forEach((position, index) => {
+pontos.forEach(
+    (position, index) => {
 
-    const marker = L.marker(
-        position,
-        {
-            icon: markerIcon,
-            keyboard: false
-        }
-    ).addTo(map);
+        const marker =
+            L.marker(
+                position,
+                {
+                    icon: markerIcon,
+                    keyboard: false
+                }
+            )
+            .addTo(map);
 
-    marker.bindTooltip(
-        `Ponto ${index + 1}`,
-        {
-            direction: "top",
 
-            offset: [0, -10],
+        marker.bindTooltip(
+            `Ponto ${index + 1}`,
+            {
+                direction: "top",
 
-            opacity: .9
-        }
-    );
+                offset: [0, -10],
 
-    markers.push(marker);
+                opacity: .9
+            }
+        );
 
-});
+
+        markers.push(marker);
+
+    }
+);
 
 
 /* =========================================================
-   FUNÇÕES
+   TOAST
 ========================================================= */
 
 function showToast(message) {
@@ -1105,14 +1382,21 @@ function showToast(message) {
 
     toast.classList.add("show");
 
-    clearTimeout(window.toastTimer);
+    clearTimeout(
+        window.toastTimer
+    );
 
     window.toastTimer =
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            toast.classList.remove("show");
+                toast.classList.remove(
+                    "show"
+                );
 
-        }, 2500);
+            },
+            2500
+        );
 }
 
 
@@ -1122,24 +1406,30 @@ function showToast(message) {
 
 document
     .getElementById("zoomIn")
-    .addEventListener("click", () => {
+    .addEventListener(
+        "click",
+        () => {
 
-        map.zoomIn();
+            map.zoomIn();
 
-    });
+        }
+    );
 
 
 document
     .getElementById("zoomOut")
-    .addEventListener("click", () => {
+    .addEventListener(
+        "click",
+        () => {
 
-        map.zoomOut();
+            map.zoomOut();
 
-    });
+        }
+    );
 
 
 /* =========================================================
-   VOLTAR AO CENTRO
+   RESET
 ========================================================= */
 
 function resetMap() {
@@ -1174,7 +1464,9 @@ let userAccuracy = null;
 
 function locateUser() {
 
-    if (!navigator.geolocation) {
+    if (
+        !navigator.geolocation
+    ) {
 
         showToast(
             "A localização não está disponível neste dispositivo."
@@ -1232,6 +1524,7 @@ function locateUser() {
                         [lat, lng],
                         {
                             icon: userIcon,
+
                             zIndexOffset: 1000
                         }
                     )
@@ -1265,7 +1558,8 @@ function locateUser() {
 
                         fillOpacity: .06
                     }
-                ).addTo(map);
+                )
+                .addTo(map);
 
 
             map.flyTo(
@@ -1286,35 +1580,47 @@ function locateUser() {
 
         },
 
+
         error => {
 
             let message =
                 "Não foi possível obter sua localização.";
 
-            if (error.code === 1) {
+
+            if (
+                error.code === 1
+            ) {
 
                 message =
                     "Permissão de localização negada.";
 
             }
 
-            if (error.code === 2) {
+
+            if (
+                error.code === 2
+            ) {
 
                 message =
                     "Localização indisponível.";
 
             }
 
-            if (error.code === 3) {
+
+            if (
+                error.code === 3
+            ) {
 
                 message =
                     "Tempo limite da localização.";
 
             }
 
+
             showToast(message);
 
         },
+
 
         {
 
@@ -1348,7 +1654,7 @@ document
 
 
 /* =========================================================
-   CLIQUE DUPLO
+   DUPLO CLIQUE
 ========================================================= */
 
 map.on(
@@ -1387,6 +1693,7 @@ document.addEventListener(
 
         }
 
+
         if (
             event.key === "-" ||
             event.key === "_"
@@ -1395,6 +1702,7 @@ document.addEventListener(
             map.zoomOut();
 
         }
+
 
         if (
             event.key === "Escape"
@@ -1417,6 +1725,7 @@ window.addEventListener(
     () => {
 
         let wall = "";
+
 
         try {
 
@@ -1449,8 +1758,14 @@ window.addEventListener(
             wall.trim().length > 0
         ) {
 
+            const safeWall =
+                wall
+                    .replace(/\\/g, "\\\\")
+                    .replace(/"/g, '\\"');
+
+
             background.style.backgroundImage =
-                `url("${wall.replace(/"/g, '\\"')}")`;
+                `url("${safeWall}")`;
 
         }
 
@@ -1459,16 +1774,51 @@ window.addEventListener(
 
 
 /* =========================================================
-   REDIMENSIONAMENTO
+   INVALIDATE DO LEAFLET
+========================================================= */
+
+function refreshMapSize() {
+
+    requestAnimationFrame(
+        () => {
+
+            map.invalidateSize({
+                pan: false,
+                animate: false
+            });
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   RESIZE NORMAL
 ========================================================= */
 
 window.addEventListener(
     "resize",
+    refreshMapSize
+);
+
+
+/* =========================================================
+   ORIENTAÇÃO
+========================================================= */
+
+window.addEventListener(
+    "orientationchange",
     () => {
 
         setTimeout(
-            () => map.invalidateSize(),
-            150
+            refreshMapSize,
+            250
+        );
+
+        setTimeout(
+            refreshMapSize,
+            600
         );
 
     }
@@ -1476,20 +1826,54 @@ window.addEventListener(
 
 
 /* =========================================================
+   VISUAL VIEWPORT
+   IMPORTANTE PARA ANDROID WEBVIEW
+========================================================= */
+
+if (
+    window.visualViewport
+) {
+
+    window.visualViewport.addEventListener(
+        "resize",
+        refreshMapSize
+    );
+
+    window.visualViewport.addEventListener(
+        "scroll",
+        refreshMapSize
+    );
+
+}
+
+
+/* =========================================================
    INICIALIZAÇÃO
 ========================================================= */
 
-setTimeout(
+window.addEventListener(
+    "load",
     () => {
 
-        map.invalidateSize();
+        setTimeout(
+            refreshMapSize,
+            50
+        );
 
-    },
-    300
+        setTimeout(
+            refreshMapSize,
+            250
+        );
+
+        setTimeout(
+            refreshMapSize,
+            600
+        );
+
+    }
 );
 
 </script>
-
 
 </body>
 

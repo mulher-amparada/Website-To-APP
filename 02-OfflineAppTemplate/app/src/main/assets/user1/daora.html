@@ -55,11 +55,10 @@
     --yellow:#ffd166;
 
     --bg:#070709;
+    --card:#111115;
+    --card2:#151519;
 
-    --glass:rgba(255,255,255,.075);
-    --glass2:rgba(255,255,255,.11);
-
-    --border:rgba(255,255,255,.11);
+    --border:rgba(255,255,255,.09);
 
     --text:#fff;
 
@@ -67,9 +66,9 @@
     --muted2:rgba(255,255,255,.38);
 
     --shadow:
-        0 18px 55px rgba(0,0,0,.40);
+        0 18px 45px rgba(0,0,0,.38);
 
-    --radius:28px;
+    --radius:26px;
 
 }
 
@@ -124,53 +123,23 @@ body::before{
 
     inset:0;
 
-    z-index:-4;
+    z-index:-5;
 
     background:
 
         radial-gradient(
-            circle at 15% 10%,
-            rgba(255,105,145,.11),
-            transparent 30%
+            circle at 10% 0%,
+            rgba(255,105,145,.07),
+            transparent 28%
         ),
 
         radial-gradient(
-            circle at 90% 85%,
-            rgba(120,183,255,.07),
-            transparent 30%
+            circle at 100% 100%,
+            rgba(120,183,255,.035),
+            transparent 28%
         ),
 
-        linear-gradient(
-            135deg,
-            #09090b,
-            #050506
-        );
-
-    pointer-events:none;
-
-}
-
-
-body::after{
-
-    content:"";
-
-    position:fixed;
-
-    width:420px;
-    height:420px;
-
-    top:-180px;
-    right:-160px;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,105,145,.10);
-
-    filter:blur(90px);
-
-    z-index:-3;
+        #070709;
 
     pointer-events:none;
 
@@ -195,7 +164,7 @@ body::after{
 
 ::-webkit-scrollbar-thumb{
 
-    background:rgba(255,255,255,.14);
+    background:rgba(255,255,255,.12);
 
     border-radius:999px;
 
@@ -211,7 +180,7 @@ body::after{
     from{
 
         opacity:0;
-        transform:translateY(15px);
+        transform:translateY(12px);
 
     }
 
@@ -237,43 +206,8 @@ body::after{
 
     50%{
 
-        transform:scale(1.45);
+        transform:scale(1.4);
         opacity:.55;
-
-    }
-
-}
-
-
-@keyframes glow{
-
-    0%,
-    100%{
-
-        opacity:.45;
-
-    }
-
-    50%{
-
-        opacity:.8;
-
-    }
-
-}
-
-
-@keyframes shine{
-
-    from{
-
-        transform:translateX(-120%);
-
-    }
-
-    to{
-
-        transform:translateX(120%);
 
     }
 
@@ -294,15 +228,15 @@ body::after{
 
     padding:
 
-        max(22px,env(safe-area-inset-top))
+        max(20px,env(safe-area-inset-top))
 
         14px
 
-        max(110px,calc(90px + env(safe-area-inset-bottom)));
+        max(30px,env(safe-area-inset-bottom));
 
     animation:
 
-        pageIn .65s
+        pageIn .55s
         cubic-bezier(.2,.8,.2,1);
 
 }
@@ -396,56 +330,53 @@ body::after{
 
 .icon-btn{
 
-    position:relative;
-
     width:45px;
     height:45px;
-
-    border:1px solid var(--border);
-
-    border-radius:16px;
-
-    color:white;
-
-    background:var(--glass);
-
-    backdrop-filter:blur(18px);
-
-    -webkit-backdrop-filter:blur(18px);
 
     display:flex;
 
     align-items:center;
     justify-content:center;
 
+    border:1px solid var(--border);
+
+    border-radius:15px;
+
+    color:#fff;
+
+    background:#111115;
+
     cursor:pointer;
 
-    box-shadow:var(--shadow);
+    box-shadow:
+
+        0 8px 24px rgba(0,0,0,.28);
 
     transition:
 
-        transform .2s ease,
-        background .2s ease,
-        border-color .2s ease;
+        transform .18s ease,
+        background .18s ease,
+        border-color .18s ease;
+        
 
 }
 
 
 .icon-btn:hover{
 
-    background:var(--glass2);
+    background:#18181d;
 
     border-color:
         rgba(255,143,171,.25);
 
-    transform:translateY(-2px);
+    transform:translateY(-1px);
 
 }
 
 
 .icon-btn:active{
 
-    transform:scale(.90);
+    transform:scale(.91);
 
 }
 
@@ -456,14 +387,18 @@ body::after{
     height:20px;
 
     object-fit:contain;
-
+display: flex;
+justify-content: center;
+align-items: center;
 }
 
 
 .icon-symbol{
 
     font-size:20px;
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
@@ -481,24 +416,16 @@ body::after{
 
     border:1px solid var(--border);
 
-    border-radius:34px;
+    border-radius:32px;
 
-    background:
-
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.12),
-            rgba(255,255,255,.035)
-        );
-
-    backdrop-filter:blur(25px);
-
-    -webkit-backdrop-filter:blur(25px);
+    background:#111115;
 
     box-shadow:var(--shadow);
 
 }
 
+
+/* detalhe discreto */
 
 .hero::before{
 
@@ -506,44 +433,17 @@ body::after{
 
     position:absolute;
 
-    width:280px;
-    height:280px;
+    width:190px;
+    height:190px;
 
-    right:-130px;
-    top:-150px;
+    right:-105px;
+    top:-105px;
 
     border-radius:50%;
 
     background:
 
-        radial-gradient(
-            circle,
-            rgba(255,127,159,.28),
-            transparent 70%
-        );
-
-    filter:blur(8px);
-
-    animation:glow 4s ease-in-out infinite;
-
-}
-
-
-.hero::after{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-
-        linear-gradient(
-            120deg,
-            rgba(255,255,255,.09),
-            transparent 32%
-        );
+        rgba(255,105,145,.08);
 
     pointer-events:none;
 
@@ -637,14 +537,11 @@ body::after{
 
     color:#9dffbd;
 
-    background:
-
-        rgba(99,245,154,.07);
+    background:#101b15;
 
     border:
-
         1px solid
-        rgba(99,245,154,.12);
+        rgba(99,245,154,.14);
 
     font-size:.62rem;
 
@@ -664,7 +561,7 @@ body::after{
 
     box-shadow:
 
-        0 0 12px var(--green);
+        0 0 10px var(--green);
 
     animation:pulse 1.5s infinite;
 
@@ -746,14 +643,11 @@ body::after{
 
     color:var(--muted);
 
-    background:
-
-        rgba(255,255,255,.055);
+    background:#18181d;
 
     border:
-
         1px solid
-        rgba(255,255,255,.06);
+        rgba(255,255,255,.07);
 
     font-size:.65rem;
 
@@ -804,9 +698,7 @@ body::after{
 
     border-radius:999px;
 
-    background:
-
-        rgba(255,255,255,.075);
+    background:#202025;
 
 }
 
@@ -829,16 +721,17 @@ body::after{
 
     box-shadow:
 
-        0 0 18px
-        rgba(255,127,159,.45);
+        0 0 14px
+        rgba(255,127,159,.35);
 
-    transition:width .4s linear;
+    transition:
+        width .4s linear;
 
 }
 
 
 /* =========================================================
-   INFORMAÇÕES
+   TÍTULO DA SEÇÃO
 ========================================================= */
 
 .section-title{
@@ -855,6 +748,10 @@ body::after{
 
 }
 
+
+/* =========================================================
+   INFORMAÇÕES
+========================================================= */
 
 .info-grid{
 
@@ -879,22 +776,19 @@ body::after{
     padding:14px 11px;
 
     border:
+        1px solid var(--border);
 
-        1px solid
-        var(--border);
+    border-radius:20px;
 
-    border-radius:21px;
+    background:#111115;
 
-    background:var(--glass);
-
-    backdrop-filter:blur(16px);
-
-    -webkit-backdrop-filter:blur(16px);
+    box-shadow:
+        0 8px 22px rgba(0,0,0,.20);
 
     transition:
 
-        transform .2s ease,
-        background .2s ease;
+        transform .18s ease,
+        background .18s ease;
 
 }
 
@@ -903,7 +797,7 @@ body::after{
 
     transform:translateY(-2px);
 
-    background:var(--glass2);
+    background:#151519;
 
 }
 
@@ -914,17 +808,16 @@ body::after{
 
     position:absolute;
 
-    width:55px;
-    height:55px;
+    width:45px;
+    height:45px;
 
-    right:-30px;
-    bottom:-30px;
+    right:-25px;
+    bottom:-25px;
 
     border-radius:50%;
 
     background:
-
-        rgba(255,127,159,.09);
+        rgba(255,127,159,.06);
 
 }
 
@@ -980,17 +873,14 @@ body::after{
     padding:18px;
 
     border:
+        1px solid var(--border);
 
-        1px solid
-        var(--border);
+    border-radius:23px;
 
-    border-radius:25px;
+    background:#111115;
 
-    background:var(--glass);
-
-    backdrop-filter:blur(18px);
-
-    -webkit-backdrop-filter:blur(18px);
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.22);
 
 }
 
@@ -1055,9 +945,9 @@ body::after{
 
     border:0;
 
-    border-radius:16px;
+    border-radius:150px;
 
-    color:white;
+    color:#fff;
 
     background:
 
@@ -1075,20 +965,20 @@ body::after{
 
     box-shadow:
 
-        0 8px 25px
-        rgba(255,79,120,.20);
+        0 8px 22px
+        rgba(255,79,120,.18);
 
     transition:
 
-        transform .2s ease,
-        filter .2s ease;
+        transform .18s ease,
+        filter .18s ease;
 
 }
 
 
 .location-button:hover{
 
-    filter:brightness(1.08);
+    filter:brightness(1.07);
 
     transform:translateY(-1px);
 
@@ -1103,115 +993,6 @@ body::after{
 
 
 /* =========================================================
-   NAV
-========================================================= */
-
-.bottom-nav{
-
-    position:fixed;
-
-    left:50%;
-
-    bottom:
-
-        max(
-            12px,
-            env(safe-area-inset-bottom)
-        );
-
-    transform:translateX(-50%);
-
-    z-index:100;
-
-    width:min(250px,80%);
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:8px;
-
-    padding:8px;
-
-    border:
-
-        1px solid
-        rgba(255,255,255,.10);
-
-    border-radius:999px;
-
-    background:
-
-        rgba(20,20,23,.78);
-
-    backdrop-filter:blur(25px);
-
-    -webkit-backdrop-filter:blur(25px);
-
-    box-shadow:
-
-        0 15px 50px
-        rgba(0,0,0,.5);
-
-}
-
-
-.nav-btn{
-
-    width:54px;
-    height:45px;
-
-    border:0;
-
-    border-radius:16px;
-
-    color:var(--muted);
-
-    background:transparent;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    cursor:pointer;
-
-    font-size:19px;
-
-    transition:.2s ease;
-
-}
-
-
-.nav-btn:hover{
-
-    color:white;
-
-    background:rgba(255,255,255,.08);
-
-}
-
-
-.nav-btn:active{
-
-    transform:scale(.90);
-
-}
-
-
-.nav-btn.active{
-
-    color:white;
-
-    background:rgba(255,255,255,.10);
-
-}
-
-
-/* =========================================================
    TOAST
 ========================================================= */
 
@@ -1221,7 +1002,11 @@ body::after{
 
     left:50%;
 
-    bottom:95px;
+    bottom:
+        max(
+            22px,
+            env(safe-area-inset-bottom)
+        );
 
     z-index:200;
 
@@ -1235,23 +1020,17 @@ body::after{
     padding:11px 15px;
 
     border:
-
         1px solid
         rgba(255,255,255,.10);
 
     border-radius:999px;
 
-    color:white;
+    color:#fff;
 
-    background:
+    background:#19191d;
 
-        rgba(25,25,28,.92);
-
-    backdrop-filter:blur(20px);
-
-    -webkit-backdrop-filter:blur(20px);
-
-    box-shadow:var(--shadow);
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.40);
 
     font-size:.68rem;
 
@@ -1304,8 +1083,10 @@ body::after{
         width:42px;
         height:42px;
 
-        border-radius:15px;
-
+        border-radius:14px;
+display: flex;
+justify-content: center;
+align-items: center;
     }
 
 
@@ -1313,7 +1094,7 @@ body::after{
 
         padding:21px;
 
-        border-radius:29px;
+        border-radius:28px;
 
     }
 
@@ -1413,6 +1194,10 @@ body::after{
 
 }
 
+svg {
+width: 25px;
+height: 25px;
+}
 </style>
 
 </head>
@@ -1450,10 +1235,11 @@ body::after{
                 onclick="carregarLocalizacao(true)"
                 aria-label="Atualizar localização"
                 title="Atualizar localização"
+                type="button"
             >
 
                 <span class="icon-symbol">
-                    ↻
+                    <svg viewBox="0 0 512 512" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#ffffff;} </style> <g id="Layer_1"></g> <g id="Layer_2"> <g> <path class="st0" d="M274.91,47.78c-97.6,0-179.71,67.5-202.15,158.26L58.79,181.4c-4.36-7.69-14.12-10.39-21.81-6.03 c-7.69,4.36-10.39,14.12-6.03,21.81l37.66,66.44c0,0,0,0.01,0.01,0.01l0.15,0.26c0.19,0.34,0.39,0.66,0.6,0.98 c0.01,0.01,0.02,0.03,0.03,0.04c0.04,0.07,0.09,0.13,0.14,0.19c0.23,0.33,0.46,0.64,0.71,0.95c0.04,0.05,0.07,0.1,0.11,0.15 c0,0,0,0.01,0.01,0.01c0.02,0.02,0.04,0.04,0.06,0.07c0.36,0.44,0.75,0.85,1.15,1.24c0.04,0.04,0.07,0.07,0.11,0.1 c0.25,0.23,0.5,0.46,0.76,0.67c0.05,0.04,0.1,0.08,0.15,0.12c0.35,0.28,0.71,0.55,1.08,0.81c0.03,0.02,0.06,0.04,0.09,0.06 c0.17,0.11,0.35,0.22,0.52,0.33c0.09,0.06,0.18,0.11,0.28,0.17c0.12,0.07,0.25,0.14,0.38,0.21c0.11,0.06,0.22,0.12,0.33,0.17 c0.2,0.1,0.39,0.2,0.59,0.3c0.11,0.05,0.22,0.1,0.33,0.15c0,0,0.01,0,0.01,0.01c0.12,0.05,0.24,0.11,0.36,0.16 c0.33,0.14,0.66,0.26,1,0.37c0.04,0.02,0.09,0.03,0.13,0.04c0.02,0.01,0.03,0.01,0.05,0.02c0.15,0.05,0.31,0.09,0.47,0.14 c0.29,0.09,0.59,0.16,0.89,0.23c0.08,0.02,0.15,0.04,0.23,0.06c0.07,0.02,0.14,0.03,0.22,0.05c0.44,0.09,0.89,0.15,1.33,0.2 c0.04,0,0.07,0.01,0.11,0.02c0.08,0.01,0.15,0.01,0.23,0.02c0.49,0.05,0.98,0.08,1.48,0.08c0.42,0,0.84-0.02,1.26-0.06 c0.07-0.01,0.14-0.01,0.21-0.02c0.01,0,0.03,0,0.04,0c0.06-0.01,0.12-0.01,0.19-0.02c0.28-0.03,0.55-0.07,0.83-0.11 c0.08-0.01,0.16-0.02,0.24-0.04c0.13-0.02,0.25-0.04,0.38-0.07c0.06-0.01,0.12-0.03,0.19-0.04c0.4-0.09,0.81-0.19,1.21-0.31 c0.1-0.03,0.2-0.06,0.3-0.09c0.11-0.03,0.21-0.07,0.32-0.11c0.14-0.05,0.28-0.1,0.42-0.15c0.17-0.06,0.33-0.12,0.5-0.19 c0.1-0.04,0.2-0.09,0.3-0.13c0.13-0.06,0.26-0.12,0.39-0.18c0.19-0.09,0.37-0.19,0.56-0.28c0.13-0.07,0.25-0.13,0.38-0.2 c0.28-0.15,0.55-0.33,0.82-0.5c0.15-0.09,0.3-0.18,0.45-0.28c0.06-0.04,0.11-0.08,0.17-0.12c0.17-0.12,0.34-0.25,0.5-0.38 c0.06-0.04,0.12-0.09,0.18-0.13c0.11-0.09,0.23-0.17,0.34-0.26c0,0,0.01-0.01,0.01-0.01l59.04-48.93 c6.8-5.64,7.75-15.72,2.11-22.53c-5.64-6.8-15.73-7.75-22.53-2.11l-28.84,23.9c17.18-79.28,87.87-138.87,172.22-138.87 c97.17,0,176.22,79.05,176.22,176.22s-79.05,176.22-176.22,176.22c-8.84,0-16,7.16-16,16s7.16,16,16,16 c114.81,0,208.22-93.41,208.22-208.22S389.72,47.78,274.91,47.78z"></path> <path class="st0" d="M274.91,147.61c-8.84,0-16,7.16-16,16V256c0,8.84,7.16,16,16,16h75.87c8.84,0,16-7.16,16-16s-7.16-16-16-16 h-59.87v-76.39C290.91,154.77,283.74,147.61,274.91,147.61z"></path> </g> </g> </g></svg>
                 </span>
 
             </button>
@@ -1464,6 +1250,7 @@ body::after{
                 onclick="toggleTelaCheia()"
                 aria-label="Tela cheia"
                 title="Tela cheia"
+                type="button"
             >
 
                 <img
@@ -1479,7 +1266,7 @@ body::after{
 
 
     <!-- =====================================================
-         RELÓGIO PRINCIPAL
+         RELÓGIO
     ====================================================== -->
 
     <main>
@@ -1508,9 +1295,7 @@ body::after{
 
                     <div class="location-status">
 
-                        <span>
-                            📍
-                        </span>
+                        <span></span>
 
                         <span id="locationStatus">
                             Detectando localização
@@ -1552,7 +1337,7 @@ body::after{
                 class="timezone"
                 id="mainTimezone"
             >
-                🌐 Detectando fuso...
+                Detectando fuso...
             </div>
 
 
@@ -1595,7 +1380,6 @@ body::after{
 
 
         <section class="info-grid">
-
 
             <div class="info">
 
@@ -1724,12 +1508,11 @@ body::after{
 
             </div>
 
-
         </section>
 
 
         <!-- =================================================
-             STATUS DA LOCALIZAÇÃO
+             STATUS
         ================================================== -->
 
         <section class="status-card">
@@ -1764,8 +1547,9 @@ body::after{
             <button
                 class="location-button"
                 onclick="carregarLocalizacao(true)"
+                type="button"
             >
-                📍 Atualizar localização
+                 Atualizar localização
             </button>
 
         </section>
@@ -1776,21 +1560,13 @@ body::after{
 
 
 <!-- =========================================================
-     NAV
-========================================================= -->
-
-
-
-<!-- =========================================================
      TOAST
 ========================================================= -->
 
 <div
     class="toast"
     id="toast"
->
-    Localização atualizada
-</div>
+></div>
 
 
 <script>
@@ -1829,30 +1605,6 @@ let localTimezone =
     Intl.DateTimeFormat()
         .resolvedOptions()
         .timeZone;
-
-
-/* =========================================================
-   FORMATAR HORÁRIO
-========================================================= */
-
-function formatTime(date, zone){
-
-    return new Intl.DateTimeFormat(
-        "pt-BR",
-        {
-            timeZone:zone,
-
-            hour:"2-digit",
-
-            minute:"2-digit",
-
-            second:"2-digit",
-
-            hour12:false
-        }
-    ).format(date);
-
-}
 
 
 /* =========================================================
@@ -2015,8 +1767,7 @@ function getDayOfYear(
     return Math.floor(
         (
             current - start
-        ) /
-        86400000
+        ) / 86400000
     ) + 1;
 
 }
@@ -2070,8 +1821,7 @@ function getWeekNumber(
         (
             (
                 utc - yearStart
-            ) /
-            86400000
+            ) / 86400000
             + 1
         ) / 7
     );
@@ -2080,7 +1830,7 @@ function getWeekNumber(
 
 
 /* =========================================================
-   PROGRESSO DO DIA
+   PROGRESSO
 ========================================================= */
 
 function getDayProgress(
@@ -2099,15 +1849,14 @@ function getDayProgress(
 
 
     return (
-        seconds /
-        86400
+        seconds / 86400
     ) * 100;
 
 }
 
 
 /* =========================================================
-   ATUALIZAR INFORMAÇÕES
+   ATUALIZAR
 ========================================================= */
 
 function updateInfo(){
@@ -2138,14 +1887,9 @@ function updateInfo(){
             .padStart(2,"0");
 
 
-    /* RELÓGIO */
-
     mainClock.innerHTML =
-
         `${hour}:${minute}<span>:${second}</span>`;
 
-
-    /* DATA */
 
     let dateText =
         formatDate(
@@ -2155,8 +1899,7 @@ function updateInfo(){
 
 
     dateText =
-        dateText.charAt(0)
-        .toUpperCase()
+        dateText.charAt(0).toUpperCase()
         + dateText.slice(1);
 
 
@@ -2164,18 +1907,14 @@ function updateInfo(){
         dateText;
 
 
-    /* FUSO */
-
     mainTimezone.textContent =
-        `🌐 ${localTimezone} · ${
+        ` ${localTimezone} · ${
             getTimezoneOffset(
                 localTimezone,
                 now
             )
         }`;
 
-
-    /* PROGRESSO */
 
     const progress =
         getDayProgress(
@@ -2196,15 +1935,11 @@ function updateInfo(){
             `${progress.toFixed(1)}%`;
 
 
-    /* ANO */
-
     document
         .getElementById("yearValue")
         .textContent =
             parts.year;
 
-
-    /* SEMESTRE */
 
     document
         .getElementById("semesterValue")
@@ -2213,8 +1948,6 @@ function updateInfo(){
                 ? "1º"
                 : "2º";
 
-
-    /* MÊS */
 
     const monthName =
         new Intl.DateTimeFormat(
@@ -2232,15 +1965,12 @@ function updateInfo(){
     document
         .getElementById("monthValue")
         .textContent =
-            monthName
-                .replace(
-                    /^./,
-                    char =>
-                        char.toUpperCase()
-                );
+            monthName.replace(
+                /^./,
+                char =>
+                    char.toUpperCase()
+            );
 
-
-    /* SEMANA */
 
     document
         .getElementById("weekValue")
@@ -2251,8 +1981,6 @@ function updateInfo(){
             );
 
 
-    /* BIMESTRE */
-
     document
         .getElementById("bimesterValue")
         .textContent =
@@ -2260,8 +1988,6 @@ function updateInfo(){
                 parts.month / 2
             )}º`;
 
-
-    /* QUINZENA */
 
     document
         .getElementById("fortnightValue")
@@ -2271,8 +1997,6 @@ function updateInfo(){
                 : "2ª";
 
 
-    /* DIA DO ANO */
-
     document
         .getElementById("yearDayValue")
         .textContent =
@@ -2281,8 +2005,6 @@ function updateInfo(){
                 localTimezone
             );
 
-
-    /* UTC */
 
     document
         .getElementById("utcValue")
@@ -2332,7 +2054,6 @@ async function carregarLocalizacao(
 
             const latitude =
                 position.coords.latitude;
-
 
             const longitude =
                 position.coords.longitude;
@@ -2536,13 +2257,16 @@ function showToast(message){
 
 
     toastTimer =
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            toast.classList.remove(
-                "show"
-            );
+                toast.classList.remove(
+                    "show"
+                );
 
-        },2500);
+            },
+            2500
+        );
 
 }
 
@@ -2568,11 +2292,8 @@ start();
 ========================================================= */
 
 setInterval(
-
     updateInfo,
-
     1000
-
 );
 
 

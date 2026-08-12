@@ -154,37 +154,6 @@ body {
    FUNDO
 ========================================================= */
 
-body::before {
-
-    content: "";
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: -3;
-
-    background:
-
-        radial-gradient(
-            circle at 50% -10%,
-            rgba(255,142,175,.17),
-            transparent 38%
-        ),
-
-        radial-gradient(
-            circle at 100% 100%,
-            rgba(125,90,255,.08),
-            transparent 35%
-        ),
-
-        linear-gradient(
-            145deg,
-            #07080b,
-            #0b0c11
-        );
-}
-
 
 body::after {
 
@@ -1581,36 +1550,6 @@ textarea::placeholder {
      CONTROLES
 ======================================================= -->
 
-<div class="controls">
-
-
-    <button
-        class="control-button"
-        onclick="voltarPagina()"
-        aria-label="Página anterior"
-    >
-        ←
-    </button>
-
-
-    <div class="hint">
-        Deslize para virar
-    </div>
-
-
-    <div class="control-spacer"></div>
-
-
-    <button
-        class="control-button"
-        onclick="virarProxima()"
-        aria-label="Próxima página"
-    >
-        →
-    </button>
-
-
-</div>
 
 
 <script>

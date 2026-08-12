@@ -90,29 +90,15 @@ body{
     color:var(--texto);
 
     background: black;
-
+margin-top: 8%;
+margin-bottom: 18%;
     background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
     background-attachment:fixed;
 }
 
-body::before{
-    content:"";
-    position:fixed;
-    inset:0;
 
-    pointer-events:none;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(0,0,0,.20),
-            rgba(0,0,0,.55)
-        );
-
-    z-index:-1;
-}
 
 /* =========================================================
    APP
@@ -142,7 +128,7 @@ body::before{
 ========================================================= */
 
 .topo{
-    position:sticky;
+    position:relative;
     top:0;
     z-index:100;
 
@@ -154,16 +140,22 @@ body::before{
 
     margin-bottom:8px;
 
-    background:
-        linear-gradient(
-            180deg,
-            rgba(8,8,8,.92),
-            rgba(8,8,8,.70),
-            transparent
-        );
+    /* Fundo sólido */
+    background:#000;
+    border-radius: 200px;
+    width: 95%;
+    margin: 2.5%;
+    /* REMOVE O EFEITO FOSCO */
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
 
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
+    /* Evita qualquer transparência */
+    isolation:isolate;
+}
+
+.topo::before,
+.topo::after{
+    display:none;
 }
 
 .topo-esquerda{
@@ -921,6 +913,10 @@ body::before{
    MODAL
 ========================================================= */
 
+/* =========================================================
+   MODAL
+========================================================= */
+
 #modal{
     position:fixed;
     inset:0;
@@ -931,17 +927,155 @@ body::before{
     align-items:flex-end;
     justify-content:center;
 
-    padding:15px;
+    /*
+     * Espaço lateral e inferior.
+     * O safe-area evita que o modal fique colado
+     * na área de navegação do celular.
+     */
+    padding:
+        15px
+        15px
+        max(20px, env(safe-area-inset-bottom));
 
     background:rgba(0,0,0,.65);
 
     backdrop-filter:blur(10px);
     -webkit-backdrop-filter:blur(10px);
+
+    overflow:hidden;
 }
 
 #modal.aberto{
     display:flex;
+
     animation:modalFundo .25s ease;
+}
+
+@keyframes modalFundo{
+    from{
+        opacity:0;
+    }
+
+    to{
+        opacity:1;
+    }
+}
+
+
+/* =========================================================
+   CONTEÚDO DO MODAL
+========================================================= */
+
+.modal-conteudo{
+    position:relative;
+
+    width:min(650px,100%);
+
+    /*
+     * Nunca ocupa toda a tela.
+     */
+    max-height:
+        calc(
+            90vh - max(20px, env(safe-area-inset-bottom))
+        );
+
+    /*
+     * Espaço interno + espaço inferior.
+     */
+    padding:
+        22px
+        22px
+        28px;
+
+    /*
+     * Garante espaço para conteúdo rolável.
+     */
+    margin-bottom:
+        max(5px, env(safe-area-inset-bottom));
+
+    overflow-y:auto;
+    overflow-x:hidden;
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+    border-radius:
+        32px
+        32px
+        20px
+        20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(35,35,35,.97),
+            rgba(12,12,12,.97)
+        );
+
+    box-shadow:
+        0 -20px 80px
+        rgba(0,0,0,.45);
+
+    animation:
+        modalSubir
+        .35s
+        cubic-bezier(.2,.8,.2,1);
+}
+
+
+@keyframes modalSubir{
+
+    from{
+        transform:translateY(60px);
+        opacity:0;
+    }
+
+    to{
+        transform:translateY(0);
+        opacity:1;
+    }
+}
+
+
+/* =========================================================
+   BARRINHA DO MODAL
+========================================================= */
+
+.modal-conteudo::before{
+    content:"";
+
+    position:absolute;
+
+    top:9px;
+    left:50%;
+
+    width:45px;
+    height:4px;
+
+    transform:translateX(-50%);
+
+    border-radius:999px;
+
+    background:
+        rgba(255,255,255,.20);
+}
+
+
+/* =========================================================
+   TOPO DO MODAL
+========================================================= */
+
+.modal-topo{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:18px;
+
+    padding-top:8px;
 }
 
 @keyframes modalFundo{
@@ -1095,7 +1229,9 @@ body::before{
 
     display:flex;
     align-items:center;
-    gap:9px;
+    justify-content:flex-start;
+
+    gap:10px;
 
     min-height:43px;
 
@@ -1111,7 +1247,9 @@ body::before{
 
     font-size:11px;
 
-    transition:.2s;
+    transition:
+        background .2s ease,
+        border-color .2s ease;
 }
 
 .check:hover{
@@ -1119,7 +1257,16 @@ body::before{
 }
 
 .check input{
+    width:18px;
+    height:18px;
+
+    flex:0 0 18px;
+
+    margin:0;
+
     accent-color:var(--rosa);
+
+    cursor:pointer;
 }
 
 .salvar{
@@ -1172,6 +1319,10 @@ body::before{
 
     .topo{
         height:76px;
+        background:#000;
+    border-radius: 200px;
+    width: 95%;
+    margin: 2.5%;
     }
 
     .titulo{
@@ -1204,9 +1355,27 @@ body::before{
     }
 
     .modal-conteudo{
-        padding:18px;
-        border-radius:29px 29px 18px 18px;
-    }
+    width:100%;
+
+    max-height:
+        calc(
+            88vh - env(safe-area-inset-bottom)
+        );
+
+    padding:
+        18px
+        18px
+        max(30px, calc(28px + env(safe-area-inset-bottom)));
+
+    margin-bottom:
+        max(6px, env(safe-area-inset-bottom));
+
+    border-radius:
+        29px
+        29px
+        18px
+        18px;
+}
 }
 
 @media(max-width:370px){
