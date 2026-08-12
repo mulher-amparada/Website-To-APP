@@ -1,4 +1,4 @@
-package com.webviewtemplate.webviewtemplate1
+package com.assist
 
 import android.Manifest
 import android.app.admin.DevicePolicyManager
@@ -45,53 +45,51 @@ class MainActivity : AppCompatActivity() {
 
 
         WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
+    window,
+    false
+)
 
+window.apply {
 
-        window.apply {
+    addFlags(
+        WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
+    )
 
-            addFlags(
-                WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
-            )
+    statusBarColor = Color.TRANSPARENT
+    navigationBarColor = Color.TRANSPARENT
 
-            statusBarColor = Color.TRANSPARENT
-            navigationBarColor = Color.TRANSPARENT
+    if (Build.VERSION.SDK_INT >= 28) {
+        navigationBarDividerColor = Color.TRANSPARENT
+    }
 
+    if (Build.VERSION.SDK_INT >= 29) {
+        isStatusBarContrastEnforced = false
+        isNavigationBarContrastEnforced = false
+    }
+}
 
-            if (android.os.Build.VERSION.SDK_INT >= 28) {
-                navigationBarDividerColor = Color.TRANSPARENT
-            }
+WindowInsetsControllerCompat(
+    window,
+    window.decorView
+).apply {
 
+    hide(
+        WindowInsetsCompat.Type.systemBars()
+    )
 
-            if (android.os.Build.VERSION.SDK_INT >= 29) {
-                isStatusBarContrastEnforced = false
-                isNavigationBarContrastEnforced = false
-            }
+    systemBarsBehavior =
+        WindowInsetsControllerCompat
+            .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
+    isAppearanceLightStatusBars = false
+    isAppearanceLightNavigationBars = false
+}
 
-            decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        }
+val root = FrameLayout(this)
 
+root.setBackgroundColor(Color.BLACK)
 
-        WindowInsetsControllerCompat(
-            window,
-            window.decorView
-        ).apply {
-
-            isAppearanceLightStatusBars = false
-            isAppearanceLightNavigationBars = false
-        }
-
-
-        val root = FrameLayout(this)
-        root.setBackgroundColor(Color.BLACK)
-
-        setContentView(root)
+setContentView(root)
         
         
 
