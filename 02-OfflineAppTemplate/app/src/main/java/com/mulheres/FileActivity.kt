@@ -2,6 +2,7 @@ package com.mulheres
 
 import android.app.Activity
 import android.graphics.Typeface
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.content.Intent
@@ -40,30 +41,30 @@ class FileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        val controller = WindowInsetsControllerCompat(
-            window,
-            window.decorView
-        )
+val controller = WindowInsetsControllerCompat(
+    window,
+    window.decorView
+)
 
-        controller.show(WindowInsetsCompat.Type.systemBars())
-        controller.systemBarsBehavior =
-            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+controller.hide(WindowInsetsCompat.Type.systemBars())
 
-        controller.isAppearanceLightStatusBars = false
-        controller.isAppearanceLightNavigationBars = false
+controller.systemBarsBehavior =
+    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
-        window.statusBarColor = 0
-        window.navigationBarColor = 0
+controller.isAppearanceLightStatusBars = false
+controller.isAppearanceLightNavigationBars = false
 
-        if (Build.VERSION.SDK_INT >= 29) {
-            window.isNavigationBarContrastEnforced = false
-        }
+window.statusBarColor = Color.TRANSPARENT
+window.navigationBarColor = Color.TRANSPARENT
 
+if (Build.VERSION.SDK_INT >= 29) {
+    window.isNavigationBarContrastEnforced = false
+}
 
-        setContentView(R.layout.activity_file)
-
+setContentView(R.layout.activity_file)
+        
 val raiz = findViewById<View>(
     android.R.id.content
 )
