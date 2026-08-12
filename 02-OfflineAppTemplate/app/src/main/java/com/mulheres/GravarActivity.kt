@@ -39,29 +39,34 @@ class GravarActivity : AppCompatActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)  
 
-val controller = WindowInsetsControllerCompat(window, window.decorView)  
-controller.show(WindowInsetsCompat.Type.systemBars())  
-controller.systemBarsBehavior =  
-    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE  
-controller.isAppearanceLightStatusBars = false  
-controller.isAppearanceLightNavigationBars = false  
+WindowCompat.setDecorFitsSystemWindows(window, false)
 
-window.statusBarColor = Color.BLACK  
-window.navigationBarColor = Color.BLACK  
+val controller = WindowInsetsControllerCompat(
+    window,
+    window.decorView
+)
 
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {  
-    window.isNavigationBarContrastEnforced = false  
-}  
+controller.hide(WindowInsetsCompat.Type.systemBars())
 
-WindowCompat.setDecorFitsSystemWindows(window, false)  
+controller.systemBarsBehavior =
+    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
-ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, insets ->  
-    insets.getInsets(WindowInsetsCompat.Type.systemBars())  
-    view.setPadding(0, 0, 0, 0)  
-    insets  
-}  
+controller.isAppearanceLightStatusBars = false
+controller.isAppearanceLightNavigationBars = false
 
-        setContentView(R.layout.activity_gravar)
+window.statusBarColor = Color.TRANSPARENT
+window.navigationBarColor = Color.TRANSPARENT
+
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+    window.isNavigationBarContrastEnforced = false
+}
+
+ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, insets ->
+    view.setPadding(0, 0, 0, 0)
+    insets
+}
+
+setContentView(R.layout.activity_gravar)
 
 val raiz = findViewById<View>(
     android.R.id.content
