@@ -25,13 +25,8 @@
 ========================================================= */
 
 @font-face {
-
     font-family: "Quicksand";
-
-    src:
-        url("font.ttf")
-        format("truetype");
-
+    src: url("font.ttf") format("truetype");
     font-display: swap;
 }
 
@@ -42,45 +37,23 @@
 
 :root {
 
-    --accent:
-        #ff8eaf;
+    --accent: #ff8eaf;
+    --accent-light: #ffc1d2;
+    --accent-dark: #e96d92;
 
-    --accent-light:
-        #ffc1d2;
+    --background: #08090d;
 
-    --accent-dark:
-        #e96d92;
+    --surface: rgba(255,255,255,.055);
+    --surface-strong: rgba(255,255,255,.08);
 
-    --background:
-        #08090d;
+    --border: rgba(255,255,255,.10);
+    --border-light: rgba(255,255,255,.16);
 
-    --surface:
-        rgba(255,255,255,.065);
+    --text: #fff;
+    --muted: rgba(255,255,255,.48);
 
-    --surface-strong:
-        rgba(255,255,255,.095);
-
-    --border:
-        rgba(255,255,255,.11);
-
-    --border-light:
-        rgba(255,255,255,.17);
-
-    --text:
-        #ffffff;
-
-    --muted:
-        rgba(255,255,255,.48);
-
-    --page:
-        #fff8fa;
-
-    --page-text:
-        #292127;
-
-    --shadow:
-        0 30px 80px
-        rgba(0,0,0,.55);
+    --page: #ffc0d0;
+    --page-text: #292127;
 }
 
 
@@ -88,161 +61,68 @@
    RESET
 ========================================================= */
 
-* {
+*,
+*::before,
+*::after {
 
     margin: 0;
-
     padding: 0;
 
     box-sizing: border-box;
 
-    font-family:
-        "Quicksand",
-        sans-serif;
+    font-family: "Quicksand", sans-serif;
 
-    -webkit-tap-highlight-color:
-        transparent;
+    -webkit-tap-highlight-color: transparent;
 }
 
 
 html {
 
     width: 100%;
-
     min-height: 100%;
 
-    scroll-behavior:
-        smooth;
+    scroll-behavior: auto;
 }
 
 
 body {
 
     width: 100%;
-
     min-height: 100vh;
 
-    color:
-        var(--text);
+    color: var(--text);
 
-    overflow-x:
-        hidden;
+    overflow-x: hidden;
 
-    background:
-        black;
+    background: #000;
 
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    align-items:
-        center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     padding:
-        max(14px, env(safe-area-inset-top))
+        max(10px, env(safe-area-inset-top))
         0
-        max(18px, env(safe-area-inset-bottom));
+        max(14px, env(safe-area-inset-bottom));
 
-    position:
-        relative;
+    position: relative;
 }
 
 
 /* =========================================================
-   FUNDO
-========================================================= */
-
-
-body::after {
-
-    content: "";
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: -2;
-
-    pointer-events:
-        none;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(0,0,0,.05),
-            rgba(0,0,0,.3)
-        );
-}
-
-
-/* =========================================================
-   SCROLLBAR
-========================================================= */
-
-::-webkit-scrollbar {
-
-    width: 6px;
-
-    height: 6px;
-}
-
-
-::-webkit-scrollbar-track {
-
-    background:
-        transparent;
-}
-
-
-::-webkit-scrollbar-thumb {
-
-    background:
-        linear-gradient(
-            180deg,
-            var(--accent),
-            var(--accent-light)
-        );
-
-    border-radius:
-        999px;
-
-    border:
-        1px solid
-        rgba(255,255,255,.12);
-}
-
-
-::-webkit-scrollbar-corner {
-
-    background:
-        transparent;
-}
-
-
-/* =========================================================
-   ANIMAÇÕES
+   ANIMAÇÕES LEVES
 ========================================================= */
 
 @keyframes pageIn {
 
     from {
-
         opacity: 0;
-
-        transform:
-            translateY(18px)
-            scale(.985);
+        transform: translateY(10px);
     }
 
     to {
-
         opacity: 1;
-
-        transform:
-            translateY(0)
-            scale(1);
+        transform: translateY(0);
     }
 }
 
@@ -250,60 +130,13 @@ body::after {
 @keyframes floatIn {
 
     from {
-
         opacity: 0;
-
-        transform:
-            translateY(12px);
+        transform: translateY(8px);
     }
 
     to {
-
         opacity: 1;
-
-        transform:
-            translateY(0);
-    }
-}
-
-
-@keyframes glow {
-
-    0%,
-    100% {
-
-        box-shadow:
-            0 0 0
-            rgba(255,142,175,0);
-    }
-
-    50% {
-
-        box-shadow:
-            0 0 40px
-            rgba(255,142,175,.10);
-    }
-}
-
-
-@keyframes pageOpen {
-
-    from {
-
-        opacity: .4;
-
-        transform:
-            rotateY(-8deg)
-            scale(.985);
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            rotateY(0)
-            scale(1);
+        transform: translateY(0);
     }
 }
 
@@ -314,84 +147,37 @@ body::after {
 
 .topo {
 
-    position:
-        relative;
+    position: relative;
 
-    width:
-        min(92%, 900px);
+    width: min(92%, 900px);
 
-    min-height:
-        70px;
+    min-height: 66px;
 
-    display:
-        flex;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        15px;
+    gap: 14px;
 
     padding:
-        10px 12px 10px 20px;
+        9px
+        10px
+        9px
+        17px;
 
-    border:
-        1px solid
-        var(--border);
+    border: 1px solid var(--border);
 
-    border-radius:
-        24px;
+    border-radius: 999px;
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.085),
-            rgba(255,255,255,.035)
-        );
-
-    backdrop-filter:
-        blur(24px);
-
-    -webkit-backdrop-filter:
-        blur(24px);
+    background: #111;
 
     box-shadow:
-        0 15px 50px
-        rgba(0,0,0,.28);
+        0 10px 28px rgba(0,0,0,.28);
 
     animation:
-        pageIn .55s ease both;
+        pageIn .35s ease both;
 
-    z-index:
-        10;
-}
-
-
-.topo::after {
-
-    content: "";
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    border-radius:
-        inherit;
-
-    pointer-events:
-        none;
-
-    background:
-        linear-gradient(
-            120deg,
-            rgba(255,255,255,.08),
-            transparent 35%
-        );
+    z-index: 10;
 }
 
 
@@ -401,101 +187,75 @@ body::after {
 
 .diario-brand {
 
-    position:
-        relative;
+    display: flex;
+    align-items: center;
 
-    display:
-        flex;
+    gap: 11px;
 
-    align-items:
-        center;
-
-    gap:
-        12px;
-
-    min-width:
-        0;
+    min-width: 0;
 }
 
 
 .diario-icon {
 
-    width:
-        43px;
+    width: 42px;
+    height: 42px;
 
-    height:
-        43px;
+    flex: 0 0 42px;
 
-    flex:
-        0 0 43px;
+    display: grid;
+    place-items: center;
 
-    display:
-        grid;
+    border-radius: 14px;
 
-    place-items:
-        center;
+    color: #fff;
 
-    border-radius:
-        14px;
+    background: #000;
 
-    color:
-        #fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--accent),
-            var(--accent-light)
-        );
+    border:
+        1px solid
+        rgba(255,255,255,.08);
 
     box-shadow:
-        0 8px 25px
-        rgba(255,142,175,.22);
+        0 5px 14px rgba(0,0,0,.3);
 
-    font-size:
-        20px;
+    font-size: 19px;
 }
 
 
 .diario-info {
 
-    min-width:
-        0;
+    min-width: 0;
 }
 
 
 .diario-title {
 
-    font-size:
-        17px;
+    font-size: 17px;
 
-    font-weight:
-        700;
+    font-weight: 700;
 
-    letter-spacing:
-        -.3px;
+    letter-spacing: -.3px;
+
+    line-height: 1.1;
 }
 
 
 .diario-subtitle {
 
-    margin-top:
-        2px;
+    margin-top: 3px;
 
-    color:
-        var(--muted);
+    color: var(--muted);
 
-    font-size:
-        9px;
+    font-size: 9px;
 
-    white-space:
-        nowrap;
+    line-height: 1;
 
-    overflow:
-        hidden;
+    white-space: nowrap;
 
-    text-overflow:
-        ellipsis;
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
 
 
@@ -505,75 +265,50 @@ body::after {
 
 .voltar {
 
-    position:
-        relative;
+    width: 42px;
+    height: 42px;
 
-    width:
-        43px;
+    flex: 0 0 42px;
 
-    height:
-        43px;
-
-    flex:
-        0 0 43px;
-
-    display:
-        grid;
-
-    place-items:
-        center;
+    display: grid;
+    place-items: center;
 
     border:
         1px solid
         var(--border);
 
-    border-radius:
-        14px;
+    border-radius: 14px;
 
     background:
-        rgba(255,255,255,.055);
+        rgba(255,255,255,.045);
 
-    cursor:
-        pointer;
+    cursor: pointer;
 
     transition:
-        .2s ease;
+        transform .15s ease,
+        background .15s ease;
 
-    z-index:
-        2;
-}
-
-
-.voltar:hover {
-
-    background:
-        rgba(255,255,255,.10);
-
-    border-color:
-        var(--border-light);
+    z-index: 2;
 }
 
 
 .voltar:active {
 
-    transform:
-        scale(.9);
+    transform: scale(.92);
+
+    background:
+        rgba(255,255,255,.09);
 }
 
 
 .voltar img {
 
-    width:
-        21px;
+    width: 20px;
+    height: 20px;
 
-    height:
-        21px;
+    object-fit: contain;
 
-    object-fit:
-        contain;
-
-    opacity:
-        .8;
+    opacity: .8;
 }
 
 
@@ -583,17 +318,14 @@ body::after {
 
 .book-wrapper {
 
-    position:
-        relative;
+    position: relative;
 
-    width:
-        min(92%, 900px);
+    width: min(92%, 900px);
 
-    margin-top:
-        18px;
+    margin-top: 17px;
 
     animation:
-        floatIn .65s .08s ease both;
+        floatIn .4s .05s ease both;
 }
 
 
@@ -603,81 +335,59 @@ body::after {
 
 .page-indicator {
 
-    position:
-        absolute;
+    position: absolute;
 
-    top:
-        -13px;
+    top: -11px;
+    left: 50%;
 
-    left:
-        50%;
+    transform: translateX(-50%);
 
-    transform:
-        translateX(-50%);
+    z-index: 50;
 
-    z-index:
-        50;
+    display: flex;
+    align-items: center;
 
-    display:
-        flex;
+    gap: 6px;
 
-    align-items:
-        center;
-
-    gap:
-        7px;
-
-    padding:
-        6px 11px;
+    padding: 5px 10px;
 
     border:
         1px solid
-        var(--border);
+        rgba(255,255,255,.10);
 
-    border-radius:
-        999px;
+    border-radius: 999px;
 
     color:
-        rgba(255,255,255,.68);
+        rgba(255,255,255,.62);
 
     background:
-        rgba(12,12,16,.8);
-
-    backdrop-filter:
-        blur(15px);
-
-    -webkit-backdrop-filter:
-        blur(15px);
+        #111;
 
     box-shadow:
-        0 8px 25px
+        0 5px 14px
         rgba(0,0,0,.25);
 
-    font-size:
-        9px;
+    font-size: 9px;
 
-    pointer-events:
-        none;
+    pointer-events: none;
 }
 
 
 .page-dot {
 
-    width:
-        5px;
+    width: 5px;
+    height: 5px;
 
-    height:
-        5px;
+    flex: 0 0 5px;
 
-    border-radius:
-        50%;
+    border-radius: 50%;
 
     background:
         var(--accent);
 
     box-shadow:
-        0 0 8px
-        var(--accent);
+        0 0 6px
+        rgba(255,142,175,.65);
 }
 
 
@@ -687,92 +397,59 @@ body::after {
 
 .book {
 
-    position:
-        relative;
+    position: relative;
 
-    width:
-        100%;
+    width: 100%;
 
-    height:
-        min(76vh, 700px);
+    height: min(76vh, 700px);
 
-    min-height:
-        430px;
+    min-height: 430px;
 
-    perspective:
-        1800px;
+    perspective: 1400px;
 
-    transform-style:
-        preserve-3d;
+    transform-style: preserve-3d;
 
-    border-radius:
-        30px;
+    border-radius: 28px;
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.07),
-            rgba(255,255,255,.025)
-        );
+    background: #101014;
 
     border:
         1px solid
-        rgba(255,255,255,.10);
+        rgba(255,255,255,.09);
 
     box-shadow:
-        var(--shadow);
+        0 18px 42px
+        rgba(0,0,0,.42);
 
-    overflow:
-        visible;
-
-    animation:
-        glow 5s ease-in-out infinite;
+    overflow: visible;
 }
 
 
 /* =========================================================
-   EFEITO CAPA
+   CAMADAS DA CAPA
 ========================================================= */
 
 .book::before {
 
     content: "";
 
-    position:
-        absolute;
+    position: absolute;
 
-    left:
-        -7px;
+    left: -5px;
+    top: 6px;
 
-    top:
-        7px;
+    width: 100%;
+    height: 100%;
 
-    width:
-        100%;
+    border-radius: 28px;
 
-    height:
-        100%;
-
-    border-radius:
-        30px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #17151a,
-            #0c0c10
-        );
+    background: #151519;
 
     border:
         1px solid
-        rgba(255,255,255,.06);
+        rgba(255,255,255,.045);
 
-    z-index:
-        -2;
-
-    box-shadow:
-        -6px 8px 30px
-        rgba(0,0,0,.35);
+    z-index: -2;
 }
 
 
@@ -780,29 +457,19 @@ body::after {
 
     content: "";
 
-    position:
-        absolute;
+    position: absolute;
 
-    left:
-        6px;
+    left: 4px;
+    top: 11px;
 
-    top:
-        14px;
+    width: 100%;
+    height: 100%;
 
-    width:
-        100%;
+    border-radius: 28px;
 
-    height:
-        100%;
+    background: #0c0c10;
 
-    border-radius:
-        30px;
-
-    background:
-        #0d0d11;
-
-    z-index:
-        -3;
+    z-index: -3;
 }
 
 
@@ -812,27 +479,21 @@ body::after {
 
 .page {
 
-    position:
-        absolute;
+    position: absolute;
 
-    inset:
-        0;
+    inset: 0;
 
-    transform-style:
-        preserve-3d;
+    transform-style: preserve-3d;
 
-    transform-origin:
-        left center;
+    transform-origin: left center;
 
     transition:
-        transform .72s
-        cubic-bezier(.2,.72,.2,1);
+        transform .58s
+        cubic-bezier(.22,.7,.2,1);
 
-    border-radius:
-        29px;
+    border-radius: 27px;
 
-    animation:
-        pageOpen .5s ease both;
+    will-change: transform;
 }
 
 
@@ -842,32 +503,21 @@ body::after {
 
 .face {
 
-    position:
-        absolute;
+    position: absolute;
 
-    inset:
-        0;
+    inset: 0;
 
-    width:
-        100%;
+    width: 100%;
+    height: 100%;
 
-    height:
-        100%;
+    padding: 34px 31px;
 
-    padding:
-        35px 32px;
+    border-radius: inherit;
 
-    border-radius:
-        inherit;
+    overflow: hidden;
 
-    overflow:
-        hidden;
-
-    backface-visibility:
-        hidden;
-
-    -webkit-backface-visibility:
-        hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 
@@ -877,36 +527,16 @@ body::after {
 
 .front {
 
-    color:
-        var(--page-text);
+    color: var(--page-text);
 
-    background:
-
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,.75),
-            transparent 4%,
-            transparent 96%,
-            rgba(0,0,0,.035)
-        ),
-
-        repeating-linear-gradient(
-            0deg,
-            rgba(80,50,60,.035) 0px,
-            rgba(80,50,60,.035) 1px,
-            transparent 1px,
-            transparent 31px
-        ),
-
-        var(--page);
+    background: var(--page);
 
     box-shadow:
-        inset
-        0 0 60px
-        rgba(130,70,90,.06),
+        inset 0 0 35px
+        rgba(130,70,90,.07),
 
-        15px 20px 60px
-        rgba(0,0,0,.22);
+        8px 12px 30px
+        rgba(0,0,0,.16);
 }
 
 
@@ -916,24 +546,18 @@ body::after {
 
 .back {
 
-    color:
-        #fff;
+    color: #fff;
 
     background:
-
         linear-gradient(
             135deg,
             #e86f95,
             #b94870
         );
 
-    transform:
-        rotateY(180deg);
+    transform: rotateY(180deg);
 
-    box-shadow:
-        inset
-        0 0 80px
-        rgba(0,0,0,.14);
+    box-shadow: none;
 }
 
 
@@ -943,50 +567,38 @@ body::after {
 
 textarea {
 
-    position:
-        relative;
+    position: relative;
 
-    z-index:
-        2;
+    z-index: 2;
 
-    width:
-        100%;
+    display: block;
 
-    height:
-        100%;
+    width: 100%;
+    height: 100%;
 
-    padding:
-        4px;
+    padding: 3px;
 
-    border:
-        none;
+    border: 0;
+    outline: 0;
 
-    outline:
-        none;
+    resize: none;
 
-    resize:
-        none;
+    background: transparent;
 
-    background:
-        transparent;
+    color: var(--page-text);
 
-    color:
-        var(--page-text);
+    font-size: 16px;
 
-    font-size:
-        16px;
+    font-weight: 500;
 
-    font-weight:
-        500;
+    line-height: 1.9;
 
-    line-height:
-        1.95;
-
-    letter-spacing:
-        .15px;
+    letter-spacing: .1px;
 
     caret-color:
         var(--accent-dark);
+
+    -webkit-appearance: none;
 }
 
 
@@ -994,59 +606,6 @@ textarea::placeholder {
 
     color:
         rgba(60,35,45,.35);
-}
-
-
-/* =========================================================
-   LINHAS DO PAPEL
-========================================================= */
-
-.front::before {
-
-    content: "";
-
-    position:
-        absolute;
-
-    top:
-        0;
-
-    bottom:
-        0;
-
-    left:
-        52px;
-
-    width:
-        1px;
-
-    background:
-        rgba(220,100,125,.13);
-
-    pointer-events:
-        none;
-}
-
-
-.front::after {
-
-    content: "";
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(255,150,180,.08),
-            transparent 18%
-        );
-
-    pointer-events:
-        none;
 }
 
 
@@ -1067,117 +626,79 @@ textarea::placeholder {
 
 .controls {
 
-    width:
-        min(92%, 900px);
+    width: min(92%, 900px);
 
-    display:
-        flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    align-items:
-        center;
+    gap: 7px;
 
-    justify-content:
-        center;
+    margin-top: 13px;
 
-    gap:
-        8px;
-
-    margin-top:
-        14px;
-
-    padding:
-        8px;
+    padding: 7px;
 
     border:
         1px solid
         var(--border);
 
-    border-radius:
-        20px;
+    border-radius: 18px;
 
-    background:
-        rgba(255,255,255,.045);
+    background: #101014;
 
-    backdrop-filter:
-        blur(18px);
-
-    -webkit-backdrop-filter:
-        blur(18px);
+    box-shadow:
+        0 7px 20px
+        rgba(0,0,0,.25);
 
     animation:
-        floatIn .65s .15s ease both;
+        floatIn .4s .1s ease both;
 }
 
 
 /* =========================================================
-   BOTÕES DE CONTROLE
+   BOTÕES
 ========================================================= */
 
 .control-button {
 
-    width:
-        46px;
+    width: 45px;
+    height: 39px;
 
-    height:
-        40px;
-
-    display:
-        grid;
-
-    place-items:
-        center;
+    display: grid;
+    place-items: center;
 
     border:
         1px solid
         var(--border);
 
-    border-radius:
-        13px;
+    border-radius: 12px;
 
     color:
-        rgba(255,255,255,.75);
+        rgba(255,255,255,.72);
 
     background:
-        rgba(255,255,255,.045);
+        rgba(255,255,255,.035);
 
-    cursor:
-        pointer;
+    cursor: pointer;
 
     transition:
-        .2s ease;
-
-    font-size:
-        17px;
-}
-
-
-.control-button:hover {
-
-    color:
-        #fff;
-
-    background:
-        rgba(255,255,255,.09);
-
-    border-color:
-        var(--border-light);
+        transform .12s ease,
+        background .12s ease;
 }
 
 
 .control-button:active {
 
-    transform:
-        scale(.92);
+    transform: scale(.91);
+
+    background:
+        rgba(255,255,255,.09);
 }
 
 
-.control-button.danger:hover {
+.control-button.danger:active {
 
-    color:
-        #ff7182;
-
-    border-color:
-        rgba(255,113,130,.25);
+    color: #ff7182;
 
     background:
         rgba(255,113,130,.08);
@@ -1186,24 +707,20 @@ textarea::placeholder {
 
 .control-spacer {
 
-    flex:
-        1;
+    flex: 1;
 }
 
 
 .hint {
 
     color:
-        rgba(255,255,255,.3);
+        rgba(255,255,255,.28);
 
-    font-size:
-        9px;
+    font-size: 9px;
 
-    text-align:
-        center;
+    text-align: center;
 
-    white-space:
-        nowrap;
+    white-space: nowrap;
 }
 
 
@@ -1216,7 +733,7 @@ textarea::placeholder {
     body {
 
         padding-top:
-            max(9px, env(safe-area-inset-top));
+            max(8px, env(safe-area-inset-top));
     }
 
 
@@ -1225,63 +742,51 @@ textarea::placeholder {
         width:
             calc(100% - 22px);
 
-        min-height:
-            63px;
+        min-height: 61px;
 
         padding:
-            8px 9px 8px 14px;
+            8px
+            8px
+            8px
+            13px;
 
-        border-radius:
-            21px;
+        border-radius: 999px;
     }
 
 
     .diario-icon {
 
-        width:
-            38px;
+        width: 37px;
+        height: 37px;
 
-        height:
-            38px;
+        flex-basis: 37px;
 
-        flex-basis:
-            38px;
+        border-radius: 12px;
 
-        border-radius:
-            12px;
-
-        font-size:
-            17px;
+        font-size: 16px;
     }
 
 
     .diario-title {
 
-        font-size:
-            15px;
+        font-size: 15px;
     }
 
 
     .diario-subtitle {
 
-        font-size:
-            8px;
+        font-size: 8px;
     }
 
 
     .voltar {
 
-        width:
-            38px;
+        width: 37px;
+        height: 37px;
 
-        height:
-            38px;
+        flex-basis: 37px;
 
-        flex-basis:
-            38px;
-
-        border-radius:
-            12px;
+        border-radius: 12px;
     }
 
 
@@ -1290,67 +795,51 @@ textarea::placeholder {
         width:
             calc(100% - 22px);
 
-        margin-top:
-            16px;
+        margin-top: 15px;
     }
 
 
     .book {
 
         height:
-            calc(100vh - 185px);
+            calc(100vh - 178px);
 
-        min-height:
-            470px;
+        min-height: 450px;
 
-        max-height:
-            720px;
+        max-height: 720px;
 
-        border-radius:
-            24px;
+        border-radius: 23px;
     }
 
 
     .book::before,
     .book::after {
 
-        border-radius:
-            24px;
+        border-radius: 23px;
     }
 
 
     .page,
     .face {
 
-        border-radius:
-            23px;
+        border-radius: 22px;
     }
 
 
     .face {
 
         padding:
-            30px 22px;
-    }
-
-
-    .front::before {
-
-        left:
-            36px;
+            29px 21px;
     }
 
 
     textarea {
 
-        padding:
-            2px;
+        padding: 2px;
 
-        font-size:
-            15px;
+        font-size: 15px;
 
-        line-height:
-            1.9;
+        line-height: 1.88;
     }
 
 
@@ -1359,53 +848,50 @@ textarea::placeholder {
         width:
             calc(100% - 22px);
 
-        border-radius:
-            18px;
+        margin-top: 11px;
+
+        border-radius: 17px;
     }
 
 
     .hint {
 
-        display:
-            none;
+        display: none;
     }
 
 
     .control-button {
 
-        width:
-            44px;
-
-        height:
-            38px;
+        width: 43px;
+        height: 37px;
     }
 }
 
 
 /* =========================================================
-   TELAS MUITO PEQUENAS
+   TELAS PEQUENAS
 ========================================================= */
 
 @media (max-width: 360px) {
 
     .book {
 
-        min-height:
-            420px;
+        min-height: 410px;
     }
 
 
     .face {
 
         padding:
-            27px 18px;
+            26px 17px;
     }
 
 
     textarea {
 
-        font-size:
-            14px;
+        font-size: 14px;
+
+        line-height: 1.85;
     }
 }
 
@@ -1422,31 +908,28 @@ textarea::placeholder {
 
     .topo {
 
-        min-height:
-            58px;
+        min-height: 56px;
     }
 
 
     .book {
 
         height:
-            calc(100vh - 135px);
+            calc(100vh - 128px);
 
-        min-height:
-            300px;
+        min-height: 280px;
     }
 
 
     .controls {
 
-        margin-top:
-            9px;
+        margin-top: 8px;
     }
 }
 
 
 /* =========================================================
-   ACESSIBILIDADE
+   REDUÇÃO DE MOVIMENTO
 ========================================================= */
 
 @media (
@@ -1457,14 +940,9 @@ textarea::placeholder {
     *::before,
     *::after {
 
-        animation-duration:
-            .01ms !important;
+        animation: none !important;
 
-        animation-iteration-count:
-            1 !important;
-
-        transition-duration:
-            .01ms !important;
+        transition: none !important;
     }
 }
 
