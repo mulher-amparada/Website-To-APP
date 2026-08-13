@@ -1,738 +1,1309 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Neo Calc</title>
+
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+>
+
+<meta
+    name="theme-color"
+    content="#000000"
+>
+
+<title>Apps</title>
 
 <style>
 
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: Quicksand, sans-serif;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    color: white;
+    background: black;
+}
+
+
+/* =========================================================
+   FONTE
+========================================================= */
+
 @font-face {
-    font-family:"Quicksand";
-    src:url("font.ttf") format("truetype");
-    font-weight:400 800;
+
+    font-family: Quicksand;
+
+    src:
+        url("font.ttf")
+        format("truetype");
+
+    font-display: swap;
 }
 
-:root{
-    --bg:#000;
-    --panel:#101010;
-    --display:#080808;
-    --button:#1d1d1d;
-    --action:#303030;
-    --operator:#4f7cff;
-    --text:#fff;
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+
+    width: 5px;
+    height: 5px;
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Quicksand",sans-serif;
-    -webkit-tap-highlight-color:transparent;
+::-webkit-scrollbar-track {
+
+    background: transparent;
 }
 
-html,body{
-    width:100%;
-    min-height:100%;
-    background:var(--bg);
+::-webkit-scrollbar-thumb {
+
+    background: rgba(255,255,255,.12);
+
+    border-radius: 999px;
 }
 
-body{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:16px;
+
+/* =========================================================
+   FUNDO
+========================================================= */
+
+.fundo {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: -10;
+
+    background:
+
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(255,150,150,.12),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 100% 100%,
+            rgba(255,255,255,.025),
+            transparent 40%
+        ),
+
+        #000;
 }
 
-.calculadora{
-    width:100%;
-    max-width:380px;
+
+/* =========================================================
+   APP
+========================================================= */
+
+main {
+
+    width: 100%;
+
+    height: 100vh;
+
+    padding:
+        max(18px, env(safe-area-inset-top))
+        max(16px, env(safe-area-inset-right))
+        110px
+        max(16px, env(safe-area-inset-left));
 }
 
-/* VISOR */
 
-.tela{
-    width:100%;
-    height:120px;
-position: relative;
-    top:-65px;
-    padding:20px;
+/* =========================================================
+   TOPO
+========================================================= */
 
-    display:flex;
-    align-items:flex-end;
-    justify-content:flex-end;
+.top {
 
-    background:#000;
-    
-    border-radius:22px;
+    width: 100%;
 
-    color:var(--text);
-    font-size:42px;
-    font-weight:600;
+    height: 55px;
 
-    overflow:hidden;
-    white-space:nowrap;
-    user-select:none;
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
 }
 
-/* GRID REAL 4x5 */
+.title-area {
 
-.botoes{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    grid-template-rows:repeat(5,1fr);
-    gap:10px;
-    width: 95%;
-    margin-left: 2.5%;
-    margin-top: 70px;
+    min-width: 0;
 }
 
-/* BOTÕES */
+.title {
 
-button{
-    width:100%;
-    height:72px;
+    font-size: 22px;
 
-    border:0;
-    border-radius:200px;
+    font-weight: 700;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    line-height: 1;
+}
 
-    background:var(--button);
-    color:white;
+.subtitle {
 
-    font-size:23px;
-    font-weight:600;
+    margin-top: 5px;
 
-    box-shadow:none;
+    font-size: 11px;
+
+    color: rgba(255,255,255,.42);
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+.action {
+
+    width: 42px;
+    height: 42px;
+
+    border: 0;
+    outline: none;
+
+    border-radius: 14px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid rgba(255,255,255,.07);
+
+    font-size: 19px;
+
+    cursor: pointer;
 
     transition:
-        background .1s ease,
-        transform .1s ease;
+        transform .18s ease,
+        background .18s ease,
+        opacity .18s ease;
 }
 
-button:active{
-    transform:scale(.94);
-    background:#292929;
+.action:active {
+
+    transform: scale(.90);
 }
 
-/* AÇÕES */
+.action:hover {
 
-.acao{
-    background:var(--action);
+    background:
+        rgba(255,255,255,.10);
 }
 
-/* OPERADORES */
+#atualizar.loading {
 
-.operador,
-.igual{
-    background:var(--operator);
+    animation:
+        girar .8s linear infinite;
 }
 
-.operador:active,
-.igual:active{
-    background:#638cff;
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.grid {
+
+    width: 100%;
+
+    height: calc(100vh - 165px);
+
+    margin-top: 10px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 26px 10px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding:
+        8px 3px
+        30px;
+
+    overscroll-behavior-y: contain;
+
+    scrollbar-width: thin;
 }
 
-/* ZERO */
 
+/* =========================================================
+   APP
+========================================================= */
 
+.app {
 
-/* SVG */
+    min-width: 0;
 
-svg{
-    width:28px;
-    height:28px;
-    pointer-events:none;
-}
+    display: flex;
 
-/* RESPONSIVO */
+    flex-direction: column;
 
-@media(max-width:420px){
+    align-items: center;
 
-    body{
-        padding:12px;
-    }
+    justify-content: flex-start;
 
-    .tela{
-        height:110px;
-        font-size:38px;
-    }
+    text-align: center;
 
-    .botoes{
-        gap:9px;
-    }
+    cursor: pointer;
 
-    button{
-        height:68px;
-        font-size:21px;
-    }
+    contain: layout paint;
 
-    svg{
-        width:26px;
-        height:26px;
-    }
-
-/* ZERO */
-
-.zero{
-    width:100%;
-    height:72px;
-
-    border:0;
-    border-radius:200px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    padding:0;
-
-    background:var(--button);
-    color:white;
-
-    font-size:23px;
-    font-weight:600;
-
-    box-shadow:none;
+    padding-bottom: 18%;
 
     transition:
-        background .1s ease,
-        transform .1s ease;
+        transform .15s ease,
+        opacity .15s ease;
+}
+
+.app:active {
+
+    transform: scale(.91);
+
+    opacity: .65;
+}
+
+
+/* =========================================================
+   ÍCONE
+========================================================= */
+
+.icon {
+
+    width: 68px;
+    height: 68px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    background: rgba(255,255,255,.04);
+}
+
+.icon img {
+
+    width: 67px;
+    height: 67px;
+
+    display: block;
+
+    object-fit: contain;
+
+    border-radius: 17px;
+}
+
+
+/* =========================================================
+   NOME
+========================================================= */
+
+.name {
+
+    width: 100%;
+
+    max-width: 82px;
+
+    margin-top: 8px;
+
+    font-size: 12px;
+
+    line-height: 1.25;
+
+    font-weight: 600;
+
+    color: rgba(255,255,255,.88);
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   SEM RESULTADOS
+========================================================= */
+
+.empty {
+
+    grid-column: 1 / -1;
+
+    min-height: 250px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    color: rgba(255,255,255,.4);
+
+    text-align: center;
+}
+
+.empty-icon {
+
+    font-size: 34px;
+
+    opacity: .5;
+}
+
+.empty-title {
+
+    color: rgba(255,255,255,.75);
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+.empty-text {
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   BARRA DE PESQUISA
+========================================================= */
+
+.search {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom:
+        max(20px, env(safe-area-inset-bottom));
+
+    transform: translateX(-50%);
+
+    z-index: 1000;
+
+    width: min(68%, 430px);
+
+    height: 56px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 0 18px;
+
+    border-radius: 999px;
+
+    background: #333;
+
+    border: 1px solid #444;
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,.35);
+
+    backdrop-filter: blur(18px);
+
+    -webkit-backdrop-filter: blur(18px);
+
+    transition:
+        width .25s ease,
+        background .25s ease;
+}
+
+.search:focus-within {
+
+    width: min(74%, 470px);
+
+    background: #444;
+
+    border: 1px solid #333;
+}
+
+.search svg {
+
+    width: 22px;
+    height: 22px;
+
+    flex-shrink: 0;
+
+    opacity: .75;
+}
+
+.search input {
+
+    width: 100%;
+
+    min-width: 0;
+
+    height: 100%;
+
+    border: 0;
+    outline: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    font-family: Quicksand, sans-serif;
+}
+
+.search input::placeholder {
+
+    color: rgba(255,255,255,.75);
+}
+
+
+/* =========================================================
+   INDICADOR
+========================================================= */
+
+.update-status {
+
+    position: fixed;
+
+    top:
+        max(80px, calc(65px + env(safe-area-inset-top)));
+
+    left: 50%;
+
+    z-index: 2000;
+
+    transform:
+        translate(-50%, -15px);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    padding: 8px 14px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(20,20,20,.88);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    color:
+        rgba(255,255,255,.75);
+
+    font-size: 10px;
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
+}
+
+.update-status.show {
+
+    opacity: 1;
+
+    transform:
+        translate(-50%, 0);
+}
+
+
+/* =========================================================
+   PULL TO REFRESH
+========================================================= */
+
+.pull-indicator {
+
+    position: fixed;
+
+    top: 5px;
+
+    left: 50%;
+
+    z-index: 3000;
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(25,25,25,.9);
+
+    opacity: 0;
+
+    transform:
+        translate(-50%, -45px);
+
+    transition:
+        opacity .15s ease,
+        transform .15s ease;
+}
+
+.pull-indicator.visible {
+
+    opacity: 1;
+
+    transform:
+        translate(-50%, 0);
+}
+
+.pull-indicator.refresh {
+
+    animation:
+        girar .7s linear infinite;
+}
+
+
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
+@keyframes girar {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   SVG
+========================================================= */
+
+svg {
+
+    width: 25px;
+    height: 25px;
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 360px) {
+
+    main {
+
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .grid {
+
+        gap: 22px 6px;
+    }
+
+    .icon,
+    .icon img {
+
+        width: 60px;
+        height: 60px;
+    }
+
+    .name {
+
+        max-width: 70px;
+
+        font-size: 11px;
+    }
+
+    .title {
+
+        font-size: 20px;
+    }
+
+    .search {
+
+        width: 76%;
+    }
+}
+
+
+@media (orientation: landscape) {
+
+    .grid {
+
+        grid-template-columns:
+            repeat(6, minmax(0, 1fr));
+
+        gap: 22px 8px;
+    }
+
+    .search {
+
+        width: 32%;
+    }
 }
 
 </style>
+
 </head>
+
 
 <body>
 
-<div class="calculadora">
+<div class="fundo"></div>
 
-    <div
-        class="tela"
-        id="display"
-        tabindex="0"
-        aria-label="Visor da calculadora"
-    >0</div>
 
-    <div class="botoes">
+<div
+    class="pull-indicator"
+    id="pullIndicator"
+>
+    ↻
+</div>
 
-        <!-- LINHA 1 -->
 
-        <button
-            onclick="limpar()"
-            class="acao"
-        >AC</button>
+<div
+    class="update-status"
+    id="updateStatus"
+>
+    Atualizando aplicativos...
+</div>
 
-        <button
-            onclick="apagar()"
-            class="acao"
-            aria-label="Apagar"
-        >
-            <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+
+<main>
+
+    <div class="top">
+
+        <div class="title-area">
+
+            <div class="title">
+                Apps
+            </div>
+
+            <div
+                class="subtitle"
+                id="contador"
             >
-                <path
-                    d="M11.142 20C8.91458 20 7.80085 20 6.87114 19.4986C5.94144 18.9971 5.35117 18.0781 4.17061 16.24L3.48981 15.18C2.4966 13.6336 2 12.8604 2 12C2 11.1396 2.4966 10.3664 3.48981 8.82001L4.17061 7.76001C5.35117 5.92191 5.94144 5.00286 6.87114 4.50143C7.80085 4 8.91458 4 11.142 4L13.779 4C17.6544 4 19.5921 4 20.7961 5.17157C22 6.34315 22 8.22876 22 12C22 15.7712 22 17.6569 20.7961 18.8284C19.5921 20 17.6544 20 13.779 20H11.142Z"
-                    stroke="white"
-                    stroke-width="1.5"
-                />
-                <path
-                    d="M15.5 9.50002L10.5 14.5M10.5 9.5L15.5 14.5"
-                    stroke="white"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                />
-            </svg>
-        </button>
+                Carregando...
+            </div>
 
-        <button
-            onclick="porcentagem()"
-            class="acao"
-        >%</button>
-
-        <button
-            onclick="operacao('/')"
-            class="operador"
-        >÷</button>
+        </div>
 
 
-        <!-- LINHA 2 -->
+        <div class="actions">
 
-        <button onclick="add('7')">7</button>
-        <button onclick="add('8')">8</button>
-        <button onclick="add('9')">9</button>
+            <button
+                class="action"
+                id="atualizar"
+                aria-label="Atualizar aplicativos"
+                title="Atualizar aplicativos"
+            >
 
-        <button
-            onclick="operacao('*')"
-            class="operador"
-        >×</button>
+                <svg
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                >
 
+                    <path
+                        fill="#ffffff"
+                        d="M274.91,47.78c-97.6,0-179.71,67.5-202.15,158.26L58.79,181.4c-4.36-7.69-14.12-10.39-21.81-6.03c-7.69,4.36-10.39,14.12-6.03,21.81l37.66,66.44c0,0,0,0.01,0.01,0.01l0.15,0.26c0.19,0.34,0.39,0.66,0.6,0.98c0.01,0.01,0.02,0.03,0.03,0.04c0.04,0.07,0.09,0.13,0.14,0.19c0.23,0.33,0.46,0.64,0.71,0.95c0.04,0.05,0.07,0.1,0.11,0.15c0,0,0,0.01,0.01,0.01c0.02,0.02,0.04,0.04,0.06,0.07c0.36,0.44,0.75,0.85,1.15,1.24c0.04,0.04,0.07,0.07,0.11,0.1c0.25,0.23,0.5,0.46,0.76,0.67c0.05,0.04,0.1,0.08,0.15,0.12c0.35,0.28,0.71,0.55,1.08,0.81c0.03,0.02,0.06,0.04,0.09,0.06c0.17,0.11,0.35,0.22,0.52,0.33c0.09,0.06,0.18,0.11,0.28,0.17c0.12,0.07,0.25,0.14,0.38,0.21c0.11,0.06,0.22,0.12,0.33,0.17c0.2,0.1,0.39,0.2,0.59,0.3c0.11,0.05,0.22,0.1,0.33,0.15c0,0,0.01,0,0.01,0.01c0.12,0.05,0.24,0.11,0.36,0.16c0.33,0.14,0.66,0.26,1,0.37c0.04,0.02,0.09,0.03,0.13,0.04c0.02,0.01,0.03,0.01,0.05,0.02c0.15,0.05,0.31,0.09,0.47,0.14c0.29,0.09,0.59,0.16,0.89,0.23c0.08,0.02,0.15,0.04,0.23,0.06c0.07,0.02,0.14,0.03,0.22,0.05c0.44,0.09,0.89,0.15,1.33,0.2c0.04,0,0.07,0.01,0.11,0.02c0.08,0.01,0.15,0.01,0.23,0.02c0.49,0.05,0.98,0.08,1.48,0.08c0.42,0,0.84-0.02,1.26-0.06c0.07-0.01,0.14-0.01,0.21-0.02c0.01,0,0.03,0,0.04,0c0.06-0.01,0.12-0.01,0.19-0.02c0.28-0.03,0.55-0.07,0.83-0.11c0.08-0.01,0.16-0.02,0.24-0.04c0.13-0.02,0.25-0.04,0.38-0.07c0.06-0.01,0.12-0.03,0.19-0.04c0.4-0.09,0.81-0.19,1.21-0.31c0.1-0.03,0.2-0.06,0.3-0.09c0.11-0.03,0.21-0.07,0.32-0.11c0.14-0.05,0.28-0.1,0.42-0.15c0.17-0.06,0.33-0.12,0.5-0.19c0.1-0.04,0.2-0.09,0.3-0.13c0.13-0.06,0.26-0.12,0.39-0.18c0.19-0.09,0.37-0.19,0.56-0.28c0.13-0.07,0.25-0.13,0.38-0.2c0.28-0.15,0.55-0.33,0.82-0.5c0.15-0.09,0.3-0.18,0.45-0.28c0.06-0.04,0.11-0.08,0.17-0.12c0.17-0.12,0.34-0.25,0.5-0.38c0.06-0.04,0.12-0.09,0.18-0.13c0.11-0.09,0.23-0.17,0.34-0.26c0,0,0.01-0.01,0.01-0.01l59.04-48.93c6.8-5.64,7.75-15.72,2.11-22.53c-5.64-6.8-15.73-7.75-22.53-2.11l-28.84,23.9c17.18-79.28,87.87-138.87,172.22-138.87c97.17,0,176.22,79.05,176.22,176.22s-79.05,176.22-176.22,176.22c-8.84,0-16,7.16-16,16s7.16,16,16,16c114.81,0,208.22-93.41,208.22-208.22S389.72,47.78,274.91,47.78z"
+                    />
 
-        <!-- LINHA 3 -->
+                    <path
+                        fill="#ffffff"
+                        d="M274.91,147.61c-8.84,0-16,7.16-16,16V256c0,8.84,7.16,16,16,16h75.87c8.84,0,16-7.16,16-16s-7.16-16-16-16h-59.87v-76.39C290.91,154.77,283.74,147.61,274.91,147.61z"
+                    />
 
-        <button onclick="add('4')">4</button>
-        <button onclick="add('5')">5</button>
-        <button onclick="add('6')">6</button>
+                </svg>
 
-        <button
-            onclick="operacao('-')"
-            class="operador"
-        >−</button>
+            </button>
 
-
-        <!-- LINHA 4 -->
-
-        <button onclick="add('1')">1</button>
-        <button onclick="add('2')">2</button>
-        <button onclick="add('3')">3</button>
-
-        <button
-            onclick="operacao('+')"
-            class="operador"
-        >+</button>
-
-
-        <!-- LINHA 5 -->
-        <button
-            
-            class="zero"
-        >()</button>
-        
-        <button
-            onclick="add('0')"
-            class="zero"
-        >0</button>
-
-        <button onclick="add('.')">.</button>
-
-        <button
-            onclick="calcular()"
-            class="igual"
-        >=</button>
+        </div>
 
     </div>
 
+
+    <div
+        class="grid"
+        id="grid"
+    ></div>
+
+</main>
+
+
+<div class="search">
+
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+
+        <path
+            d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z"
+            stroke="#ffffff"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        />
+
+    </svg>
+
+
+    <input
+        id="pesquisaInput"
+        type="text"
+        placeholder="Pesquisar"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+    >
+
 </div>
+
 
 <script>
 
-const CHAVE_SENHA="senha";
-const CHAVE_RECUPERACAO="nome_recuperacao";
+/* =========================================================
+   USUÁRIO ATUAL
+========================================================= */
 
-const display=document.getElementById("display");
-
-let expr="";
-let contadorToques=0;
-let timerToques=null;
+let usuarioAtual = "user1";
 
 
-/* SENHA */
+/* =========================================================
+   ELEMENTOS
+========================================================= */
 
-function inicializarSenha(){
+const grid =
+    document.getElementById("grid");
 
-    let senhaSalva="";
+const pesquisa =
+    document.getElementById("pesquisaInput");
 
-    try{
-        senhaSalva=String(
-            Cripto.carregar(CHAVE_SENHA)||""
-        ).trim();
-    }catch(e){
-        senhaSalva="";
+const atualizar =
+    document.getElementById("atualizar");
+
+const contador =
+    document.getElementById("contador");
+
+const pullIndicator =
+    document.getElementById("pullIndicator");
+
+
+/* =========================================================
+   APP PRÉ-DEFINIDO
+========================================================= */
+
+const apps = [
+
+    {
+        nome: "✅️Mulher Amparada",
+        icone: "user2.png"
     }
 
-    if(senhaSalva){
-        atualizar();
+];
+
+
+/* =========================================================
+   MENSAGEM DO ANDROID
+========================================================= */
+
+function receberMensagemAndroid(mensagem) {
+
+    if (mensagem === "user2") {
+
+        usuarioAtual = "user2";
+
+        apps[0].nome =
+            "Calculadora";
+
+    } else {
+
+        usuarioAtual = "user1";
+
+        apps[0].nome =
+            "✅️Mulher Amparada";
+
+    }
+
+    renderizar(apps);
+
+}
+
+
+/* =========================================================
+   RENDERIZAÇÃO
+========================================================= */
+
+function renderizar(lista) {
+
+    grid.innerHTML = "";
+
+
+    /* =====================================================
+       SEM RESULTADOS
+    ===================================================== */
+
+    if (!lista.length) {
+
+        contador.textContent =
+            "Nenhum aplicativo";
+
+
+        grid.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ⌕
+                </div>
+
+                <div class="empty-title">
+                    Nenhum aplicativo encontrado
+                </div>
+
+                <div class="empty-text">
+                    Tente pesquisar outro nome
+                </div>
+
+            </div>
+
+        `;
+
         return;
     }
 
-    const novaSenha=prompt("Crie uma senha");
 
-    if(!novaSenha || !novaSenha.trim()){
-        location.reload();
-        return;
-    }
+    /* =====================================================
+       CONTADOR
+    ===================================================== */
 
-    const resposta=prompt(
-        "Como você gosta de ser chamada?"
-    );
+    const termo =
+        pesquisa.value.trim();
 
-    if(!resposta || !resposta.trim()){
-        location.reload();
-        return;
-    }
 
-    try{
+    contador.textContent =
+        `${lista.length} ${
+            termo
+                ? "encontrado"
+                : "aplicativo"
+        }${
+            lista.length === 1
+                ? ""
+                : "s"
+        }`;
 
-        Cripto.salvar(
-            CHAVE_SENHA,
-            novaSenha.trim()
+
+    /* =====================================================
+       FRAGMENT
+    ===================================================== */
+
+    const fragment =
+        document.createDocumentFragment();
+
+
+    /* =====================================================
+       APPS
+    ===================================================== */
+
+    lista.forEach(app => {
+
+        const elemento =
+            document.createElement("div");
+
+
+        elemento.className =
+            "app";
+
+
+        /* =================================================
+           ÍCONE
+        ================================================= */
+
+        const icon =
+            document.createElement("div");
+
+
+        icon.className =
+            "icon";
+
+
+        const img =
+            document.createElement("img");
+
+
+        img.loading =
+            "lazy";
+
+
+        img.decoding =
+            "async";
+
+
+        img.alt =
+            app.nome;
+
+
+        /*
+         * O ícone fica na mesma pasta
+         * deste HTML.
+         */
+
+        img.src =
+            app.icone;
+
+
+        /*
+         * Se a imagem não existir,
+         * apenas esconde a imagem.
+         */
+
+        img.onerror =
+            function () {
+
+                this.style.display =
+                    "none";
+
+            };
+
+
+        icon.appendChild(img);
+
+
+        /* =================================================
+           NOME
+        ================================================= */
+
+        const nome =
+            document.createElement("div");
+
+
+        nome.className =
+            "name";
+
+
+        nome.textContent =
+            app.nome;
+
+
+        /* =================================================
+           ADICIONA AO APP
+        ================================================= */
+
+        elemento.appendChild(icon);
+
+        elemento.appendChild(nome);
+
+
+        /* =================================================
+           CLIQUE
+        =================================================
+
+           Independente do usuário ou da mensagem
+           recebida pelo Android.
+
+           SEM PASTA.
+        */
+
+        elemento.setAttribute(
+            "onclick",
+            "window.location.href='index1.html'"
         );
 
-        Cripto.salvar(
-            CHAVE_RECUPERACAO,
-            resposta.trim().toLowerCase()
-        );
 
-    }catch(e){
+        fragment.appendChild(elemento);
 
-        alert("Não foi possível salvar os dados.");
-        return;
-    }
+    });
 
-    location.reload();
+
+    grid.appendChild(fragment);
+
 }
 
 
-/* VISOR */
+/* =========================================================
+   PESQUISA
+========================================================= */
 
-function atualizar(){
+function pesquisar() {
 
-    display.innerText =
-        expr.length
-        ? expr
-        : "0";
-}
-
-/* NÚMEROS */
-
-function add(valor){
-
-    if(valor==="."){
-
-        const parteAtual=
-            expr.split(/[+\-*/]/).pop();
-
-        if(parteAtual.includes(".")){
-            return;
-        }
-    }
-
-    expr+=valor;
-    atualizar();
-}
-
-
-/* OPERAÇÕES */
-
-function operacao(op){
-
-    if(!expr){
-
-        if(op==="-"){
-            expr="-";
-            atualizar();
-        }
-
-        return;
-    }
-
-    if(/[+\-*/]$/.test(expr)){
-
-        expr=
-            expr.slice(0,-1)+op;
-
-    }else{
-
-        expr+=op;
-    }
-
-    atualizar();
-}
-
-
-/* PORCENTAGEM */
-
-function porcentagem(){
-
-    if(!expr)return;
-
-    expr=expr.replace(
-        /(\d+(?:\.\d+)?)$/,
-        "($1/100)"
-    );
-
-    atualizar();
-}
-
-
-/* LIMPAR */
-
-function limpar(){
-
-    expr="";
-    atualizar();
-}
-
-
-/* APAGAR */
-
-function apagar(){
-
-    expr=
-        expr.slice(0,-1);
-
-    atualizar();
-}
-
-
-/* CALCULAR */
-
-function calcular(){
-
-    const senha=
-        String(
-            Cripto.carregar(CHAVE_SENHA)||""
-        ).trim();
-
-    if(
-        expr.trim()!=="" &&
-        expr.trim()===senha
-    ){
-
-        window.location.href=
-            "file:///android_asset/user1/index2.html";
-
-        return;
-    }
-
-    try{
-
-        const resultado=
-            Function(
-                '"use strict";return ('+
-                expr+
-                ')'
-            )();
-
-        if(
-            typeof resultado==="number" &&
-            Number.isFinite(resultado)
-        ){
-
-            display.innerText=
-                String(resultado);
-
-            expr=
-                String(resultado);
-
-            return;
-        }
-
-    }catch(e){}
-
-    mostrarMensagem("Erro");
-
-    expr="";
-}
-
-
-/* MENSAGEM */
-
-function mostrarMensagem(
-    texto,
-    tempo=1000
-){
-
-    display.innerText=texto;
-
-    clearTimeout(
-        mostrarMensagem.timer
-    );
-
-    mostrarMensagem.timer=
-        setTimeout(
-            atualizar,
-            tempo
-        );
-}
-
-
-/* RECUPERAÇÃO */
-
-function recuperarSenha(){
-
-    let respostaSalva="";
-
-    try{
-
-        respostaSalva=
-            String(
-                Cripto.carregar(
-                    CHAVE_RECUPERACAO
-                )||""
-            )
-            .toLowerCase()
+    const termo =
+        pesquisa.value
+            .toLocaleLowerCase("pt-BR")
             .trim();
 
-    }catch(e){
 
-        mostrarMensagem("Erro",1500);
-        return;
-    }
+    /* =====================================================
+       PESQUISA VAZIA
+    ===================================================== */
 
-    const resposta=
-        prompt(
-            "Como você gosta de ser chamada?"
-        );
+    if (!termo) {
 
-    if(
-        !resposta ||
-        resposta.toLowerCase().trim()!==respostaSalva
-    ){
-
-        mostrarMensagem(
-            "Resposta incorreta",
-            1500
-        );
+        renderizar(apps);
 
         return;
+
     }
 
-    const novaSenha=
-        prompt("Digite a nova senha");
 
-    if(
-        !novaSenha ||
-        !novaSenha.trim()
-    ){
-        return;
-    }
+    /* =====================================================
+       FILTRO
+    ===================================================== */
 
-    const confirmarSenha=
-        prompt("Confirme a nova senha");
+    const resultado =
+        apps.filter(app =>
 
-    if(confirmarSenha!==novaSenha){
+            app.nome
+                .toLocaleLowerCase("pt-BR")
+                .includes(termo)
 
-        mostrarMensagem(
-            "Senhas diferentes",
-            1500
         );
 
-        return;
-    }
 
-    Cripto.salvar(
-        CHAVE_SENHA,
-        novaSenha.trim()
-    );
+    renderizar(resultado);
 
-    const trocarResposta=
-        confirm(
-            "Deseja alterar a resposta de recuperação?"
-        );
-
-    if(trocarResposta){
-
-        const novaResposta=
-            prompt(
-                "Como você gosta de ser chamada?"
-            );
-
-        if(
-            novaResposta &&
-            novaResposta.trim()
-        ){
-
-            Cripto.salvar(
-                CHAVE_RECUPERACAO,
-                novaResposta
-                    .trim()
-                    .toLowerCase()
-            );
-        }
-    }
-
-    mostrarMensagem(
-        "Senha alterada",
-        1500
-    );
-
-    expr="";
 }
 
 
-/* CINCO TOQUES */
+pesquisa.addEventListener(
+    "input",
+    pesquisar
+);
 
-function registrarToque(){
 
-    contadorToques++;
+/* =========================================================
+   BOTÃO ATUALIZAR
+========================================================= */
 
-    clearTimeout(timerToques);
-
-    if(contadorToques>=5){
-
-        contadorToques=0;
-        recuperarSenha();
-        return;
-    }
-
-    timerToques=setTimeout(
-        ()=>{
-            contadorToques=0;
-        },
-        2000
-    );
-}
-
-display.addEventListener(
+atualizar.addEventListener(
     "click",
-    registrarToque
-);
+    function () {
+
+        atualizar.classList.add(
+            "loading"
+        );
 
 
-/* TECLADO */
+        setTimeout(
+            function () {
 
-document.addEventListener(
-    "keydown",
-    e=>{
+                renderizar(apps);
 
-        if(/^\d$/.test(e.key)){
 
-            add(e.key);
+                atualizar.classList.remove(
+                    "loading"
+                );
 
-        }else if(
-            ["+","-","*","/"].includes(e.key)
-        ){
+            },
+            300
+        );
 
-            operacao(e.key);
-
-        }else if(e.key==="."){
-
-            add(".");
-
-        }else if(e.key==="Backspace"){
-
-            apagar();
-
-        }else if(e.key==="Escape"){
-
-            limpar();
-
-        }else if(
-            e.key==="Enter" ||
-            e.key==="="
-        ){
-
-            calcular();
-
-        }else if(e.key==="%"){
-
-            porcentagem();
-        }
     }
 );
 
 
-inicializarSenha();
-atualizar();
+/* =========================================================
+   PULL TO REFRESH
+========================================================= */
+
+let inicioY = 0;
+
+let puxando = false;
+
+
+/* =========================================================
+   TOUCH START
+========================================================= */
+
+grid.addEventListener(
+    "touchstart",
+    function (event) {
+
+        if (
+            grid.scrollTop > 0
+        ) {
+
+            return;
+
+        }
+
+
+        inicioY =
+            event.touches[0].clientY;
+
+
+        puxando = true;
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+/* =========================================================
+   TOUCH MOVE
+========================================================= */
+
+grid.addEventListener(
+    "touchmove",
+    function (event) {
+
+        if (!puxando) {
+
+            return;
+
+        }
+
+
+        const atualY =
+            event.touches[0].clientY;
+
+
+        const distancia =
+            atualY - inicioY;
+
+
+        if (
+            distancia > 25
+        ) {
+
+            pullIndicator.classList.add(
+                "visible"
+            );
+
+        }
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+/* =========================================================
+   TOUCH END
+========================================================= */
+
+grid.addEventListener(
+    "touchend",
+    function () {
+
+        if (!puxando) {
+
+            return;
+
+        }
+
+
+        puxando = false;
+
+
+        if (
+            pullIndicator.classList.contains(
+                "visible"
+            )
+        ) {
+
+            pullIndicator.classList.add(
+                "refresh"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    renderizar(apps);
+
+
+                    pullIndicator.classList.remove(
+                        "visible",
+                        "refresh"
+                    );
+
+                },
+                300
+            );
+
+        }
+
+    },
+    {
+        passive: true
+    }
+);
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+renderizar(apps);
 
 </script>
 
 </body>
+
 </html>
