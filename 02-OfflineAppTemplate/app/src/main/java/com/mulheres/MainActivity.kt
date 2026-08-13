@@ -121,14 +121,31 @@ locationClient = LocationServices.getFusedLocationProviderClient(this)
 
 configurarWebView()  
 
-val pagina = intent.getStringExtra("pagina")  
+val iniciarIndex1 =
+    intent.getBooleanExtra("INICIAR_INDEX1", false)
 
-if (!pagina.isNullOrEmpty()) {  
-    webView.loadUrl(pagina)  
-} else {  
-    webView.loadUrl("file:///android_asset/user1/index1.html")  
-}  
+val pagina = intent.getStringExtra("pagina")
 
+when {
+    iniciarIndex1 -> {
+        // Ícone 3 selecionado
+        webView.loadUrl(
+            "file:///android_asset/user1/index1.html"
+        )
+    }
+
+    !pagina.isNullOrEmpty() -> {
+        // Página enviada normalmente
+        webView.loadUrl(pagina)
+    }
+
+    else -> {
+        // Entrada normal da MainActivity
+        webView.loadUrl(
+            "file:///android_asset/user1/index11.html"
+        )
+    }
+}
 if (!temPermissoes()) {  
     pedirPermissoes()  
 }
