@@ -120,7 +120,6 @@ webView.visibility = View.VISIBLE
 locationClient = LocationServices.getFusedLocationProviderClient(this)  
 
 configurarWebView()  
-
 val iniciarIndex1 =
     intent.getBooleanExtra("INICIAR_INDEX1", false)
 
@@ -128,19 +127,16 @@ val pagina = intent.getStringExtra("pagina")
 
 when {
     iniciarIndex1 -> {
-        // Ícone 3 selecionado
         webView.loadUrl(
             "file:///android_asset/user1/index1.html"
         )
     }
 
     !pagina.isNullOrEmpty() -> {
-        // Página enviada normalmente
         webView.loadUrl(pagina)
     }
 
     else -> {
-        // Entrada normal da MainActivity
         webView.loadUrl(
             "file:///android_asset/user1/index11.html"
         )
