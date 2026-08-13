@@ -37,7 +37,16 @@ class WebAppInterface(
         }
     }
     
-
+@JavascriptInterface
+fun trocarParaUser2() {
+    activity.runOnUiThread {
+        activity.findViewById<WebView>(R.id.webview)
+            .evaluateJavascript(
+                "receberMensagemAndroid('user2')",
+                null
+            )
+    }
+}
 
 @JavascriptInterface
 fun obterApps(): String {
