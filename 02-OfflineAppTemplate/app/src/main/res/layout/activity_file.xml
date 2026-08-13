@@ -47,7 +47,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Arquivos"
-                            android:textColor="#111318"
+                            android:textColor="#0000ff"
                             android:textSize="30sp"
                             android:textStyle="bold"
                             android:fontFamily="sans"
@@ -59,7 +59,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:text="/storage"
-                            android:textColor="#747986"
+                            android:textColor="#000088"
                             android:textSize="13sp"
                             android:fontFamily="sans"
                             android:includeFontPadding="false"/>
@@ -128,8 +128,9 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="112dp"
+               <LinearLayout
+    android:id="@+id/categoryFolders"
+    android:layout_width="112dp"
                         android:layout_height="92dp"
                         android:background="@drawable/category_blue"
                         android:gravity="bottom"
@@ -153,8 +154,9 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="112dp"
+<LinearLayout
+    android:id="@+id/categoryImages"
+    android:layout_width="112dp"
                         android:layout_height="92dp"
                         android:layout_marginStart="10dp"
                         android:background="@drawable/category_neutral"
@@ -179,8 +181,9 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="112dp"
+<LinearLayout
+    android:id="@+id/categoryDocuments"
+    android:layout_width="112dp"
                         android:layout_height="92dp"
                         android:layout_marginStart="10dp"
                         android:background="@drawable/category_neutral"
@@ -263,20 +266,6 @@
 
 
     <!-- NOVO ARQUIVO -->
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/createButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="24dp"
-        android:text="Novo"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:textSize="14sp"
-        app:icon="@drawable/ic_add"
-        app:iconTint="#FFFFFF"
-        app:backgroundTint="#17191E"
-        app:elevation="8dp"/>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
