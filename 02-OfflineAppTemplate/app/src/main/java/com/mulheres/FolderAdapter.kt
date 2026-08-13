@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import android.graphics.Typeface
 
 class FolderAdapter(
     private val onClick: (File) -> Unit
@@ -17,70 +17,151 @@ class FolderAdapter(
 
     private var list: List<File> = emptyList()
 
+
+    // =========================================================
+    // VIEW HOLDER
+    // =========================================================
+
     class VH(view: View) : RecyclerView.ViewHolder(view) {
 
-        val name: TextView = view.findViewById(R.id.folderName)
-        val date: TextView = view.findViewById(R.id.folderDate)
-        val count: TextView = view.findViewById(R.id.folderCount)
+        val name: TextView =
+            view.findViewById(R.id.folderName)
+
+        val date: TextView =
+            view.findViewById(R.id.folderDate)
+
+        val count: TextView =
+            view.findViewById(R.id.folderCount)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
 
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_folder, parent, false)
+    // =========================================================
+    // CRIAR ITEM
+    // =========================================================
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): VH {
+
+        val view = LayoutInflater
+            .from(parent.context)
+            .inflate(
+                R.layout.item_folder,
+                parent,
+                false
+            )
 
         return VH(view)
     }
 
-    override fun onBindViewHolder(holder: VH, position: Int) {
+
+    // =========================================================
+    // PREENCHER ITEM
+    // =========================================================
+
+    override fun onBindViewHolder(
+        holder: VH,
+        position: Int
+    ) {
 
         val file = list[position]
 
-val fonte = Typeface.createFromAsset(
-    holder.itemView.context.assets,
-    "font.ttf"
-)
 
-holder.name.typeface = fonte
-holder.date.typeface = fonte
-holder.count.typeface = fonte
+        // -----------------------------------------------------
+        // FONTE
+        // -----------------------------------------------------
 
-        holder.name.text = file.name.ifEmpty {
-            "Sem nome"
+        val fonte = try {
+
+            Typeface.createFromAsset(
+                holder.itemView.context.assets,
+                "font.ttf"
+            )
+
+        } catch (e: Exception) {
+
+            Typeface.DEFAULT
         }
 
-        val date = SimpleDateFormat(
-            "dd/MM/yyyy HH:mm",
-            Locale.getDefault()
-        ).format(
-            Date(file.lastModified())
-        )
+        holder.name.typeface = fonte
+        holder.date.typeface = fonte
+        holder.count.typeface = fonte
 
-        holder.date.text = date
 
-        val count = if (file.isDirectory) {
-            file.listFiles()?.size ?: 0
+        // -----------------------------------------------------
+        // NOME
+        // -----------------------------------------------------
+
+        holder.name.text =
+            file.name.ifEmpty {
+                "Sem nome"
+            }
+
+
+        // -----------------------------------------------------
+        // DATA
+        // -----------------------------------------------------
+
+        holder.date.text =
+            SimpleDateFormat(
+                "dd/MM/yyyy HH:mm",
+                Locale.getDefault()
+            ).format(
+                Date(file.lastModified())
+            )
+
+
+        // -----------------------------------------------------
+        // PASTA OU ARQUIVO
+        // -----------------------------------------------------
+
+        if (file.isDirectory) {
+
+            val quantidade =
+                file.listFiles()?.size ?: 0
+
+            holder.count.text =
+                if (quantidade == 1) {
+                    "1 item"
+                } else {
+                    "$quantidade itens"
+                }
+
         } else {
-            0
+
+            holder.count.text = "Arquivo"
         }
 
-        holder.count.text = if (file.isDirectory) {
-            "$count itens"
-        } else {
-            "arquivo"
-        }
+
+        // -----------------------------------------------------
+        // CLIQUE
+        // -----------------------------------------------------
 
         holder.itemView.setOnClickListener {
+
             onClick(file)
         }
     }
+
+
+    // =========================================================
+    // QUANTIDADE
+    // =========================================================
 
     override fun getItemCount(): Int {
         return list.size
     }
 
+
+    // =========================================================
+    // ATUALIZAR
+    // =========================================================
+
     fun update(newList: List<File>) {
+
         list = newList
+
         notifyDataSetChanged()
     }
 }
