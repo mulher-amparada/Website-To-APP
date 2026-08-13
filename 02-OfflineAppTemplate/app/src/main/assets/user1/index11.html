@@ -118,13 +118,12 @@ body {
 
 
 /* =========================================================
-   APP
+   CONTEÚDO PRINCIPAL
 ========================================================= */
 
 main {
 
     width: 100%;
-
     height: 100vh;
 
     padding:
@@ -136,61 +135,15 @@ main {
 
 
 /* =========================================================
-   TOPO
-========================================================= */
-
-.top {
-
-    width: 100%;
-
-    height: 55px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 10px;
-}
-
-.title-area {
-
-    min-width: 0;
-}
-
-.title {
-
-    font-size: 22px;
-
-    font-weight: 700;
-
-    line-height: 1;
-}
-
-.subtitle {
-
-    margin-top: 5px;
-
-    font-size: 11px;
-
-    color: rgba(255,255,255,.42);
-
-    font-weight: 500;
-}
-
-
-/* =========================================================
    GRID
 ========================================================= */
 
 .grid {
+margin-top: 10%;
 
     width: 100%;
 
-    height: calc(100vh - 165px);
-
-    margin-top: 10px;
+    height: calc(100vh - 100px);
 
     display: grid;
 
@@ -236,8 +189,10 @@ main {
 
     padding-bottom: 18%;
 
+border-radius: 200px;
     transition:
         transform .15s ease,
+       
         opacity .15s ease;
 }
 
@@ -267,7 +222,8 @@ main {
 
     overflow: hidden;
 
-    background: rgba(255,255,255,.04);
+    background:
+        rgba(255,255,255,.04);
 }
 
 .icon img {
@@ -542,6 +498,7 @@ svg {
     }
 
     .grid {
+margin-top: 10%;
 
         gap: 22px 6px;
     }
@@ -560,11 +517,6 @@ svg {
         font-size: 11px;
     }
 
-    .title {
-
-        font-size: 20px;
-    }
-
     .search {
 
         width: 76%;
@@ -575,6 +527,7 @@ svg {
 @media (orientation: landscape) {
 
     .grid {
+margin-top: 10%;
 
         grid-template-columns:
             repeat(6, minmax(0, 1fr));
@@ -610,35 +563,11 @@ svg {
 </div>
 
 
+<!-- =======================================================
+     CONTEÚDO
+======================================================= -->
+
 <main>
-
-    <!-- ===================================================
-         TOPO
-    ==================================================== -->
-
-    <div class="top">
-
-        <div class="title-area">
-
-            <div class="title">
-                Apps
-            </div>
-
-            <div
-                class="subtitle"
-                id="contador"
-            >
-                Carregando...
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ===================================================
-         GRID
-    ==================================================== -->
 
     <div
         class="grid"
@@ -649,7 +578,7 @@ svg {
 
 
 <!-- =======================================================
-     PESQUISA
+     BARRA DE PESQUISA
 ======================================================= -->
 
 <div class="search">
@@ -701,9 +630,6 @@ const grid =
 
 const pesquisa =
     document.getElementById("pesquisaInput");
-
-const contador =
-    document.getElementById("contador");
 
 const pullIndicator =
     document.getElementById("pullIndicator");
@@ -765,10 +691,6 @@ function renderizar(lista) {
 
     if (!lista.length) {
 
-        contador.textContent =
-            "Nenhum aplicativo";
-
-
         grid.innerHTML = `
 
             <div class="empty">
@@ -791,26 +713,6 @@ function renderizar(lista) {
 
         return;
     }
-
-
-    /* =====================================================
-       CONTADOR
-    ===================================================== */
-
-    const termo =
-        pesquisa.value.trim();
-
-
-    contador.textContent =
-        `${lista.length} ${
-            termo
-                ? "encontrado"
-                : "aplicativo"
-        }${
-            lista.length === 1
-                ? ""
-                : "s"
-        }`;
 
 
     /* =====================================================
@@ -863,19 +765,13 @@ function renderizar(lista) {
             app.nome;
 
 
-        /*
-         * O ícone fica na mesma pasta
-         * deste HTML.
-         */
-
         img.src =
             app.icone;
 
 
-        /*
-         * Se a imagem não existir,
-         * apenas esconde a imagem.
-         */
+        /* =================================================
+           IMAGEM NÃO ENCONTRADA
+        ================================================= */
 
         img.onerror =
             function () {
@@ -916,13 +812,7 @@ function renderizar(lista) {
 
         /* =================================================
            CLIQUE
-        =================================================
-
-           Independente do usuário ou da mensagem
-           recebida pelo Android.
-
-           SEM PASTA.
-        */
+        ================================================= */
 
         elemento.setAttribute(
             "onclick",
