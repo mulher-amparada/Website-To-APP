@@ -85,14 +85,7 @@ aplicarFonte(raiz)
         recycler.adapter = adapter
 
 
-        findViewById<View>(R.id.ic_back).setOnClickListener {
-            voltar()
-        }
-
-
-        findViewById<View>(R.id.ic_forward).setOnClickListener {
-            avancar()
-        }
+        
 
 
         if (!temPermissao()) {
