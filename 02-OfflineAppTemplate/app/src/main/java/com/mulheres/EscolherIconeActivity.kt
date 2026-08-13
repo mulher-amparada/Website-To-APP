@@ -30,7 +30,9 @@ class EscolherIconeActivity : AppCompatActivity() {
             window.decorView
         )
 
-        controller.hide(WindowInsetsCompat.Type.systemBars())
+        controller.hide(
+            WindowInsetsCompat.Type.systemBars()
+        )
 
         controller.systemBarsBehavior =
             WindowInsetsControllerCompat
@@ -49,7 +51,13 @@ class EscolherIconeActivity : AppCompatActivity() {
             window.isNavigationBarContrastEnforced = false
         }
 
-        setContentView(R.layout.activity_escolher_icone)
+        setContentView(
+            R.layout.activity_escolher_icone
+        )
+
+        // =====================================================
+        // FONTE
+        // =====================================================
 
         val raiz = findViewById<View>(
             android.R.id.content
@@ -61,39 +69,53 @@ class EscolherIconeActivity : AppCompatActivity() {
         // BOTÕES
         // =====================================================
 
-        findViewById<Button>(R.id.btnIconeOriginal)
-            .setOnClickListener {
-                trocarParaOriginal()
-            }
+        findViewById<Button>(
+            R.id.btnIconeOriginal
+        ).setOnClickListener {
 
-        findViewById<Button>(R.id.btnIcone1)
-            .setOnClickListener {
-                trocarParaIcone1()
-            }
+            trocarParaOriginal()
+        }
 
-        findViewById<Button>(R.id.btnIcone2)
-            .setOnClickListener {
-                trocarParaIcone2()
-            }
+        findViewById<Button>(
+            R.id.btnIcone1
+        ).setOnClickListener {
 
-        findViewById<Button>(R.id.btnIcone3)
-            .setOnClickListener {
-                trocarParaIcone3()
-            }
+            trocarParaIcone1()
+        }
+
+        findViewById<Button>(
+            R.id.btnIcone2
+        ).setOnClickListener {
+
+            trocarParaIcone2()
+        }
+
+        findViewById<Button>(
+            R.id.btnIcone3
+        ).setOnClickListener {
+
+            trocarParaIcone3()
+        }
     }
 
     // =========================================================
     // TROCAR ÍCONE
     // =========================================================
 
-    private fun trocarPara(nomeAtivo: String) {
+    private fun trocarPara(
+        nomeAtivo: String
+    ) {
 
         val pm = packageManager
 
         val icons = listOf(
+
             "com.mulheres.IconeOriginal",
+
             "com.mulheres.Icone1",
+
             "com.mulheres.Icone2",
+
             "com.mulheres.Icone3"
         )
 
@@ -105,6 +127,7 @@ class EscolherIconeActivity : AppCompatActivity() {
             )
 
             val estado =
+
                 if (nome == nomeAtivo) {
 
                     PackageManager
@@ -125,15 +148,26 @@ class EscolherIconeActivity : AppCompatActivity() {
     }
 
     // =========================================================
-    // MANDAR MENSAGEM PARA A MAINACTIVITY
+    // ENVIAR MENSAGEM PARA O JAVASCRIPT
     // =========================================================
 
-    private fun avisarJavaScript(pagina: String) {
+    private fun avisarJavaScript(
+        pagina: String
+    ) {
 
         val intent = Intent(
             this,
             MainActivity::class.java
         )
+
+        /*
+         * A única informação enviada é:
+         *
+         * user1
+         * ou
+         *
+         * user2
+         */
 
         intent.putExtra(
             "PAGINA_JS",
@@ -160,8 +194,10 @@ class EscolherIconeActivity : AppCompatActivity() {
             "com.mulheres.IconeOriginal"
         )
 
-        // Original = index1
-        avisarJavaScript("index1")
+        // ORIGINAL = USER1
+        avisarJavaScript(
+            "user1"
+        )
     }
 
     // =========================================================
@@ -174,8 +210,10 @@ class EscolherIconeActivity : AppCompatActivity() {
             "com.mulheres.Icone1"
         )
 
-        // Ícone 1 = index1
-        avisarJavaScript("index1")
+        // ÍCONE 1 = USER1
+        avisarJavaScript(
+            "user1"
+        )
     }
 
     // =========================================================
@@ -188,8 +226,10 @@ class EscolherIconeActivity : AppCompatActivity() {
             "com.mulheres.Icone2"
         )
 
-        // Ícone 2 = index1
-        avisarJavaScript("index1")
+        // ÍCONE 2 = USER1
+        avisarJavaScript(
+            "user1"
+        )
     }
 
     // =========================================================
@@ -202,15 +242,19 @@ class EscolherIconeActivity : AppCompatActivity() {
             "com.mulheres.Icone3"
         )
 
-        // Ícone 3 = index11
-        avisarJavaScript("index11")
+        // ÍCONE 3 = USER2
+        avisarJavaScript(
+            "user2"
+        )
     }
 
     // =========================================================
-    // FONTE
+    // APLICAR FONTE
     // =========================================================
 
-    private fun aplicarFonte(view: View) {
+    private fun aplicarFonte(
+        view: View
+    ) {
 
         val fonte = Typeface.createFromAsset(
             assets,
@@ -218,6 +262,7 @@ class EscolherIconeActivity : AppCompatActivity() {
         )
 
         if (view is android.widget.TextView) {
+
             view.typeface = fonte
         }
 
