@@ -779,6 +779,19 @@ val nome = if (nomeIndex >= 0) {
 
 }
 
+override fun onNewIntent(intent: Intent?) {
+    super.onNewIntent(intent)
+
+    setIntent(intent)
+
+    if (intent?.getBooleanExtra("INICIAR_INDEX1", false) == true) {
+
+        webView.loadUrl(
+            "file:///android_asset/user1/index1.html"
+        )
+    }
+}
+
 fun pegarLocalizacao() {
 if (
 ActivityCompat.checkSelfPermission(
