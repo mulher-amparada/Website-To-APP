@@ -1,11 +1,7 @@
 package com.mulheres
 
-import android.app.Activity
-import android.graphics.Typeface
-import android.graphics.Color
-import android.view.ViewGroup
-import android.widget.TextView
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +9,8 @@ import android.os.Environment
 import android.provider.Settings
 import android.view.View
 import android.webkit.MimeTypeMap
+import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -33,60 +31,28 @@ class FileActivity : AppCompatActivity() {
     }
 
     private lateinit var adapter: FolderAdapter
-    private val history = ArrayList<File>()
-    private var index = -1
     private lateinit var recycler: RecyclerView
+    private lateinit var pathText: TextView
+
+    private val history = ArrayList<File>()
+
+    private var index = -1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-WindowCompat.setDecorFitsSystemWindows(window, false)
+        configurarSistema()
 
-val controller = WindowInsetsControllerCompat(
-    window,
-    window.decorView
-)
+        setContentView(R.layout.activity_file)
 
-controller.hide(WindowInsetsCompat.Type.systemBars())
-
-controller.systemBarsBehavior =
-    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-
-controller.isAppearanceLightStatusBars = false
-controller.isAppearanceLightNavigationBars = false
-
-window.statusBarColor = Color.TRANSPARENT
-window.navigationBarColor = Color.TRANSPARENT
-
-if (Build.VERSION.SDK_INT >= 29) {
-    window.isNavigationBarContrastEnforced = false
-}
-
-setContentView(R.layout.activity_file)
-        
-val raiz = findViewById<View>(
-    android.R.id.content
-)
-
-aplicarFonte(raiz)
-
+        aplicarFonte(findViewById(android.R.id.content))
 
         recycler = findViewById(R.id.recycler)
+        pathText = findViewById(R.id.pathText)
 
-        recycler.layoutManager = LinearLayoutManager(this)
-
-
-        adapter = FolderAdapter { file ->
-            openFile(file)
-        }
-
-
-        recycler.adapter = adapter
-
-
-        
-
+        configurarRecycler()
+        configurarBack()
 
         if (!temPermissao()) {
             pedirPermissao()
@@ -96,44 +62,190 @@ aplicarFonte(raiz)
     }
 
 
-    private fun iniciar() {
-        val root = Environment.getExternalStorageDirectory()
-        println(root.absolutePath)
+    // =========================================================
+    // SISTEMA / TELA CHEIA
+    // =========================================================
 
-        openFile(root)
+    private fun configurarSistema() {
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        val controller = WindowInsetsControllerCompat(
+            window,
+            window.decorView
+        )
+
+        controller.hide(WindowInsetsCompat.Type.systemBars())
+
+        controller.systemBarsBehavior =
+            WindowInsetsControllerCompat
+                .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+        controller.isAppearanceLightStatusBars = false
+        controller.isAppearanceLightNavigationBars = false
+
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
+
+        if (Build.VERSION.SDK_INT >= 29) {
+            window.isNavigationBarContrastEnforced = false
+        }
     }
 
 
-    private fun openFile(file: File) {
+    // =========================================================
+    // RECYCLER
+    // =========================================================
 
-        if (index < history.size - 1) {
-            history.subList(index + 1, history.size).clear()
+    private fun configurarRecycler() {
+
+        recycler.layoutManager =
+            LinearLayoutManager(this)
+
+        adapter = FolderAdapter { file ->
+            abrirArquivoOuPasta(file)
         }
 
-        history.add(file)
-        index++
+        recycler.adapter = adapter
+    }
 
+
+    // =========================================================
+    // BACK MODERNO
+    // =========================================================
+
+    private fun configurarBack() {
+
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+
+                override fun handleOnBackPressed() {
+
+                    if (index > 0) {
+                        voltarDiretorio()
+                    } else {
+                        finish()
+                    }
+                }
+            }
+        )
+    }
+
+
+    // =========================================================
+    // INÍCIO
+    // =========================================================
+
+    private fun iniciar() {
+
+        val root =
+            Environment.getExternalStorageDirectory()
+
+        abrirDiretorioInicial(root)
+    }
+
+
+    private fun abrirDiretorioInicial(file: File) {
+
+        history.clear()
+
+        index = -1
+
+        abrirDiretorio(file)
+    }
+
+
+    // =========================================================
+    // ABRIR ARQUIVO / PASTA
+    // =========================================================
+
+    private fun abrirArquivoOuPasta(file: File) {
 
         if (file.isDirectory) {
+            abrirDiretorio(file)
+        } else {
+            abrirExterno(file)
+        }
+    }
 
-            val list = file.listFiles()?.toList()
+
+    private fun abrirDiretorio(file: File) {
+
+        if (!file.isDirectory) {
+            return
+        }
+
+
+        // Remove o futuro caso o usuário tenha voltado
+        // e depois entre em outro diretório.
+
+        if (index < history.size - 1) {
+
+            history.subList(
+                index + 1,
+                history.size
+            ).clear()
+        }
+
+
+        // Evita adicionar o mesmo diretório duas vezes.
+
+        if (index >= 0 && history[index] == file) {
+
+            atualizarLista(file)
+            return
+        }
+
+
+        history.add(file)
+
+        index = history.lastIndex
+
+
+        atualizarLista(file)
+    }
+
+
+    // =========================================================
+    // ATUALIZAR LISTA
+    // =========================================================
+
+    private fun atualizarLista(directory: File) {
+
+        val files =
+            directory.listFiles()?.toList()
                 ?: emptyList()
 
 
-            val collator = Collator.getInstance(
+        val collator =
+            Collator.getInstance(
                 Locale("pt", "BR")
             )
 
 
-            val sorted = list.sortedWith(
+        val sorted =
+            files.sortedWith(
                 Comparator { a, b ->
 
-                    if (a.isDirectory && !b.isDirectory)
+                    // Pastas primeiro
+
+                    if (
+                        a.isDirectory &&
+                        !b.isDirectory
+                    ) {
                         return@Comparator -1
+                    }
 
-                    if (!a.isDirectory && b.isDirectory)
+                    if (
+                        !a.isDirectory &&
+                        b.isDirectory
+                    ) {
                         return@Comparator 1
+                    }
 
+
+                    // Depois por nome
 
                     collator.compare(
                         a.name,
@@ -143,42 +255,152 @@ aplicarFonte(raiz)
             )
 
 
-            adapter.update(sorted)
+        adapter.update(sorted)
+
+        atualizarCaminho(directory)
+    }
+
+
+    // =========================================================
+    // CAMINHO
+    // =========================================================
+
+    private fun atualizarCaminho(directory: File) {
+
+        pathText.text =
+            obterCaminhoBonito(directory)
+    }
+
+
+    private fun obterCaminhoBonito(directory: File): String {
+
+        val root =
+            Environment.getExternalStorageDirectory()
+
+
+        val rootPath =
+            root.absolutePath
+
+
+        val currentPath =
+            directory.absolutePath
+
+
+        if (currentPath == rootPath) {
+            return "Armazenamento interno"
+        }
+
+
+        return if (
+            currentPath.startsWith(rootPath)
+        ) {
+
+            val relativo =
+                currentPath
+                    .removePrefix(rootPath)
+                    .trim('/')
+
+
+            if (relativo.isEmpty()) {
+                "Armazenamento interno"
+            } else {
+                "Armazenamento interno / $relativo"
+            }
 
         } else {
-            openExternal(file)
+
+            directory.name
         }
     }
 
 
-    private fun openExternal(file: File) {
+    // =========================================================
+    // AVANÇAR
+    // =========================================================
+
+    private fun avancarDiretorio() {
+
+        if (index >= history.size - 1) {
+            return
+        }
+
+
+        index++
+
+        val directory =
+            history[index]
+
+
+        if (directory.isDirectory) {
+            atualizarLista(directory)
+        }
+    }
+
+
+    // =========================================================
+    // VOLTAR
+    // =========================================================
+
+    private fun voltarDiretorio() {
+
+        if (index <= 0) {
+            return
+        }
+
+
+        index--
+
+        val directory =
+            history[index]
+
+
+        if (directory.isDirectory) {
+            atualizarLista(directory)
+        }
+    }
+
+
+    // =========================================================
+    // ABRIR ARQUIVO
+    // =========================================================
+
+    private fun abrirExterno(file: File) {
 
         try {
 
-            val uri = androidx.core.content.FileProvider
-                .getUriForFile(
-                    this,
-                    "$packageName.provider",
-                    file
-                )
+            val uri =
+                androidx.core.content.FileProvider
+                    .getUriForFile(
+                        this,
+                        "$packageName.provider",
+                        file
+                    )
 
 
-            val ext = file.extension.lowercase(Locale.ROOT)
-
-            val mime = MimeTypeMap
-                .getSingleton()
-                .getMimeTypeFromExtension(ext)
-                ?: "*/*"
+            val extensao =
+                file.extension
+                    .lowercase(Locale.ROOT)
 
 
-            val intent = Intent(
-                Intent.ACTION_VIEW
-            ).apply {
+            val mime =
+                MimeTypeMap
+                    .getSingleton()
+                    .getMimeTypeFromExtension(extensao)
+                    ?: "*/*"
 
-                setDataAndType(uri, mime)
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
-            }
+            val intent =
+                Intent(Intent.ACTION_VIEW).apply {
+
+                    setDataAndType(
+                        uri,
+                        mime
+                    )
+
+                    addFlags(
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                }
 
 
             startActivity(
@@ -188,66 +410,33 @@ aplicarFonte(raiz)
                 )
             )
 
-
         } catch (e: Exception) {
+
             e.printStackTrace()
         }
     }
 
 
-
-    private fun avancar() {
-
-        if (index < history.size - 1) {
-
-            index++
-
-            val file = history[index]
-
-            if (file.isDirectory) {
-
-                adapter.update(
-                    file.listFiles()?.toList()
-                        ?: emptyList()
-                )
-            }
-        }
-    }
-
-
-
-    private fun voltar() {
-
-        if (index > 0) {
-
-            index--
-
-            val file = history[index]
-
-            if (file.isDirectory) {
-
-                adapter.update(
-                    file.listFiles()?.toList()
-                        ?: emptyList()
-                )
-            }
-        }
-    }
-
-
+    // =========================================================
+    // PERMISSÕES
+    // =========================================================
 
     private fun pedirPermissao() {
 
         if (Build.VERSION.SDK_INT >= 30) {
 
-            if (!Environment.isExternalStorageManager()) {
+            if (
+                !Environment.isExternalStorageManager()
+            ) {
 
-                val intent = Intent(
-                    Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-                    Uri.parse(
-                        "package:$packageName"
+                val intent =
+                    Intent(
+                        Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                        Uri.parse(
+                            "package:$packageName"
+                        )
                     )
-                )
+
 
                 startActivityForResult(
                     intent,
@@ -258,7 +447,6 @@ aplicarFonte(raiz)
 
                 iniciar()
             }
-
 
         } else {
 
@@ -273,10 +461,11 @@ aplicarFonte(raiz)
     }
 
 
-
     private fun temPermissao(): Boolean {
 
-        return if (Build.VERSION.SDK_INT >= 30) {
+        return if (
+            Build.VERSION.SDK_INT >= 30
+        ) {
 
             Environment.isExternalStorageManager()
 
@@ -285,12 +474,17 @@ aplicarFonte(raiz)
             ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE
-            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+            ) ==
+                android.content.pm.PackageManager.PERMISSION_GRANTED
         }
     }
 
 
+    // =========================================================
+    // RESULTADO DA PERMISSÃO
+    // =========================================================
 
+    @Deprecated("Compatibilidade com versões antigas")
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
@@ -304,14 +498,14 @@ aplicarFonte(raiz)
         )
 
 
-        if (requestCode == MANAGE_STORAGE_CODE) {
+        if (
+            requestCode == MANAGE_STORAGE_CODE &&
+            temPermissao()
+        ) {
 
-            if (temPermissao()) {
-                iniciar()
-            }
+            iniciar()
         }
     }
-
 
 
     override fun onRequestPermissionsResult(
@@ -327,47 +521,54 @@ aplicarFonte(raiz)
         )
 
 
-        if (requestCode == PERMISSION_CODE) {
-
-            if (grantResults.isNotEmpty() &&
-                grantResults[0] ==
+        if (
+            requestCode == PERMISSION_CODE &&
+            grantResults.isNotEmpty() &&
+            grantResults[0] ==
                 android.content.pm.PackageManager.PERMISSION_GRANTED
-            ) {
+        ) {
 
-                iniciar()
+            iniciar()
+        }
+    }
+
+
+    // =========================================================
+    // FONTE
+    // =========================================================
+
+    private fun aplicarFonte(view: View) {
+
+        val fonte = try {
+
+            assets.open("font.ttf").use {
+
+                android.graphics.Typeface
+                    .createFromAsset(
+                        assets,
+                        "font.ttf"
+                    )
             }
-        }
-    }
 
+        } catch (e: Exception) {
 
-private fun aplicarFonte(view: View) {
-
-    val fonte = resources.assets
-        .open("font.ttf")
-        .let {
-            android.graphics.Typeface.createFromAsset(
-                assets,
-                "font.ttf"
-            )
+            Typeface.DEFAULT
         }
 
-    if (view is android.widget.TextView) {
-        view.typeface = fonte
-    }
 
-    if (view is android.view.ViewGroup) {
-        for (i in 0 until view.childCount) {
-            aplicarFonte(view.getChildAt(i))
+        if (view is TextView) {
+            view.typeface = fonte
         }
-    }
-}
 
-    override fun onBackPressed() {
 
-        if (index > 0) {
-            voltar()
-        } else {
-            super.onBackPressed()
+        if (view is ViewGroup) {
+
+            for (i in 0 until view.childCount) {
+
+                aplicarFonte(
+                    view.getChildAt(i)
+                )
+            }
         }
     }
 }
