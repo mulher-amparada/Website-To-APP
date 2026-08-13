@@ -11,10 +11,8 @@ import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
-import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -37,22 +35,11 @@ class FileActivity : AppCompatActivity() {
     private lateinit var adapter: FolderAdapter
     private lateinit var recycler: RecyclerView
     private lateinit var pathText: TextView
-    private lateinit var searchBox: View
+    private lateinit var itemCount: TextView
 
     private val history = ArrayList<File>()
 
     private var index = -1
-    private var diretorioAtual: File? = null
-    private var textoPesquisa = ""
-
-    private enum class Filtro {
-        TODOS,
-        PASTAS,
-        IMAGENS,
-        DOCUMENTOS
-    }
-
-    private var filtroAtual = Filtro.TODOS
 
 
     // =========================================================
@@ -66,17 +53,13 @@ class FileActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_file)
 
-        aplicarFonte(
-            findViewById(android.R.id.content)
-        )
+        aplicarFonte(findViewById(android.R.id.content))
 
         recycler = findViewById(R.id.recycler)
         pathText = findViewById(R.id.pathText)
-        searchBox = findViewById(R.id.searchBox)
+        itemCount = findViewById(R.id.itemCount)
 
         configurarRecycler()
-        configurarPesquisa()
-        configurarCategorias()
         configurarBack()
 
         if (!temPermissao()) {
@@ -143,99 +126,7 @@ class FileActivity : AppCompatActivity() {
 
 
     // =========================================================
-    // PESQUISA
-    // =========================================================
-
-    private fun configurarPesquisa() {
-
-        searchBox.setOnClickListener {
-            abrirPesquisa()
-        }
-    }
-
-
-    private fun abrirPesquisa() {
-
-        val campo = EditText(this)
-
-        campo.setSingleLine(true)
-
-        campo.hint = "Pesquisar arquivos"
-
-        campo.setText(textoPesquisa)
-
-        campo.setSelectAllOnFocus(true)
-
-        val dialog =
-            AlertDialog.Builder(this)
-                .setTitle("Pesquisar arquivos")
-                .setView(campo)
-                .setNegativeButton(
-                    "Cancelar",
-                    null
-                )
-                .setPositiveButton(
-                    "Pesquisar"
-                ) { _, _ ->
-
-                    textoPesquisa =
-                        campo.text
-                            .toString()
-                            .trim()
-
-                    atualizarListaAtual()
-                }
-                .create()
-
-        dialog.show()
-    }
-
-
-    // =========================================================
-    // CATEGORIAS
-    // =========================================================
-
-    private fun configurarCategorias() {
-
-        findViewById<View>(
-            R.id.categoryFolders
-        ).setOnClickListener {
-
-            filtroAtual = Filtro.PASTAS
-
-            textoPesquisa = ""
-
-            atualizarListaAtual()
-        }
-
-
-        findViewById<View>(
-            R.id.categoryImages
-        ).setOnClickListener {
-
-            filtroAtual = Filtro.IMAGENS
-
-            textoPesquisa = ""
-
-            atualizarListaAtual()
-        }
-
-
-        findViewById<View>(
-            R.id.categoryDocuments
-        ).setOnClickListener {
-
-            filtroAtual = Filtro.DOCUMENTOS
-
-            textoPesquisa = ""
-
-            atualizarListaAtual()
-        }
-    }
-
-
-    // =========================================================
-    // BACK MODERNO
+    // BOTÃO VOLTAR
     // =========================================================
 
     private fun configurarBack() {
@@ -282,18 +173,12 @@ class FileActivity : AppCompatActivity() {
 
         index = -1
 
-        diretorioAtual = null
-
-        filtroAtual = Filtro.TODOS
-
-        textoPesquisa = ""
-
         abrirDiretorio(file)
     }
 
 
     // =========================================================
-    // ABRIR ARQUIVO OU PASTA
+    // ABRIR PASTA OU ARQUIVO
     // =========================================================
 
     private fun abrirArquivoOuPasta(
@@ -311,6 +196,10 @@ class FileActivity : AppCompatActivity() {
     }
 
 
+    // =========================================================
+    // ABRIR DIRETÓRIO
+    // =========================================================
+
     private fun abrirDiretorio(
         file: File
     ) {
@@ -320,8 +209,10 @@ class FileActivity : AppCompatActivity() {
         }
 
 
-        // Se voltou e entrou em outro diretório,
-        // remove o histórico futuro.
+        /*
+         * Se o usuário voltou e depois entrou
+         * em outra pasta, remove o histórico futuro.
+         */
 
         if (index < history.size - 1) {
 
@@ -332,14 +223,15 @@ class FileActivity : AppCompatActivity() {
         }
 
 
-        // Não duplica o diretório atual.
+        /*
+         * Evita adicionar a mesma pasta duas vezes.
+         */
 
         if (
             index >= 0 &&
-            history[index] == file
+            history[index].absolutePath ==
+            file.absolutePath
         ) {
-
-            diretorioAtual = file
 
             atualizarLista(file)
 
@@ -350,12 +242,6 @@ class FileActivity : AppCompatActivity() {
         history.add(file)
 
         index = history.lastIndex
-
-        diretorioAtual = file
-
-        filtroAtual = Filtro.TODOS
-
-        textoPesquisa = ""
 
         atualizarLista(file)
     }
@@ -369,10 +255,10 @@ class FileActivity : AppCompatActivity() {
         directory: File
     ) {
 
-        diretorioAtual = directory
-
         val files =
-            directory.listFiles()?.toList()
+            directory
+                .listFiles()
+                ?.toList()
                 ?: emptyList()
 
 
@@ -382,77 +268,14 @@ class FileActivity : AppCompatActivity() {
             )
 
 
-        var filtrados = files
-
-
-        // =====================================================
-        // FILTRO
-        // =====================================================
-
-        filtrados =
-            when (filtroAtual) {
-
-                Filtro.TODOS -> {
-
-                    filtrados
-                }
-
-
-                Filtro.PASTAS -> {
-
-                    filtrados.filter {
-                        it.isDirectory
-                    }
-                }
-
-
-                Filtro.IMAGENS -> {
-
-                    filtrados.filter {
-                        it.isFile &&
-                        ehImagem(it)
-                    }
-                }
-
-
-                Filtro.DOCUMENTOS -> {
-
-                    filtrados.filter {
-                        it.isFile &&
-                        ehDocumento(it)
-                    }
-                }
-            }
-
-
-        // =====================================================
-        // PESQUISA
-        // =====================================================
-
-        if (textoPesquisa.isNotEmpty()) {
-
-            val pesquisa =
-                textoPesquisa.lowercase(
-                    Locale.ROOT
-                )
-
-
-            filtrados =
-                filtrados.filter {
-
-                    it.name
-                        .lowercase(Locale.ROOT)
-                        .contains(pesquisa)
-                }
-        }
-
-
-        // =====================================================
-        // ORDENAÇÃO
-        // =====================================================
+        /*
+         * Pastas primeiro.
+         * Arquivos depois.
+         * Dentro de cada grupo, ordem alfabética.
+         */
 
         val sorted =
-            filtrados.sortedWith(
+            files.sortedWith(
                 Comparator { a, b ->
 
                     if (
@@ -462,14 +285,12 @@ class FileActivity : AppCompatActivity() {
                         return@Comparator -1
                     }
 
-
                     if (
                         !a.isDirectory &&
                         b.isDirectory
                     ) {
                         return@Comparator 1
                     }
-
 
                     collator.compare(
                         a.name,
@@ -482,72 +303,28 @@ class FileActivity : AppCompatActivity() {
         adapter.update(sorted)
 
         atualizarCaminho(directory)
-    }
 
-
-    private fun atualizarListaAtual() {
-
-        val directory =
-            diretorioAtual
-                ?: return
-
-        atualizarLista(directory)
+        atualizarContador(sorted.size)
     }
 
 
     // =========================================================
-    // IMAGENS
+    // CONTADOR
     // =========================================================
 
-    private fun ehImagem(
-        file: File
-    ): Boolean {
+    private fun atualizarContador(
+        quantidade: Int
+    ) {
 
-        val extensao =
-            file.extension
-                .lowercase(Locale.ROOT)
+        itemCount.text =
+            when (quantidade) {
 
+                0 -> ""
 
-        return extensao in setOf(
-            "jpg",
-            "jpeg",
-            "png",
-            "webp",
-            "gif",
-            "bmp",
-            "heic",
-            "heif",
-            "avif"
-        )
-    }
+                1 -> "1 item"
 
-
-    // =========================================================
-    // DOCUMENTOS
-    // =========================================================
-
-    private fun ehDocumento(
-        file: File
-    ): Boolean {
-
-        val extensao =
-            file.extension
-                .lowercase(Locale.ROOT)
-
-
-        return extensao in setOf(
-            "pdf",
-            "doc",
-            "docx",
-            "xls",
-            "xlsx",
-            "ppt",
-            "pptx",
-            "txt",
-            "csv",
-            "rtf",
-            "odt"
-        )
+                else -> "$quantidade itens"
+            }
     }
 
 
@@ -635,10 +412,6 @@ class FileActivity : AppCompatActivity() {
 
         if (directory.isDirectory) {
 
-            filtroAtual = Filtro.TODOS
-
-            textoPesquisa = ""
-
             atualizarLista(directory)
         }
     }
@@ -664,17 +437,13 @@ class FileActivity : AppCompatActivity() {
 
         if (directory.isDirectory) {
 
-            filtroAtual = Filtro.TODOS
-
-            textoPesquisa = ""
-
             atualizarLista(directory)
         }
     }
 
 
     // =========================================================
-    // ABRIR ARQUIVO EXTERNO
+    // ABRIR ARQUIVO
     // =========================================================
 
     private fun abrirExterno(
@@ -774,7 +543,8 @@ class FileActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                    android.Manifest.permission
+                        .READ_EXTERNAL_STORAGE
                 ),
                 PERMISSION_CODE
             )
@@ -795,7 +565,8 @@ class FileActivity : AppCompatActivity() {
 
             ContextCompat.checkSelfPermission(
                 this,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE
+                android.Manifest.permission
+                    .READ_EXTERNAL_STORAGE
             ) ==
                 android.content.pm.PackageManager
                     .PERMISSION_GRANTED
@@ -825,7 +596,7 @@ class FileActivity : AppCompatActivity() {
 
         if (
             requestCode ==
-                MANAGE_STORAGE_CODE &&
+            MANAGE_STORAGE_CODE &&
             temPermissao()
         ) {
 
@@ -851,8 +622,8 @@ class FileActivity : AppCompatActivity() {
             requestCode == PERMISSION_CODE &&
             grantResults.isNotEmpty() &&
             grantResults[0] ==
-                android.content.pm.PackageManager
-                    .PERMISSION_GRANTED
+            android.content.pm.PackageManager
+                .PERMISSION_GRANTED
         ) {
 
             iniciar()
@@ -868,21 +639,17 @@ class FileActivity : AppCompatActivity() {
         view: View
     ) {
 
-        val fonte =
-            try {
+        val fonte = try {
 
-                assets.open("font.ttf").use {
+            Typeface.createFromAsset(
+                assets,
+                "font.ttf"
+            )
 
-                    Typeface.createFromAsset(
-                        assets,
-                        "font.ttf"
-                    )
-                }
+        } catch (e: Exception) {
 
-            } catch (e: Exception) {
-
-                Typeface.DEFAULT
-            }
+            Typeface.DEFAULT
+        }
 
 
         if (view is TextView) {
