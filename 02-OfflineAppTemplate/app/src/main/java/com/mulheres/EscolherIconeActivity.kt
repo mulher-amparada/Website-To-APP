@@ -1,5 +1,6 @@
 package com.mulheres
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +14,6 @@ class EscolherIconeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // ==========================================
-        // TELA FULLSCREEN
-        // ==========================================
 
         WindowCompat.setDecorFitsSystemWindows(
             window,
@@ -49,10 +46,6 @@ class EscolherIconeActivity : AppCompatActivity() {
             window.isNavigationBarContrastEnforced = false
         }
 
-        // ==========================================
-        // LAYOUT
-        // ==========================================
-
         setContentView(
             R.layout.activity_escolher_icone
         )
@@ -63,54 +56,30 @@ class EscolherIconeActivity : AppCompatActivity() {
 
         aplicarFonte(raiz)
 
-        // ==========================================
-        // BOTÃO ÍCONE ORIGINAL
-        // ==========================================
-
         findViewById<Button>(
             R.id.btnIconeOriginal
         ).setOnClickListener {
-
             trocarParaOriginal()
         }
-
-        // ==========================================
-        // BOTÃO ÍCONE 1
-        // ==========================================
 
         findViewById<Button>(
             R.id.btnIcone1
         ).setOnClickListener {
-
             trocarParaIcone1()
         }
-
-        // ==========================================
-        // BOTÃO ÍCONE 2
-        // ==========================================
 
         findViewById<Button>(
             R.id.btnIcone2
         ).setOnClickListener {
-
             trocarParaIcone2()
         }
-
-        // ==========================================
-        // BOTÃO ÍCONE 3
-        // ==========================================
 
         findViewById<Button>(
             R.id.btnIcone3
         ).setOnClickListener {
-
             trocarParaIcone3()
         }
     }
-
-    // ==========================================
-    // TROCAR ÍCONE
-    // ==========================================
 
     private fun trocarPara(
         nomeAtivo: String
@@ -119,13 +88,9 @@ class EscolherIconeActivity : AppCompatActivity() {
         val pm = packageManager
 
         val icons = listOf(
-
             "com.mulheres.IconeOriginal",
-
             "com.mulheres.Icone1",
-
             "com.mulheres.Icone2",
-
             "com.mulheres.Icone3"
         )
 
@@ -138,7 +103,6 @@ class EscolherIconeActivity : AppCompatActivity() {
                 )
 
             val estado =
-
                 if (nome == nomeAtivo) {
 
                     android.content.pm.PackageManager
@@ -151,20 +115,13 @@ class EscolherIconeActivity : AppCompatActivity() {
                 }
 
             pm.setComponentEnabledSetting(
-
                 component,
-
                 estado,
-
                 android.content.pm.PackageManager
                     .DONT_KILL_APP
             )
         }
     }
-
-    // ==========================================
-    // SALVAR CONFIGURAÇÃO
-    // ==========================================
 
     private fun salvarConfiguracao(
         abrirIndex1: Boolean
@@ -182,82 +139,74 @@ class EscolherIconeActivity : AppCompatActivity() {
             .apply()
     }
 
-    // ==========================================
-    // ÍCONE 1
-    // ==========================================
+    private fun abrirMainActivity() {
 
-    private fun trocarParaIcone1() {
-
-        // Troca o ícone
-        trocarPara(
-            "com.mulheres.Icone1"
+        val intent = Intent(
+            this,
+            MainActivity::class.java
         )
 
-        // A partir de agora:
-        // abrirá index11.html
-        salvarConfiguracao(false)
+        intent.addFlags(
+            Intent.FLAG_ACTIVITY_CLEAR_TOP or
+            Intent.FLAG_ACTIVITY_NEW_TASK
+        )
+
+        startActivity(intent)
 
         finish()
     }
-
-    // ==========================================
-    // ÍCONE 2
-    // ==========================================
-
-    private fun trocarParaIcone2() {
-
-        // Troca o ícone
-        trocarPara(
-            "com.mulheres.Icone2"
-        )
-
-        // A partir de agora:
-        // abrirá index11.html
-        salvarConfiguracao(false)
-
-        finish()
-    }
-
-    // ==========================================
-    // ÍCONE 3
-    // ==========================================
-
-    private fun trocarParaIcone3() {
-
-        // Troca o ícone
-        trocarPara(
-            "com.mulheres.Icone3"
-        )
-
-        // Salva permanentemente:
-        // quando o aplicativo for aberto
-        // pelo ícone 3, abrir index1.html
-        salvarConfiguracao(true)
-
-        finish()
-    }
-
-    // ==========================================
-    // ÍCONE ORIGINAL
-    // ==========================================
 
     private fun trocarParaOriginal() {
 
-        // Troca o ícone
         trocarPara(
             "com.mulheres.IconeOriginal"
         )
 
-        // A partir de agora:
-        // abrirá index11.html
         salvarConfiguracao(false)
 
-        finish()
+        // Volta para MainActivity
+        // e mostra index11
+        abrirMainActivity()
     }
 
-    // ==========================================
-    // FONTE
-    // ==========================================
+    private fun trocarParaIcone1() {
+
+        trocarPara(
+            "com.mulheres.Icone1"
+        )
+
+        salvarConfiguracao(false)
+
+        // Volta para MainActivity
+        // e mostra index11
+        abrirMainActivity()
+    }
+
+    private fun trocarParaIcone2() {
+
+        trocarPara(
+            "com.mulheres.Icone2"
+        )
+
+        salvarConfiguracao(false)
+
+        // Volta para MainActivity
+        // e mostra index11
+        abrirMainActivity()
+    }
+
+    private fun trocarParaIcone3() {
+
+        trocarPara(
+            "com.mulheres.Icone3"
+        )
+
+        salvarConfiguracao(true)
+
+        // Volta para MainActivity
+        // e mostra index1
+        abrirMainActivity()
+    }
 
     private fun aplicarFonte(
         view: View
@@ -270,7 +219,6 @@ class EscolherIconeActivity : AppCompatActivity() {
             )
 
         if (view is android.widget.TextView) {
-
             view.typeface = fonte
         }
 
