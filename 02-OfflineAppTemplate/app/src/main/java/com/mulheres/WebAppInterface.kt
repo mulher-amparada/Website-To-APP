@@ -1,6 +1,7 @@
 package com.mulheres
 
 import org.json.JSONArray
+import android.webkit.WebView
 import android.Manifest
 import android.os.Build
 import androidx.core.app.ActivityCompat
