@@ -2,8 +2,6 @@ package com.mulheres
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -86,10 +84,13 @@ class EscolherIconeActivity : AppCompatActivity() {
             )
 
             val estado =
-                if (nome == nomeAtivo)
-                    android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                else
-                    android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                if (nome == nomeAtivo) {
+                    android.content.pm.PackageManager
+                        .COMPONENT_ENABLED_STATE_ENABLED
+                } else {
+                    android.content.pm.PackageManager
+                        .COMPONENT_ENABLED_STATE_DISABLED
+                }
 
             pm.setComponentEnabledSetting(
                 component,
@@ -97,30 +98,34 @@ class EscolherIconeActivity : AppCompatActivity() {
                 android.content.pm.PackageManager.DONT_KILL_APP
             )
         }
-
-        Handler(Looper.getMainLooper()).postDelayed({
-
-            moveTaskToBack(true)
-
-        }, 200)
     }
 
     private fun trocarParaIcone1() {
+
         trocarPara("com.mulheres.Icone1")
+
+        finish()
     }
 
     private fun trocarParaIcone2() {
+
         trocarPara("com.mulheres.Icone2")
+
+        finish()
     }
 
     private fun trocarParaIcone3() {
 
-        // Troca o ícone para o 3
+        // 1. Troca para o ícone 3
         trocarPara("com.mulheres.Icone3")
 
-        // Envia a mensagem para a MainActivity
-        val intent = Intent(this, MainActivity::class.java)
+        // 2. Abre a MainActivity
+        val intent = Intent(
+            this,
+            MainActivity::class.java
+        )
 
+        // 3. Manda a mensagem
         intent.putExtra(
             "INICIAR_INDEX1",
             true
@@ -133,11 +138,15 @@ class EscolherIconeActivity : AppCompatActivity() {
 
         startActivity(intent)
 
+        // 4. Fecha o seletor
         finish()
     }
 
     private fun trocarParaOriginal() {
+
         trocarPara("com.mulheres.IconeOriginal")
+
+        finish()
     }
 
     private fun aplicarFonte(view: View) {
@@ -152,6 +161,7 @@ class EscolherIconeActivity : AppCompatActivity() {
         }
 
         if (view is ViewGroup) {
+
             for (i in 0 until view.childCount) {
                 aplicarFonte(view.getChildAt(i))
             }
