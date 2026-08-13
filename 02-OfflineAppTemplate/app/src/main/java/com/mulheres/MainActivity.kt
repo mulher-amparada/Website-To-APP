@@ -120,28 +120,20 @@ webView.visibility = View.VISIBLE
 locationClient = LocationServices.getFusedLocationProviderClient(this)  
 
 configurarWebView()  
-val iniciarIndex1 =
-    intent.getBooleanExtra("INICIAR_INDEX1", false)
 
 val pagina = intent.getStringExtra("pagina")
 
-when {
-    iniciarIndex1 -> {
-        webView.loadUrl(
-            "file:///android_asset/user1/index1.html"
-        )
-    }
+if (!pagina.isNullOrEmpty()) {
 
-    !pagina.isNullOrEmpty() -> {
-        webView.loadUrl(pagina)
-    }
+    webView.loadUrl(pagina)
 
-    else -> {
-        webView.loadUrl(
-            "file:///android_asset/user1/index11.html"
-        )
-    }
+} else {
+
+    webView.loadUrl(
+        "file:///android_asset/user1/index11.html"
+    )
 }
+
 if (!temPermissoes()) {  
     pedirPermissoes()  
 }
@@ -780,10 +772,17 @@ override fun onNewIntent(intent: Intent?) {
 
     setIntent(intent)
 
-    if (intent?.getBooleanExtra("INICIAR_INDEX1", false) == true) {
+    val pagina = intent?.getStringExtra("PAGINA_JS")
 
-        webView.loadUrl(
-            "file:///android_asset/user1/index1.html"
+    if (pagina != null) {
+
+        webView.evaluateJavascript(
+            """
+            if (typeof trocarPaginaPeloIcone === 'function') {
+                trocarPaginaPeloIcone('$pagina');
+            }
+            """.trimIndent(),
+            null
         )
     }
 }
