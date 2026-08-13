@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:background="#F7F7F7"
+    android:background="#000"
     android:fitsSystemWindows="true">
 
 
@@ -59,7 +59,7 @@
 
                 android:text="Gravador"
 
-                android:textColor="#171717"
+                android:textColor="#777"
                 android:textSize="32sp"
                 android:textStyle="bold"
 
@@ -77,7 +77,7 @@
 
                 android:text="Suas gravações"
 
-                android:textColor="#777777"
+                android:textColor="#888"
                 android:textSize="15sp"
 
                 android:fontFamily="sans"
