@@ -888,7 +888,6 @@ svg {
 
 </div>
 
-
 <script>
 
 /* =========================================================
@@ -923,6 +922,28 @@ const apps = [
     }
 
 ];
+
+
+/* =========================================================
+   ENVIAR MENSAGEM PARA O ANDROID
+========================================================= */
+
+function enviarMensagemParaAndroid() {
+
+    if (
+        typeof Android !== "undefined" &&
+        Android.trocarParaUser2
+    ) {
+
+        Android.trocarParaUser2();
+
+        return true;
+
+    }
+
+    return false;
+
+}
 
 
 /* =========================================================
@@ -1041,15 +1062,21 @@ function renderizar(lista) {
 
 
         /* =================================================
-           ABRIR INDEX11.HTML
+           CLIQUE NO APP
         ================================================= */
 
         elemento.addEventListener(
             "click",
             function () {
 
-                window.location.href =
-                    "index11.html";
+                /*
+                 * Não abre index11 diretamente.
+                 *
+                 * Primeiro manda a mensagem
+                 * para a MainActivity.
+                 */
+
+                enviarMensagemParaAndroid();
 
             }
         );
@@ -1263,7 +1290,6 @@ grid.addEventListener(
 renderizar(apps);
 
 </script>
-
 
 </body>
 
