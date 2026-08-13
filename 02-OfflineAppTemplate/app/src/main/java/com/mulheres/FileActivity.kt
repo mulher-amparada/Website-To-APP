@@ -1,18 +1,20 @@
 package com.mulheres
 
-import android.graphics.Typeface
-import android.view.ViewGroup
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.MimeTypeMap
+import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -35,11 +37,27 @@ class FileActivity : AppCompatActivity() {
     private lateinit var adapter: FolderAdapter
     private lateinit var recycler: RecyclerView
     private lateinit var pathText: TextView
+    private lateinit var searchBox: View
 
     private val history = ArrayList<File>()
 
     private var index = -1
+    private var diretorioAtual: File? = null
+    private var textoPesquisa = ""
 
+    private enum class Filtro {
+        TODOS,
+        PASTAS,
+        IMAGENS,
+        DOCUMENTOS
+    }
+
+    private var filtroAtual = Filtro.TODOS
+
+
+    // =========================================================
+    // ON CREATE
+    // =========================================================
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,12 +66,17 @@ class FileActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_file)
 
-        aplicarFonte(findViewById(android.R.id.content))
+        aplicarFonte(
+            findViewById(android.R.id.content)
+        )
 
         recycler = findViewById(R.id.recycler)
         pathText = findViewById(R.id.pathText)
+        searchBox = findViewById(R.id.searchBox)
 
         configurarRecycler()
+        configurarPesquisa()
+        configurarCategorias()
         configurarBack()
 
         if (!temPermissao()) {
@@ -70,14 +93,20 @@ class FileActivity : AppCompatActivity() {
 
     private fun configurarSistema() {
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        val controller = WindowInsetsControllerCompat(
+        WindowCompat.setDecorFitsSystemWindows(
             window,
-            window.decorView
+            false
         )
 
-        controller.hide(WindowInsetsCompat.Type.systemBars())
+        val controller =
+            WindowInsetsControllerCompat(
+                window,
+                window.decorView
+            )
+
+        controller.hide(
+            WindowInsetsCompat.Type.systemBars()
+        )
 
         controller.systemBarsBehavior =
             WindowInsetsControllerCompat
@@ -105,10 +134,103 @@ class FileActivity : AppCompatActivity() {
             LinearLayoutManager(this)
 
         adapter = FolderAdapter { file ->
+
             abrirArquivoOuPasta(file)
         }
 
         recycler.adapter = adapter
+    }
+
+
+    // =========================================================
+    // PESQUISA
+    // =========================================================
+
+    private fun configurarPesquisa() {
+
+        searchBox.setOnClickListener {
+            abrirPesquisa()
+        }
+    }
+
+
+    private fun abrirPesquisa() {
+
+        val campo = EditText(this)
+
+        campo.setSingleLine(true)
+
+        campo.hint = "Pesquisar arquivos"
+
+        campo.setText(textoPesquisa)
+
+        campo.setSelectAllOnFocus(true)
+
+        val dialog =
+            AlertDialog.Builder(this)
+                .setTitle("Pesquisar arquivos")
+                .setView(campo)
+                .setNegativeButton(
+                    "Cancelar",
+                    null
+                )
+                .setPositiveButton(
+                    "Pesquisar"
+                ) { _, _ ->
+
+                    textoPesquisa =
+                        campo.text
+                            .toString()
+                            .trim()
+
+                    atualizarListaAtual()
+                }
+                .create()
+
+        dialog.show()
+    }
+
+
+    // =========================================================
+    // CATEGORIAS
+    // =========================================================
+
+    private fun configurarCategorias() {
+
+        findViewById<View>(
+            R.id.categoryFolders
+        ).setOnClickListener {
+
+            filtroAtual = Filtro.PASTAS
+
+            textoPesquisa = ""
+
+            atualizarListaAtual()
+        }
+
+
+        findViewById<View>(
+            R.id.categoryImages
+        ).setOnClickListener {
+
+            filtroAtual = Filtro.IMAGENS
+
+            textoPesquisa = ""
+
+            atualizarListaAtual()
+        }
+
+
+        findViewById<View>(
+            R.id.categoryDocuments
+        ).setOnClickListener {
+
+            filtroAtual = Filtro.DOCUMENTOS
+
+            textoPesquisa = ""
+
+            atualizarListaAtual()
+        }
     }
 
 
@@ -125,8 +247,11 @@ class FileActivity : AppCompatActivity() {
                 override fun handleOnBackPressed() {
 
                     if (index > 0) {
+
                         voltarDiretorio()
+
                     } else {
+
                         finish()
                     }
                 }
@@ -142,45 +267,61 @@ class FileActivity : AppCompatActivity() {
     private fun iniciar() {
 
         val root =
-            Environment.getExternalStorageDirectory()
+            Environment
+                .getExternalStorageDirectory()
 
         abrirDiretorioInicial(root)
     }
 
 
-    private fun abrirDiretorioInicial(file: File) {
+    private fun abrirDiretorioInicial(
+        file: File
+    ) {
 
         history.clear()
 
         index = -1
+
+        diretorioAtual = null
+
+        filtroAtual = Filtro.TODOS
+
+        textoPesquisa = ""
 
         abrirDiretorio(file)
     }
 
 
     // =========================================================
-    // ABRIR ARQUIVO / PASTA
+    // ABRIR ARQUIVO OU PASTA
     // =========================================================
 
-    private fun abrirArquivoOuPasta(file: File) {
+    private fun abrirArquivoOuPasta(
+        file: File
+    ) {
 
         if (file.isDirectory) {
+
             abrirDiretorio(file)
+
         } else {
+
             abrirExterno(file)
         }
     }
 
 
-    private fun abrirDiretorio(file: File) {
+    private fun abrirDiretorio(
+        file: File
+    ) {
 
         if (!file.isDirectory) {
             return
         }
 
 
-        // Remove o futuro caso o usuário tenha voltado
-        // e depois entre em outro diretório.
+        // Se voltou e entrou em outro diretório,
+        // remove o histórico futuro.
 
         if (index < history.size - 1) {
 
@@ -191,11 +332,17 @@ class FileActivity : AppCompatActivity() {
         }
 
 
-        // Evita adicionar o mesmo diretório duas vezes.
+        // Não duplica o diretório atual.
 
-        if (index >= 0 && history[index] == file) {
+        if (
+            index >= 0 &&
+            history[index] == file
+        ) {
+
+            diretorioAtual = file
 
             atualizarLista(file)
+
             return
         }
 
@@ -204,6 +351,11 @@ class FileActivity : AppCompatActivity() {
 
         index = history.lastIndex
 
+        diretorioAtual = file
+
+        filtroAtual = Filtro.TODOS
+
+        textoPesquisa = ""
 
         atualizarLista(file)
     }
@@ -213,7 +365,11 @@ class FileActivity : AppCompatActivity() {
     // ATUALIZAR LISTA
     // =========================================================
 
-    private fun atualizarLista(directory: File) {
+    private fun atualizarLista(
+        directory: File
+    ) {
+
+        diretorioAtual = directory
 
         val files =
             directory.listFiles()?.toList()
@@ -226,11 +382,78 @@ class FileActivity : AppCompatActivity() {
             )
 
 
-        val sorted =
-            files.sortedWith(
-                Comparator { a, b ->
+        var filtrados = files
 
-                    // Pastas primeiro
+
+        // =====================================================
+        // FILTRO
+        // =====================================================
+
+        filtrados =
+            when (filtroAtual) {
+
+                Filtro.TODOS -> {
+
+                    filtrados
+                }
+
+
+                Filtro.PASTAS -> {
+
+                    filtrados.filter {
+                        it.isDirectory
+                    }
+                }
+
+
+                Filtro.IMAGENS -> {
+
+                    filtrados.filter {
+                        it.isFile &&
+                        ehImagem(it)
+                    }
+                }
+
+
+                Filtro.DOCUMENTOS -> {
+
+                    filtrados.filter {
+                        it.isFile &&
+                        ehDocumento(it)
+                    }
+                }
+            }
+
+
+        // =====================================================
+        // PESQUISA
+        // =====================================================
+
+        if (textoPesquisa.isNotEmpty()) {
+
+            val pesquisa =
+                textoPesquisa.lowercase(
+                    Locale.ROOT
+                )
+
+
+            filtrados =
+                filtrados.filter {
+
+                    it.name
+                        .lowercase(Locale.ROOT)
+                        .contains(pesquisa)
+                }
+        }
+
+
+        // =====================================================
+        // ORDENAÇÃO
+        // =====================================================
+
+        val sorted =
+            filtrados.sortedWith(
+                Comparator { a, b ->
 
                     if (
                         a.isDirectory &&
@@ -239,6 +462,7 @@ class FileActivity : AppCompatActivity() {
                         return@Comparator -1
                     }
 
+
                     if (
                         !a.isDirectory &&
                         b.isDirectory
@@ -246,8 +470,6 @@ class FileActivity : AppCompatActivity() {
                         return@Comparator 1
                     }
 
-
-                    // Depois por nome
 
                     collator.compare(
                         a.name,
@@ -263,21 +485,92 @@ class FileActivity : AppCompatActivity() {
     }
 
 
+    private fun atualizarListaAtual() {
+
+        val directory =
+            diretorioAtual
+                ?: return
+
+        atualizarLista(directory)
+    }
+
+
+    // =========================================================
+    // IMAGENS
+    // =========================================================
+
+    private fun ehImagem(
+        file: File
+    ): Boolean {
+
+        val extensao =
+            file.extension
+                .lowercase(Locale.ROOT)
+
+
+        return extensao in setOf(
+            "jpg",
+            "jpeg",
+            "png",
+            "webp",
+            "gif",
+            "bmp",
+            "heic",
+            "heif",
+            "avif"
+        )
+    }
+
+
+    // =========================================================
+    // DOCUMENTOS
+    // =========================================================
+
+    private fun ehDocumento(
+        file: File
+    ): Boolean {
+
+        val extensao =
+            file.extension
+                .lowercase(Locale.ROOT)
+
+
+        return extensao in setOf(
+            "pdf",
+            "doc",
+            "docx",
+            "xls",
+            "xlsx",
+            "ppt",
+            "pptx",
+            "txt",
+            "csv",
+            "rtf",
+            "odt"
+        )
+    }
+
+
     // =========================================================
     // CAMINHO
     // =========================================================
 
-    private fun atualizarCaminho(directory: File) {
+    private fun atualizarCaminho(
+        directory: File
+    ) {
 
         pathText.text =
             obterCaminhoBonito(directory)
     }
 
 
-    private fun obterCaminhoBonito(directory: File): String {
+    private fun obterCaminhoBonito(
+        directory: File
+    ): String {
 
         val root =
-            Environment.getExternalStorageDirectory()
+            Environment
+                .getExternalStorageDirectory()
 
 
         val rootPath =
@@ -289,6 +582,7 @@ class FileActivity : AppCompatActivity() {
 
 
         if (currentPath == rootPath) {
+
             return "Armazenamento interno"
         }
 
@@ -304,8 +598,11 @@ class FileActivity : AppCompatActivity() {
 
 
             if (relativo.isEmpty()) {
+
                 "Armazenamento interno"
+
             } else {
+
                 "Armazenamento interno / $relativo"
             }
 
@@ -322,25 +619,33 @@ class FileActivity : AppCompatActivity() {
 
     private fun avancarDiretorio() {
 
-        if (index >= history.size - 1) {
+        if (
+            index >= history.size - 1
+        ) {
             return
         }
 
 
         index++
 
+
         val directory =
             history[index]
 
 
         if (directory.isDirectory) {
+
+            filtroAtual = Filtro.TODOS
+
+            textoPesquisa = ""
+
             atualizarLista(directory)
         }
     }
 
 
     // =========================================================
-    // VOLTAR
+    // VOLTAR DIRETÓRIO
     // =========================================================
 
     private fun voltarDiretorio() {
@@ -352,21 +657,29 @@ class FileActivity : AppCompatActivity() {
 
         index--
 
+
         val directory =
             history[index]
 
 
         if (directory.isDirectory) {
+
+            filtroAtual = Filtro.TODOS
+
+            textoPesquisa = ""
+
             atualizarLista(directory)
         }
     }
 
 
     // =========================================================
-    // ABRIR ARQUIVO
+    // ABRIR ARQUIVO EXTERNO
     // =========================================================
 
-    private fun abrirExterno(file: File) {
+    private fun abrirExterno(
+        file: File
+    ) {
 
         try {
 
@@ -387,12 +700,16 @@ class FileActivity : AppCompatActivity() {
             val mime =
                 MimeTypeMap
                     .getSingleton()
-                    .getMimeTypeFromExtension(extensao)
+                    .getMimeTypeFromExtension(
+                        extensao
+                    )
                     ?: "*/*"
 
 
             val intent =
-                Intent(Intent.ACTION_VIEW).apply {
+                Intent(
+                    Intent.ACTION_VIEW
+                ).apply {
 
                     setDataAndType(
                         uri,
@@ -428,12 +745,14 @@ class FileActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= 30) {
 
             if (
-                !Environment.isExternalStorageManager()
+                !Environment
+                    .isExternalStorageManager()
             ) {
 
                 val intent =
                     Intent(
-                        Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                        Settings
+                            .ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
                         Uri.parse(
                             "package:$packageName"
                         )
@@ -469,7 +788,8 @@ class FileActivity : AppCompatActivity() {
             Build.VERSION.SDK_INT >= 30
         ) {
 
-            Environment.isExternalStorageManager()
+            Environment
+                .isExternalStorageManager()
 
         } else {
 
@@ -477,7 +797,8 @@ class FileActivity : AppCompatActivity() {
                 this,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE
             ) ==
-                android.content.pm.PackageManager.PERMISSION_GRANTED
+                android.content.pm.PackageManager
+                    .PERMISSION_GRANTED
         }
     }
 
@@ -486,7 +807,9 @@ class FileActivity : AppCompatActivity() {
     // RESULTADO DA PERMISSÃO
     // =========================================================
 
-    @Deprecated("Compatibilidade com versões antigas")
+    @Deprecated(
+        "Compatibilidade com versões antigas"
+    )
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
@@ -501,7 +824,8 @@ class FileActivity : AppCompatActivity() {
 
 
         if (
-            requestCode == MANAGE_STORAGE_CODE &&
+            requestCode ==
+                MANAGE_STORAGE_CODE &&
             temPermissao()
         ) {
 
@@ -527,7 +851,8 @@ class FileActivity : AppCompatActivity() {
             requestCode == PERMISSION_CODE &&
             grantResults.isNotEmpty() &&
             grantResults[0] ==
-                android.content.pm.PackageManager.PERMISSION_GRANTED
+                android.content.pm.PackageManager
+                    .PERMISSION_GRANTED
         ) {
 
             iniciar()
@@ -539,33 +864,38 @@ class FileActivity : AppCompatActivity() {
     // FONTE
     // =========================================================
 
-    private fun aplicarFonte(view: View) {
+    private fun aplicarFonte(
+        view: View
+    ) {
 
-        val fonte = try {
+        val fonte =
+            try {
 
-            assets.open("font.ttf").use {
+                assets.open("font.ttf").use {
 
-                android.graphics.Typeface
-                    .createFromAsset(
+                    Typeface.createFromAsset(
                         assets,
                         "font.ttf"
                     )
+                }
+
+            } catch (e: Exception) {
+
+                Typeface.DEFAULT
             }
-
-        } catch (e: Exception) {
-
-            Typeface.DEFAULT
-        }
 
 
         if (view is TextView) {
+
             view.typeface = fonte
         }
 
 
         if (view is ViewGroup) {
 
-            for (i in 0 until view.childCount) {
+            for (
+                i in 0 until view.childCount
+            ) {
 
                 aplicarFonte(
                     view.getChildAt(i)
