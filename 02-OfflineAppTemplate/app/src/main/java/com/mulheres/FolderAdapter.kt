@@ -4,6 +4,7 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
@@ -17,12 +18,10 @@ class FolderAdapter(
 
     private var list: List<File> = emptyList()
 
-
-    // =========================================================
-    // VIEW HOLDER
-    // =========================================================
-
     class VH(view: View) : RecyclerView.ViewHolder(view) {
+
+        val icon: ImageView =
+            view.findViewById(R.id.fileIcon)
 
         val name: TextView =
             view.findViewById(R.id.folderName)
@@ -33,11 +32,6 @@ class FolderAdapter(
         val count: TextView =
             view.findViewById(R.id.folderCount)
     }
-
-
-    // =========================================================
-    // CRIAR ITEM
-    // =========================================================
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -55,11 +49,6 @@ class FolderAdapter(
         return VH(view)
     }
 
-
-    // =========================================================
-    // PREENCHER ITEM
-    // =========================================================
-
     override fun onBindViewHolder(
         holder: VH,
         position: Int
@@ -67,10 +56,9 @@ class FolderAdapter(
 
         val file = list[position]
 
-
-        // -----------------------------------------------------
+        // =====================================================
         // FONTE
-        // -----------------------------------------------------
+        // =====================================================
 
         val fonte = try {
 
@@ -89,9 +77,9 @@ class FolderAdapter(
         holder.count.typeface = fonte
 
 
-        // -----------------------------------------------------
+        // =====================================================
         // NOME
-        // -----------------------------------------------------
+        // =====================================================
 
         holder.name.text =
             file.name.ifEmpty {
@@ -99,9 +87,9 @@ class FolderAdapter(
             }
 
 
-        // -----------------------------------------------------
+        // =====================================================
         // DATA
-        // -----------------------------------------------------
+        // =====================================================
 
         holder.date.text =
             SimpleDateFormat(
@@ -112,11 +100,17 @@ class FolderAdapter(
             )
 
 
-        // -----------------------------------------------------
-        // PASTA OU ARQUIVO
-        // -----------------------------------------------------
+        // =====================================================
+        // DIFERENÇA ENTRE PASTA E ARQUIVO
+        // =====================================================
 
         if (file.isDirectory) {
+
+            // PASTA
+
+            holder.icon.setImageResource(
+                R.drawable.ic_folder
+            )
 
             val quantidade =
                 file.listFiles()?.size ?: 0
@@ -130,13 +124,20 @@ class FolderAdapter(
 
         } else {
 
-            holder.count.text = "Arquivo"
+            // ARQUIVO
+
+            holder.icon.setImageResource(
+                R.drawable.ic_document
+            )
+
+            holder.count.text =
+                "Arquivo"
         }
 
 
-        // -----------------------------------------------------
+        // =====================================================
         // CLIQUE
-        // -----------------------------------------------------
+        // =====================================================
 
         holder.itemView.setOnClickListener {
 
@@ -144,19 +145,9 @@ class FolderAdapter(
         }
     }
 
-
-    // =========================================================
-    // QUANTIDADE
-    // =========================================================
-
     override fun getItemCount(): Int {
         return list.size
     }
-
-
-    // =========================================================
-    // ATUALIZAR
-    // =========================================================
 
     fun update(newList: List<File>) {
 
