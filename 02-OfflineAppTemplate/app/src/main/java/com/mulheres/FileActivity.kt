@@ -1,5 +1,7 @@
 package com.mulheres
 
+import android.graphics.Typeface
+import android.view.ViewGroup
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
