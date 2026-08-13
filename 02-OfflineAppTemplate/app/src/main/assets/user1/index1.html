@@ -891,6 +891,28 @@ svg {
 <script>
 
 /* =========================================================
+   USUÁRIO / PASTA ATIVA
+========================================================= */
+
+let usuarioAtual = "user1";
+
+
+/* =========================================================
+   MENSAGEM RECEBIDA DO ANDROID
+========================================================= */
+
+function receberMensagemAndroid(mensagem) {
+
+    if (mensagem === "user2") {
+
+        usuarioAtual = "user2";
+
+    }
+
+}
+
+
+/* =========================================================
    ELEMENTOS
 ========================================================= */
 
@@ -925,23 +947,12 @@ const apps = [
 
 
 /* =========================================================
-   ENVIAR MENSAGEM PARA O ANDROID
+   CAMINHO DO USUÁRIO
 ========================================================= */
 
-function enviarMensagemParaAndroid() {
+function caminhoUsuario(arquivo) {
 
-    if (
-        typeof Android !== "undefined" &&
-        Android.trocarParaUser2
-    ) {
-
-        Android.trocarParaUser2();
-
-        return true;
-
-    }
-
-    return false;
+    return usuarioAtual + "/" + arquivo;
 
 }
 
@@ -1029,8 +1040,16 @@ function renderizar(lista) {
         img.alt =
             app.nome;
 
+
+        /*
+         * O ícone também usa a pasta atual.
+         *
+         * user1 → user1.png
+         * user2 → user2.png
+         */
+
         img.src =
-            app.icone;
+            caminhoUsuario(app.icone);
 
 
         img.onerror =
@@ -1070,13 +1089,21 @@ function renderizar(lista) {
             function () {
 
                 /*
-                 * Não abre index11 diretamente.
-                 *
-                 * Primeiro manda a mensagem
-                 * para a MainActivity.
+                 * Aqui o JS decide qual página abrir
+                 * baseado na mensagem recebida.
                  */
 
-                enviarMensagemParaAndroid();
+                if (usuarioAtual === "user2") {
+
+                    window.location.href =
+                        "user2/index11.html";
+
+                } else {
+
+                    window.location.href =
+                        "user1/index11.html";
+
+                }
 
             }
         );
