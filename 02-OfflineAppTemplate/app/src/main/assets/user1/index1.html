@@ -17,7 +17,6 @@
 
 <title>Apps</title>
 
-
 <style>
 
 /* =========================================================
@@ -474,7 +473,8 @@ main {
     border-radius: 999px;
 
     background: #333;
-        border: 1px solid #444;
+
+    border: 1px solid #444;
 
     box-shadow:
         0 15px 45px rgba(0,0,0,.35);
@@ -494,6 +494,7 @@ main {
     width: min(74%, 470px);
 
     background: #444;
+
     border: 1px solid #333;
 }
 
@@ -770,13 +771,7 @@ svg {
 
 <main>
 
-
-    <!-- =====================================================
-         TOPO
-    ====================================================== -->
-
     <div class="top">
-
 
         <div class="title-area">
 
@@ -795,7 +790,6 @@ svg {
 
 
         <div class="actions">
-
 
             <button
                 class="action"
@@ -840,10 +834,6 @@ svg {
     </div>
 
 
-    <!-- =====================================================
-         GRID
-    ====================================================== -->
-
     <div
         class="grid"
         id="grid"
@@ -853,12 +843,7 @@ svg {
 </main>
 
 
-<!-- =========================================================
-     PESQUISA
-========================================================= -->
-
 <div class="search">
-
 
     <svg
         viewBox="0 0 24 24"
@@ -888,24 +873,41 @@ svg {
 
 </div>
 
+
 <script>
 
 /* =========================================================
-   USUÁRIO / PASTA ATIVA
+   USUÁRIO ATUAL
 ========================================================= */
 
 let usuarioAtual = "user1";
 
 
 /* =========================================================
-   MENSAGEM RECEBIDA DO ANDROID
+   MENSAGEM DO ANDROID
 ========================================================= */
+
+/*
+   O Kotlin deve chamar:
+
+   receberMensagemAndroid("user2")
+
+   Se não chamar nada, continua user1.
+*/
 
 function receberMensagemAndroid(mensagem) {
 
     if (mensagem === "user2") {
 
         usuarioAtual = "user2";
+
+        renderizar(apps);
+
+    } else {
+
+        usuarioAtual = "user1";
+
+        renderizar(apps);
 
     }
 
@@ -997,8 +999,7 @@ function renderizar(lista) {
 
 
     const termo =
-        pesquisa.value
-            .trim();
+        pesquisa.value.trim();
 
 
     contador.textContent =
@@ -1041,13 +1042,6 @@ function renderizar(lista) {
             app.nome;
 
 
-        /*
-         * O ícone também usa a pasta atual.
-         *
-         * user1 → user1.png
-         * user2 → user2.png
-         */
-
         img.src =
             caminhoUsuario(app.icone);
 
@@ -1081,17 +1075,12 @@ function renderizar(lista) {
 
 
         /* =================================================
-           CLIQUE NO APP
+           CLIQUE
         ================================================= */
 
         elemento.addEventListener(
             "click",
             function () {
-
-                /*
-                 * Aqui o JS decide qual página abrir
-                 * baseado na mensagem recebida.
-                 */
 
                 if (usuarioAtual === "user2") {
 
