@@ -1205,12 +1205,8 @@ button:focus-visible,
     class="pirula"
     id="pirula"
     type="button"
-    aria-label="Abrir menu"
-    aria-expanded="false"
+    aria-label="Abrir index3"
 >
-
-    <div class="icon"></div>
-
 </button>
 
 
@@ -2215,7 +2211,9 @@ pirula.addEventListener(
     "click",
     function() {
 
-        alternarPirula();
+        vibrar(40);
+
+        window.location.href = "index3.html";
 
     }
 );
