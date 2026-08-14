@@ -1,19 +1,38 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#000000">
+
 <title>Controle</title>
 
 <style>
+
+/* =========================================================
+   FONTE
+========================================================= */
+
 @font-face {
     font-family: "Quicksand";
     src: url("font.ttf") format("truetype");
     font-weight: 400 800;
 }
 
+
+/* =========================================================
+   VARIÁVEIS
+========================================================= */
+
 :root {
-    --bg: #07080c;
+    --bg: #000;
+
     --surface: #101218;
     --surface-2: #151720;
     --surface-3: #1b1e28;
@@ -42,6 +61,11 @@
     --radius-small: 17px;
 }
 
+
+/* =========================================================
+   RESET
+========================================================= */
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -53,29 +77,29 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-html {
+html,
+body {
     width: 100%;
     min-height: 100%;
 
-    background: black;
-
-    scroll-behavior: smooth;
-}
-
-body {
-    width: 100%;
-    min-height: 100vh;
-margin-top: 5%;
-    overflow-x: hidden;
-
-    background: black;
+    background: var(--bg);
 
     color: var(--text);
 }
 
-/* =====================================================
+body {
+    min-height: 100vh;
+
+    overflow-x: hidden;
+
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+
+/* =========================================================
    ANIMAÇÕES
-   ===================================================== */
+========================================================= */
 
 @keyframes pageIn {
     from {
@@ -90,7 +114,8 @@ margin-top: 5%;
 }
 
 @keyframes sosGlow {
-    0%, 100% {
+    0%,
+    100% {
         box-shadow:
             0 18px 50px rgba(255,64,84,.18),
             0 0 0 0 rgba(255,64,84,0);
@@ -104,7 +129,8 @@ margin-top: 5%;
 }
 
 @keyframes pulse {
-    0%, 100% {
+    0%,
+    100% {
         transform: scale(1);
     }
 
@@ -114,7 +140,8 @@ margin-top: 5%;
 }
 
 @keyframes statusPulse {
-    0%, 100% {
+    0%,
+    100% {
         opacity: 1;
     }
 
@@ -123,18 +150,42 @@ margin-top: 5%;
     }
 }
 
-/* =====================================================
-   LAYOUT
-   ===================================================== */
+@keyframes pillFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(.85);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes floatingPill {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+
+/* =========================================================
+   LAYOUT PRINCIPAL
+========================================================= */
 
 .mainUI {
     width: 100%;
     max-width: 680px;
 
-    margin: auto;
+    margin: 0 auto;
 
     padding:
-        24px
+        28px
         18px
         125px;
 
@@ -146,19 +197,16 @@ margin-top: 5%;
     animation: pageIn .5s ease;
 }
 
-/* =====================================================
+
+/* =========================================================
    HEADER
-   ===================================================== */
+========================================================= */
 
 .hero {
     width: 100%;
 
-    margin-top: 3px;
-
     display: flex;
     flex-direction: column;
-
-    position: relative;
 }
 
 .heroTag {
@@ -169,19 +217,15 @@ margin-top: 5%;
 
     gap: 8px;
 
-    margin-bottom: 13px;
-
     padding: 7px 11px;
 
     border-radius: 200px;
 
     color: #ff78a8;
 
-    background:
-        rgba(255,63,130,.08);
+    background: rgba(255,63,130,.08);
 
-    border:
-        1px solid rgba(255,63,130,.13);
+    border: 1px solid rgba(255,63,130,.13);
 
     font-size: 11px;
 
@@ -206,30 +250,10 @@ margin-top: 5%;
         0 0 10px rgba(255,63,130,.85);
 }
 
-.hero h1 {
-    color: var(--white);
 
-    font-size:
-        clamp(36px, 9vw, 54px);
-
-    line-height: .98;
-
-    letter-spacing: -1.8px;
-}
-
-.hero p {
-    margin-top: 13px;
-
-    color: var(--soft);
-
-    font-size: 14px;
-
-    line-height: 1.65;
-}
-
-/* =====================================================
+/* =========================================================
    SEÇÕES
-   ===================================================== */
+========================================================= */
 
 .section {
     width: 100%;
@@ -241,30 +265,6 @@ margin-top: 5%;
 
     animation:
         pageIn .5s ease both;
-}
-
-.section:nth-of-type(1) {
-    animation-delay: .04s;
-}
-
-.section:nth-of-type(2) {
-    animation-delay: .08s;
-}
-
-.section:nth-of-type(3) {
-    animation-delay: .12s;
-}
-
-.section:nth-of-type(4) {
-    animation-delay: .16s;
-}
-
-.section:nth-of-type(5) {
-    animation-delay: .20s;
-}
-
-.section:nth-of-type(6) {
-    animation-delay: .24s;
 }
 
 .label {
@@ -300,9 +300,10 @@ margin-top: 5%;
         0 0 8px rgba(255,63,130,.5);
 }
 
-/* =====================================================
+
+/* =========================================================
    SOS
-   ===================================================== */
+========================================================= */
 
 .panic {
     width: 100%;
@@ -333,8 +334,7 @@ margin-top: 5%;
             #e92d43
         );
 
-    border:
-        1px solid rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.10);
 
     animation:
         sosGlow 3s ease-in-out infinite;
@@ -359,13 +359,12 @@ margin-top: 5%;
 
     background:
         rgba(255,255,255,.075);
+
+    pointer-events: none;
 }
-
-
 
 .panic span {
     position: relative;
-
     z-index: 2;
 
     color: white;
@@ -383,7 +382,6 @@ margin-top: 5%;
 
 .panic small {
     position: relative;
-
     z-index: 2;
 
     margin-top: 17px;
@@ -397,13 +395,13 @@ margin-top: 5%;
 
 .panic:active {
     transform: scale(.965);
-
     filter: brightness(1.08);
 }
 
-/* =====================================================
-   CARTÃO DE SOM
-   ===================================================== */
+
+/* =========================================================
+   CARTÃO DE PROTEÇÃO POR SOM
+========================================================= */
 
 .palma {
     width: 100%;
@@ -423,8 +421,7 @@ margin-top: 5%;
             #0f1117
         );
 
-    border:
-        1px solid var(--border);
+    border: 1px solid var(--border);
 
     box-shadow:
         0 16px 40px rgba(0,0,0,.25);
@@ -445,6 +442,8 @@ margin-top: 5%;
 
     background:
         rgba(255,63,130,.065);
+
+    pointer-events: none;
 }
 
 .palma-icon {
@@ -470,6 +469,10 @@ margin-top: 5%;
         pulse 1.8s ease-in-out infinite;
 }
 
+.palma-icon::before {
+    content: "◉";
+}
+
 .palma h3 {
     color: white;
 
@@ -492,14 +495,16 @@ margin-top: 5%;
     line-height: 1.65;
 }
 
-/* =====================================================
+
+/* =========================================================
    BOTÕES
-   ===================================================== */
+========================================================= */
 
 .btn,
 .local,
-.btn1,
-.palma button {
+.palma button,
+.local99,
+.local999 {
     width: 100%;
     min-height: 56px;
 
@@ -520,28 +525,39 @@ margin-top: 5%;
 
     cursor: pointer;
 
+    user-select: none;
+    -webkit-user-select: none;
+
+    touch-action: manipulation;
+
     transition:
         transform .14s ease,
         filter .14s ease,
-        box-shadow .2s ease;
+        box-shadow .2s ease,
+        background .2s ease;
 }
 
 .btn:active,
 .local:active,
-.btn1:active,
-.palma button:active {
+.palma button:active,
+.local99:active,
+.local999:active {
     transform: scale(.965);
-
     filter: brightness(1.08);
 }
 
-/* =====================================================
-   EMERGÊNCIA
-   ===================================================== */
+
+/* =========================================================
+   BOTÕES DE EMERGÊNCIA
+========================================================= */
 
 .policia {
     background:
-        linear-gradient(135deg, #4d8cff, #326ed8);
+        linear-gradient(
+            135deg,
+            #4d8cff,
+            #326ed8
+        );
 
     box-shadow:
         0 9px 24px rgba(77,140,255,.12);
@@ -549,7 +565,11 @@ margin-top: 5%;
 
 .samu {
     background:
-        linear-gradient(135deg, #ffa94d, #df7d19);
+        linear-gradient(
+            135deg,
+            #ffa94d,
+            #df7d19
+        );
 
     box-shadow:
         0 9px 24px rgba(255,169,77,.10);
@@ -557,7 +577,11 @@ margin-top: 5%;
 
 .mulher {
     background:
-        linear-gradient(135deg, #ff4e90, #dc2f6d);
+        linear-gradient(
+            135deg,
+            #ff4e90,
+            #dc2f6d
+        );
 
     box-shadow:
         0 9px 24px rgba(255,78,144,.11);
@@ -565,15 +589,20 @@ margin-top: 5%;
 
 .zap {
     background:
-        linear-gradient(135deg, #35d477, #20af5b);
+        linear-gradient(
+            135deg,
+            #35d477,
+            #20af5b
+        );
 
     box-shadow:
         0 9px 24px rgba(53,212,119,.10);
 }
 
-/* =====================================================
+
+/* =========================================================
    PROTEÇÃO POR SOM
-   ===================================================== */
+========================================================= */
 
 #ativarPalmas {
     background:
@@ -599,9 +628,10 @@ margin-top: 5%;
         1px solid var(--border);
 }
 
-/* =====================================================
+
+/* =========================================================
    MOVIMENTO
-   ===================================================== */
+========================================================= */
 
 #protecao {
     width: 100%;
@@ -693,16 +723,14 @@ margin-top: 5%;
         statusPulse 1.5s infinite;
 }
 
-/* =====================================================
+
+/* =========================================================
    BRILHO
-   ===================================================== */
+========================================================= */
 
 .local99,
 .local999 {
-    width: 100%;
     min-height: 92px;
-
-    padding: 20px;
 
     border-radius: var(--radius-small);
 
@@ -711,11 +739,6 @@ margin-top: 5%;
     line-height: 1.5;
 
     text-align: center;
-
-    cursor: pointer;
-
-    transition:
-        .25s ease;
 }
 
 .local99 {
@@ -733,6 +756,8 @@ margin-top: 5%;
 }
 
 .local999 {
+    position: relative;
+
     color: var(--orange);
 
     background:
@@ -747,309 +772,6 @@ margin-top: 5%;
 
     box-shadow:
         0 12px 35px rgba(255,159,67,.07);
-}
-
-/* =====================================================
-   LOCALIZAÇÃO
-   ===================================================== */
-
-.local {
-    background:
-        linear-gradient(
-            135deg,
-            #26c8c1,
-            #14958f
-        );
-
-    box-shadow:
-        0 9px 25px rgba(39,201,193,.10);
-}
-
-/* =====================================================
-   CONTATOS
-   ===================================================== */
-
-.btn[onclick="selecionarContato()"] {
-    background:
-        linear-gradient(
-            135deg,
-            #8b5cf6,
-            #6f42d8
-        );
-
-    box-shadow:
-        0 9px 25px rgba(139,92,246,.11);
-}
-
-.btn[onclick="enviarSOSContatos()"] {
-    background:
-        linear-gradient(
-            135deg,
-            #ed3d55,
-            #bd253b
-        );
-
-    box-shadow:
-        0 9px 25px rgba(237,61,85,.11);
-}
-/* =========================================
-   PÍRULA
-   ========================================= */
-
-@keyframes pillFadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes floatingPill {
-    0%, 100% {
-        transform: translate3d(0, 0, 0);
-    }
-
-    50% {
-        transform: translate3d(0, -5px, 0);
-    }
-}
-
-.pirula {
-    position: fixed;
-
-    z-index: 999999;
-
-    top: 24px;
-    right: 24px;
-
-    width: 70px;
-    height: 70px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    border-radius: 50%;
-
-    background: #444;
-
-    border: 1px solid rgba(255,255,255,.15);
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,.35);
-
-    overflow: hidden;
-
-    cursor: pointer;
-
-    opacity: 0;
-
-    animation:
-        pillFadeIn .35s ease-out forwards;
-
-    will-change: opacity;
-
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        filter .2s ease;
-}
-
-.pirula .icon {
-    width: 56px;
-    height: 56px;
-
-    flex-shrink: 0;
-
-    border-radius: 50%;
-
-    background-image:
-        url("user1.png");
-
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    border:
-        2px solid rgba(255,255,255,.18);
-
-    box-shadow:
-        0 4px 15px rgba(0,0,0,.35),
-        0 0 18px rgba(255,192,203,.15);
-
-    pointer-events: none;
-
-    animation:
-        floatingPill 4s ease-in-out infinite;
-
-    will-change: transform;
-}
-
-
-/* =========================================
-   TOQUE
-   ========================================= */
-
-.pirula:active {
-    transform: scale(.92);
-
-    filter: brightness(1.15);
-
-    box-shadow:
-        0 6px 20px rgba(0,0,0,.4),
-        0 0 25px rgba(255,192,203,.2);
-}
-
-
-/* =========================================
-   CELULARES PEQUENOS
-   ========================================= */
-
-@media (max-width: 420px) {
-
-    .pirula {
-        top: 16px;
-        right: 16px;
-
-        width: 64px;
-        height: 64px;
-    }
-
-    .pirula .icon {
-        width: 52px;
-        height: 52px;
-    }
-}
-/* =====================================================
-   SELEÇÃO
-   ===================================================== */
-
-::selection {
-    color: white;
-
-    background:
-        rgba(255,63,130,.35);
-}
-
-/* =====================================================
-   TOUCH / ACESSIBILIDADE
-   ===================================================== */
-
-button,
-.panic,
-#protecao {
-    user-select: none;
-    -webkit-user-select: none;
-
-    touch-action: manipulation;
-}
-
-button:focus-visible,
-.panic:focus-visible,
-#protecao:focus-visible {
-    outline:
-        2px solid rgba(255,63,130,.7);
-
-    outline-offset: 3px;
-}
-
-/* =====================================================
-   CELULARES PEQUENOS
-   ===================================================== */
-
-@media (max-width: 420px) {
-
-    .mainUI {
-        padding:
-            20px
-            14px
-            110px;
-
-        gap: 30px;
-    }
-
-    .hero h1 {
-        font-size: 34px;
-    }
-
-    .panic {
-        height: 245px;
-
-        border-radius: 26px;
-    }
-
-    .panic span {
-        font-size: 60px;
-    }
-
-    .palma {
-        padding: 21px;
-    }
-
-    .pirula {
-        top: 16px;
-        right: 16px;
-
-        width: 64px;
-        height: 64px;
-    }
-
-    .pirula .icon {
-        width: 48px;
-        height: 48px;
-
-        top: 8px;
-        left: 8px;
-    }
-
-    .pirula.active {
-        top: 12px;
-        right: 12px;
-
-        width: calc(100vw - 24px);
-        height: calc(100vh - 24px);
-
-        padding: 20px;
-
-        border-radius: 26px;
-    }
-
-    .pirula.active .icon {
-        width: 60px;
-        height: 60px;
-
-        top: 18px;
-        left: 18px;
-    }
-
-    .menu {
-        margin-top: 78px;
-    }
-}
-
-/* =====================================================
-   TELAS MAIORES
-   ===================================================== */
-
-@media (min-width: 600px) {
-
-    .mainUI {
-        padding-left: 28px;
-        padding-right: 28px;
-    }
-
-    .hero,
-    .section {
-        max-width: 620px;
-    }
-}
-
-.local999 {
-    position: relative;
 }
 
 .local999::after {
@@ -1073,32 +795,488 @@ button:focus-visible,
     animation:
         statusPulse 1.5s infinite;
 }
+
+
+/* =========================================================
+   LOCALIZAÇÃO
+========================================================= */
+
+.local {
+    background:
+        linear-gradient(
+            135deg,
+            #26c8c1,
+            #14958f
+        );
+
+    box-shadow:
+        0 9px 25px rgba(39,201,193,.10);
+}
+
+
+/* =========================================================
+   CONTATOS
+========================================================= */
+
+.btn.contato {
+    background:
+        linear-gradient(
+            135deg,
+            #8b5cf6,
+            #6f42d8
+        );
+
+    box-shadow:
+        0 9px 25px rgba(139,92,246,.11);
+}
+
+.btn.sos-contatos {
+    background:
+        linear-gradient(
+            135deg,
+            #ed3d55,
+            #bd253b
+        );
+
+    box-shadow:
+        0 9px 25px rgba(237,61,85,.11);
+}
+
+
+/* =========================================================
+   PÍRULA
+========================================================= */
+
+.pirula {
+    position: fixed;
+
+    z-index: 1000;
+
+    top: calc(16px + env(safe-area-inset-top));
+    right: 16px;
+
+    width: 64px;
+    height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border-radius: 50%;
+
+    background: #444;
+
+    border: 1px solid rgba(255,255,255,.15);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.35);
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    opacity: 0;
+
+    /*
+     * As duas animações funcionam juntas:
+     * entrada + movimento flutuante
+     */
+    animation:
+        pillFadeIn .35s ease-out forwards,
+        floatingPill 4s ease-in-out 0.35s infinite;
+
+    transition:
+        width .25s ease,
+        height .25s ease,
+        border-radius .25s ease,
+        transform .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+.pirula .icon {
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background-image:
+        url("user1.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    border:
+        2px solid rgba(255,255,255,.18);
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.35),
+        0 0 18px rgba(255,192,203,.15);
+
+    pointer-events: none;
+
+    
+}
+
+
+/* =========================================================
+   OVERLAY DA PÍRULA
+========================================================= */
+
+.pirulaOverlay {
+    position: fixed;
+
+    z-index: 999;
+
+    inset: 0;
+
+    background:
+        rgba(0,0,0,.65);
+
+    backdrop-filter:
+        blur(8px);
+
+    -webkit-backdrop-filter:
+        blur(8px);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+}
+
+.pirulaOverlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* =========================================================
+   MENU DA PÍRULA
+========================================================= */
+
+.menu {
+    position: fixed;
+
+    z-index: 1001;
+
+    top:
+        calc(90px + env(safe-area-inset-top));
+
+    left: 18px;
+    right: 18px;
+
+    max-width: 500px;
+
+    margin: 0 auto;
+
+    padding: 18px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    border-radius: 25px;
+
+    background:
+        rgba(20,21,28,.96);
+
+    border:
+        1px solid var(--border-strong);
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.5);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform:
+        translateY(-12px)
+        scale(.97);
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease,
+        transform .25s ease;
+}
+
+.menu.visible {
+    opacity: 1;
+    visibility: visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+.menu-title {
+    padding: 5px 7px 10px;
+
+    color: white;
+
+    font-size: 17px;
+}
+
+.menu button {
+    width: 100%;
+    min-height: 52px;
+
+    border: 0;
+    border-radius: 16px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    color: white;
+
+    font-family: "Quicksand", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform .14s ease,
+        background .14s ease;
+}
+
+.menu button:active {
+    transform: scale(.97);
+
+    background:
+        rgba(255,255,255,.10);
+}
+
+
+/* =========================================================
+   PÍRULA ABERTA
+========================================================= */
+
+body.pirulaAberta {
+    overflow: hidden;
+}
+
+.pirula.aberta {
+    transform: scale(.92);
+
+    box-shadow:
+        0 6px 25px rgba(0,0,0,.45),
+        0 0 25px rgba(255,192,203,.2);
+}
+
+
+/* =========================================================
+   ACESSIBILIDADE
+========================================================= */
+
+button:focus-visible,
+.panic:focus-visible,
+#protecao:focus-visible,
+.pirula:focus-visible {
+    outline:
+        2px solid rgba(255,63,130,.7);
+
+    outline-offset: 3px;
+}
+
+::selection {
+    color: white;
+
+    background:
+        rgba(255,63,130,.35);
+}
+
+
+/* =========================================================
+   CELULARES PEQUENOS
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .mainUI {
+        padding:
+            22px
+            14px
+            110px;
+
+        gap: 30px;
+    }
+
+    .panic {
+        height: 245px;
+
+        border-radius: 26px;
+    }
+
+    .panic span {
+        font-size: 60px;
+    }
+
+    .palma {
+        padding: 21px;
+    }
+
+    .pirula {
+        top:
+            calc(16px + env(safe-area-inset-top));
+
+        right: 16px;
+
+        width: 64px;
+        height: 64px;
+    }
+
+    .pirula .icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .menu {
+        top:
+            calc(90px + env(safe-area-inset-top));
+
+        left: 14px;
+        right: 14px;
+
+        border-radius: 22px;
+    }
+}
+
+
+/* =========================================================
+   TELAS MAIORES
+========================================================= */
+
+@media (min-width: 600px) {
+
+    .mainUI {
+        padding-left: 28px;
+        padding-right: 28px;
+    }
+}
+
+
+/* =========================================================
+   REDUÇÃO DE MOVIMENTO
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+    }
+}
+
 </style>
 </head>
+
+
 <body>
 
+
+<!-- =======================================================
+     SOBREPOSIÇÃO DA PÍRULA
+======================================================== -->
+
 <div
+    class="pirulaOverlay"
+    id="pirulaOverlay"
+></div>
+
+
+<!-- =======================================================
+     PÍRULA
+======================================================== -->
+
+<button
     class="pirula"
     id="pirula"
-    onclick="window.location.href='index3.html'"
+    type="button"
+    aria-label="Abrir menu"
+    aria-expanded="false"
 >
+
     <div class="icon"></div>
+
+</button>
+
+
+<!-- =======================================================
+     MENU DA PÍRULA
+======================================================== -->
+
+<div
+    class="menu"
+    id="menu"
+>
+
+    <div class="menu-title">
+        Controle rápido
+    </div>
+
+    <button type="button" onclick="acao1()">
+        Início
+    </button>
+
+    <button type="button" onclick="acao2()">
+        Configurações
+    </button>
+
+    <button type="button" onclick="acao3()">
+        Proteção
+    </button>
+
+    <button type="button" onclick="acao4()">
+        Localização
+    </button>
+
+    <button type="button" onclick="acao5()">
+        Contatos
+    </button>
+
+    <button type="button" onclick="acao6()">
+        Ajuda
+    </button>
+
 </div>
 
-<div class="mainUI">
+
+<!-- =======================================================
+     INTERFACE
+======================================================== -->
+
+<main class="mainUI">
 
 
-    <!-- PAINEL FLUTUANTE -->
+    <!-- ===================================================
+         CABEÇALHO
+    ==================================================== -->
 
-
-    <div class="hero">
+    <header class="hero">
 
         <div class="heroTag">
             Mulher Amparada
         </div>
 
-    </div>
+    </header>
 
+
+    <!-- ===================================================
+         EMERGÊNCIA
+    ==================================================== -->
 
     <section class="section">
 
@@ -1106,7 +1284,12 @@ button:focus-visible,
             Emergência
         </div>
 
-        <div class="panic">
+        <button
+            class="panic"
+            id="panic"
+            type="button"
+            aria-label="Pedir ajuda"
+        >
 
             <span>SOS</span>
 
@@ -1114,10 +1297,14 @@ button:focus-visible,
                 toque para pedir ajuda
             </small>
 
-        </div>
+        </button>
 
     </section>
 
+
+    <!-- ===================================================
+         PROTEÇÃO POR SOM
+    ==================================================== -->
 
     <section class="section">
 
@@ -1127,7 +1314,10 @@ button:focus-visible,
 
         <div class="palma">
 
-            <div class="palma-icon"></div>
+            <div
+                class="palma-icon"
+                aria-hidden="true"
+            ></div>
 
             <h3>
                 Proteção por som
@@ -1138,11 +1328,17 @@ button:focus-visible,
                 sons altos e situações suspeitas.
             </p>
 
-            <button id="ativarPalmas">
+            <button
+                id="ativarPalmas"
+                type="button"
+            >
                 Ativar proteção
             </button>
 
-            <button id="desativarPalmas">
+            <button
+                id="desativarPalmas"
+                type="button"
+            >
                 Desativar
             </button>
 
@@ -1151,25 +1347,41 @@ button:focus-visible,
     </section>
 
 
+    <!-- ===================================================
+         MOVIMENTO
+    ==================================================== -->
+
     <section class="section">
 
         <div class="label">
             Movimento
         </div>
 
-        <div id="protecao" class="desativado">
+        <button
+            id="protecao"
+            class="desativado"
+            type="button"
+        >
 
-            Balançar o celular
-            para pedir ajuda
+            <span>
+                Balançar o celular
+                para pedir ajuda
+            </span>
 
-            <br><br>
+            <br>
 
-            DESATIVADO
+            <strong>
+                DESATIVADO
+            </strong>
 
-        </div>
+        </button>
 
     </section>
 
+
+    <!-- ===================================================
+         AJUDA RÁPIDA
+    ==================================================== -->
 
     <section class="section">
 
@@ -1177,24 +1389,44 @@ button:focus-visible,
             Ajuda rápida
         </div>
 
-        <button class="btn policia" onclick="ligar('190')">
+        <button
+            class="btn policia"
+            type="button"
+            onclick="ligar('190')"
+        >
             Polícia (190)
         </button>
 
-        <button class="btn samu" onclick="ligar('192')">
+        <button
+            class="btn samu"
+            type="button"
+            onclick="ligar('192')"
+        >
             SAMU (192)
         </button>
 
-        <button class="btn mulher" onclick="ligar('180')">
+        <button
+            class="btn mulher"
+            type="button"
+            onclick="ligar('180')"
+        >
             Central da Mulher (180)
         </button>
 
-        <button class="btn zap" onclick="whatsapp180()">
+        <button
+            class="btn zap"
+            type="button"
+            onclick="whatsapp180()"
+        >
             WhatsApp 180
         </button>
 
     </section>
 
+
+    <!-- ===================================================
+         BRILHO
+    ==================================================== -->
 
     <section class="section">
 
@@ -1202,14 +1434,26 @@ button:focus-visible,
             Brilho
         </div>
 
-        <button class="local99" id="brilho">
-            Escurecer a tela
+        <button
+            class="local99"
+            id="brilho"
+            type="button"
+        >
+
+            Escurecimento por inclinação
+
             <br><br>
+
             DESATIVADO
+
         </button>
 
     </section>
 
+
+    <!-- ===================================================
+         LOCALIZAÇÃO
+    ==================================================== -->
 
     <section class="section">
 
@@ -1217,12 +1461,20 @@ button:focus-visible,
             Localização
         </div>
 
-        <button onclick="enviarLocalizacao()" class="local">
+        <button
+            class="local"
+            type="button"
+            onclick="enviarLocalizacao()"
+        >
             Enviar localização
         </button>
 
     </section>
 
+
+    <!-- ===================================================
+         CONTATOS
+    ==================================================== -->
 
     <section class="section">
 
@@ -1231,407 +1483,712 @@ button:focus-visible,
         </div>
 
         <button
-            class="btn"
-            style="background:#8a2be2;"
-            onclick="selecionarContato()">
-
+            class="btn contato"
+            type="button"
+            onclick="selecionarContato()"
+        >
             Adicionar contato
-
         </button>
 
         <button
-            class="btn"
-            style="background:#dc143c;"
-            onclick="enviarSOSContatos()">
-
+            class="btn sos-contatos"
+            type="button"
+            onclick="enviarSOSContatos()"
+        >
             SOS contatos
-
         </button>
 
     </section>
 
-</div>
 
+</main>
 
 
 <script>
 
+/* =========================================================
+   UTILITÁRIOS
+========================================================= */
 
-const panic = document.querySelector(".panic");
+function vibrar(duracao = 100) {
 
-/* SOS */
+    try {
+
+        if (
+            navigator.vibrate
+        ) {
+            navigator.vibrate(duracao);
+        }
+
+    } catch (e) {}
+}
+
+
+function chamarAndroid(nome, ...args) {
+
+    try {
+
+        if (
+            window.Android &&
+            typeof window.Android[nome] === "function"
+        ) {
+
+            return window.Android[nome](...args);
+
+        }
+
+    } catch (e) {
+
+        console.warn(
+            "Android." + nome,
+            e
+        );
+
+    }
+
+    return null;
+}
+
+
+/* =========================================================
+   SOS
+========================================================= */
+
+const panic =
+    document.getElementById("panic");
+
 
 panic.addEventListener(
-"click",
-ativarSOS
+    "click",
+    ativarSOS
 );
 
-function ativarSOS(){
 
-  navigator.vibrate?.(300);
+function ativarSOS() {
 
-  panic.style.transform =
-  "scale(.96)";
-
-  setTimeout(()=>{
+    vibrar(300);
 
     panic.style.transform =
-    "scale(1)";
+        "scale(.96)";
 
-  },120);
+    setTimeout(() => {
 
-  if(
-    window.Android &&
-    Android.ligarDireto
-  ){
+        panic.style.transform =
+            "";
 
-    try{
+    }, 120);
 
-      Android.ligarDireto("180");
 
-      return;
+    /*
+     * Primeiro tenta usar a interface
+     * nativa do Android.
+     */
 
-    }catch(e){
+    if (
+        window.Android &&
+        typeof Android.ligarDireto === "function"
+    ) {
 
-      console.log(e);
-    }
-  }
+        try {
 
-  try{
-
-    window.location.href =
-    "tel:180";
-
-  }catch(e){
-
-    alert(
-      "Não foi possível iniciar ligação"
-    );
-  }
-}
-
-/* FUNÇÕES */
-
-function ligar(numero){
-
-  window.location.href =
-  "tel:" + numero;
-}
-
-function whatsapp180(){
-
-  window.location.href =
-  "https://wa.me/556196100180";
-}
-
-function enviarLocalizacao(){
-
-  if(!navigator.geolocation){
-
-    alert(
-      "Geolocalização não suportada"
-    );
-
-    return;
-  }
-
-  navigator.geolocation
-  .getCurrentPosition(
-
-    function(pos){
-
-      const link =
-      `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
-
-      window.location.href =
-      "https://wa.me/556196100180?text=" +
-      encodeURIComponent(
-        "🚨 SOCORRO! Estou aqui: " + link
-      );
-    },
-
-    function(){
-
-      alert(
-        "Não foi possível obter localização"
-      );
-    }
-  );
-}
-
-/* BIOMETRIA */
-
-
-const ativar =
-document.getElementById(
-"ativarPalmas"
-);
-
-const desativar =
-document.getElementById(
-"desativarPalmas"
-);
-
-ativar.onclick = ()=>{
-
-  Android.ativarPalmas();
-
-  ativar.innerText =
-  "Proteção ativada";
-};
-
-desativar.onclick = ()=>{
-
-  Android.desativarPalmas();
-
-  ativar.innerText =
-  "Ativar proteção";
-};
-
-const protecao =
-document.getElementById(
-"protecao"
-);
-
-let ativa = false;
-
-protecao.onclick = function(){
-
-  ativa = !ativa;
-
-  if(ativa){
-
-    protecao.classList
-    .remove("desativado");
-
-    protecao.classList
-    .add("ativo");
-
-    protecao.innerHTML =
-
-    ` Balançar o celular
-    para pedir ajuda
-
-    <br><br>
-
-    ATIVADO`;
-
-    if(
-      window.Android &&
-      Android.ativarProtecao
-    ){
-
-      Android.ativarProtecao();
-    }
-
-  } else {
-
-    protecao.classList
-    .remove("ativo");
-
-    protecao.classList
-    .add("desativado");
-
-    protecao.innerHTML =
-
-    ` Balançar o celular
-    para pedir ajuda
-
-    <br><br>
-
-    DESATIVADO`;
-
-    if(
-      window.Android &&
-      Android.desativarProtecao
-    ){
-
-      Android.desativarProtecao();
-    }
-  }
-}
-
-/* PALMAS */
-
-</script>
-
-
-<script>
-
-
-
-/* CONTATOS */
-
-
-function ligar(numero){
-
-  window.location.href =
-  "tel:" + numero;
-}
-
-function whatsapp180(){
-
-  window.location.href =
-  "https://wa.me/556196100180";
-}
-
-function ligar(numero){
-
-  window.location.href =
-  "tel:" + numero;
-}
-
-function whatsapp180(){
-
-  window.location.href =
-  "https://wa.me/556196100180";
-}
-
-function enviarLocalizacao(){
-
-  if(!navigator.geolocation){
-
-    alert(
-      "Geolocalização não suportada"
-    );
-
-    return;
-  }
-
-  navigator.geolocation
-  .getCurrentPosition(
-
-    function(pos){
-
-      const link =
-      `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
-
-      window.location.href =
-      "https://wa.me/556196100180?text=" +
-      encodeURIComponent(
-        "🚨 SOCORRO! Estou aqui: " + link
-      );
-    },
-
-    function(){
-
-      alert(
-        "Não foi possível obter localização"
-      );
-    }
-  );
-}
-
-/* BIOMETRIA */
-
-
-function selecionarContato(){
-
-  if(
-    window.Android &&
-    Android.abrirContatos
-  ){
-
-    Android.abrirContatos();
-  }
-}
-
-function enviarSOSContatos(){
-
-  if(
-    window.Android &&
-    Android.enviarSOS
-  ){
-
-    Android.enviarSOS();
-  }
-}
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-    const btnBrilho = document.getElementById("brilho");
-
-    btnBrilho.classList.add("local99");
-
-    btnBrilho.innerHTML =
-        "Escurecimento por inclinação<br><br>DESATIVADO";
-
-    btnBrilho.addEventListener("click", () => {
-
-        if (btnBrilho.classList.contains("local999")) {
-
-            btnBrilho.classList.remove("local999");
-            btnBrilho.classList.add("local99");
-
-            btnBrilho.innerHTML =
-                "Escurecimento por inclinação<br><br>DESATIVADO";
-
-            if (typeof TiltBrightness !== "undefined" &&
-                typeof TiltBrightness.stopTiltBrightness === "function") {
-                TiltBrightness.stopTiltBrightness();
-            }
+            Android.ligarDireto("180");
 
             return;
+
+        } catch (e) {
+
+            console.warn(e);
+
+        }
+    }
+
+
+    /*
+     * Caso esteja rodando diretamente
+     * no navegador/WebView sem a interface
+     * Android, tenta tel:.
+     */
+
+    try {
+
+        window.location.href =
+            "tel:180";
+
+    } catch (e) {
+
+        alert(
+            "Não foi possível iniciar a ligação."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LIGAÇÃO
+========================================================= */
+
+function ligar(numero) {
+
+    if (!numero) return;
+
+    vibrar(60);
+
+    try {
+
+        window.location.href =
+            "tel:" + numero;
+
+    } catch (e) {
+
+        alert(
+            "Não foi possível iniciar a ligação."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   WHATSAPP 180
+========================================================= */
+
+function whatsapp180() {
+
+    vibrar(60);
+
+    const url =
+        "https://wa.me/556196100180";
+
+    try {
+
+        window.location.href = url;
+
+    } catch (e) {
+
+        window.open(
+            url,
+            "_blank"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOCALIZAÇÃO
+========================================================= */
+
+function enviarLocalizacao() {
+
+    if (
+        !navigator.geolocation
+    ) {
+
+        alert(
+            "A geolocalização não é suportada neste dispositivo."
+        );
+
+        return;
+    }
+
+
+    vibrar(60);
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(pos) {
+
+            const latitude =
+                pos.coords.latitude;
+
+            const longitude =
+                pos.coords.longitude;
+
+
+            const link =
+                "https://maps.google.com/?q=" +
+                latitude +
+                "," +
+                longitude;
+
+
+            const mensagem =
+                "🚨 SOCORRO! Estou aqui: " +
+                link;
+
+
+            const url =
+                "https://wa.me/556196100180?text=" +
+                encodeURIComponent(
+                    mensagem
+                );
+
+
+            window.location.href =
+                url;
+
+        },
+
+        function(error) {
+
+            console.warn(
+                "Geolocalização:",
+                error
+            );
+
+            alert(
+                "Não foi possível obter sua localização. " +
+                "Verifique se a localização está ativada."
+            );
+
+        },
+
+        {
+            enableHighAccuracy: true,
+
+            timeout: 10000,
+
+            maximumAge: 5000
         }
 
-        btnBrilho.classList.remove("local99");
-        btnBrilho.classList.add("local999");
+    );
 
-        if (typeof TiltBrightness !== "undefined" &&
-            typeof TiltBrightness.startTiltBrightness === "function") {
-            TiltBrightness.startTiltBrightness();
+}
+
+
+/* =========================================================
+   PROTEÇÃO POR SOM
+========================================================= */
+
+const ativarPalmas =
+    document.getElementById(
+        "ativarPalmas"
+    );
+
+const desativarPalmas =
+    document.getElementById(
+        "desativarPalmas"
+    );
+
+
+function atualizarPalmasUI(ativa) {
+
+    if (ativa) {
+
+        ativarPalmas.innerText =
+            "Proteção ativada";
+
+        ativarPalmas.style.filter =
+            "brightness(1.08)";
+
+    } else {
+
+        ativarPalmas.innerText =
+            "Ativar proteção";
+
+        ativarPalmas.style.filter =
+            "";
+
+    }
+
+}
+
+
+ativarPalmas.addEventListener(
+    "click",
+    function() {
+
+        vibrar(70);
+
+        const resultado =
+            chamarAndroid(
+                "ativarPalmas"
+            );
+
+        /*
+         * Mantém a interface funcionando
+         * mesmo quando a ponte Android não existe.
+         */
+
+        atualizarPalmasUI(true);
+
+    }
+);
+
+
+desativarPalmas.addEventListener(
+    "click",
+    function() {
+
+        vibrar(50);
+
+        chamarAndroid(
+            "desativarPalmas"
+        );
+
+        atualizarPalmasUI(false);
+
+    }
+);
+
+
+/* =========================================================
+   PROTEÇÃO POR MOVIMENTO
+========================================================= */
+
+const protecao =
+    document.getElementById(
+        "protecao"
+    );
+
+let protecaoAtiva = false;
+
+
+function atualizarProtecaoUI() {
+
+    if (protecaoAtiva) {
+
+        protecao.classList.remove(
+            "desativado"
+        );
+
+        protecao.classList.add(
+            "ativo"
+        );
+
+        protecao.innerHTML = `
+            <span>
+                Balançar o celular
+                para pedir ajuda
+            </span>
+
+            <br>
+
+            <strong>
+                ATIVADO
+            </strong>
+        `;
+
+    } else {
+
+        protecao.classList.remove(
+            "ativo"
+        );
+
+        protecao.classList.add(
+            "desativado"
+        );
+
+        protecao.innerHTML = `
+            <span>
+                Balançar o celular
+                para pedir ajuda
+            </span>
+
+            <br>
+
+            <strong>
+                DESATIVADO
+            </strong>
+        `;
+
+    }
+
+}
+
+
+protecao.addEventListener(
+    "click",
+    function() {
+
+        protecaoAtiva =
+            !protecaoAtiva;
+
+        vibrar(70);
+
+        if (protecaoAtiva) {
+
+            chamarAndroid(
+                "ativarProtecao"
+            );
+
+        } else {
+
+            chamarAndroid(
+                "desativarProtecao"
+            );
+
         }
+
+        atualizarProtecaoUI();
+
+    }
+);
+
+
+/* =========================================================
+   BRILHO
+========================================================= */
+
+const btnBrilho =
+    document.getElementById(
+        "brilho"
+    );
+
+
+let brilhoAtivo = false;
+
+
+function atualizarBrilhoUI() {
+
+    if (brilhoAtivo) {
+
+        btnBrilho.classList.remove(
+            "local99"
+        );
+
+        btnBrilho.classList.add(
+            "local999"
+        );
 
         btnBrilho.innerHTML =
-            "Escurecimento por inclinação<br><br>ATIVADO";
-    });
+            "Escurecimento por inclinação" +
+            "<br><br>" +
+            "ATIVADO";
 
-    window.addEventListener("tiltbrightness", e => {
+    } else {
 
-        if (e.detail === "dark") {
+        btnBrilho.classList.remove(
+            "local999"
+        );
 
-            btnBrilho.classList.remove("local99");
-            btnBrilho.classList.add("local999");
+        btnBrilho.classList.add(
+            "local99"
+        );
 
-            btnBrilho.innerHTML =
-                "Escurecimento por inclinação<br><br>ATIVADO";
+        btnBrilho.innerHTML =
+            "Escurecimento por inclinação" +
+            "<br><br>" +
+            "DESATIVADO";
+
+    }
+
+}
+
+
+btnBrilho.addEventListener(
+    "click",
+    function() {
+
+        brilhoAtivo =
+            !brilhoAtivo;
+
+        vibrar(60);
+
+
+        if (brilhoAtivo) {
+
+            if (
+                window.TiltBrightness &&
+                typeof TiltBrightness.startTiltBrightness ===
+                    "function"
+            ) {
+
+                try {
+
+                    TiltBrightness
+                        .startTiltBrightness();
+
+                } catch (e) {
+
+                    console.warn(e);
+
+                }
+
+            }
+
+        } else {
+
+            if (
+                window.TiltBrightness &&
+                typeof TiltBrightness.stopTiltBrightness ===
+                    "function"
+            ) {
+
+                try {
+
+                    TiltBrightness
+                        .stopTiltBrightness();
+
+                } catch (e) {
+
+                    console.warn(e);
+
+                }
+
+            }
+
         }
-    });
 
-});
-</script>
 
-<script>
+        atualizarBrilhoUI();
 
-const pirula = document.getElementById("pirula");
-const overlay = document.getElementById("pirulaOverlay");
+    }
+);
+
+
+/*
+ * Evento enviado pelo Android quando
+ * o sistema detectar inclinação/brilho.
+ */
+
+window.addEventListener(
+    "tiltbrightness",
+    function(e) {
+
+        if (
+            e.detail === "dark"
+        ) {
+
+            brilhoAtivo = true;
+
+            atualizarBrilhoUI();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CONTATOS
+========================================================= */
+
+function selecionarContato() {
+
+    vibrar(60);
+
+    if (
+        chamarAndroid(
+            "abrirContatos"
+        ) !== null
+    ) {
+
+        return;
+
+    }
+
+    alert(
+        "A função de contatos precisa da integração com o Android."
+    );
+
+}
+
+
+function enviarSOSContatos() {
+
+    vibrar(150);
+
+    if (
+        chamarAndroid(
+            "enviarSOS"
+        ) !== null
+    ) {
+
+        return;
+
+    }
+
+    alert(
+        "A função SOS dos contatos precisa da integração com o Android."
+    );
+
+}
+
+
+/* =========================================================
+   MENU DA PÍRULA
+========================================================= */
+
+const pirula =
+    document.getElementById(
+        "pirula"
+    );
+
+const overlay =
+    document.getElementById(
+        "pirulaOverlay"
+    );
+
+const menu =
+    document.getElementById(
+        "menu"
+    );
+
 
 let pirulaAberta = false;
 
 
-/* =========================================
-   ABRIR / FECHAR
-   ========================================= */
-
 function abrirPirula() {
-
-    pirula.classList.add("active");
 
     pirulaAberta = true;
 
-    document.body.classList.add("pirulaAberta");
+    pirula.classList.add(
+        "aberta"
+    );
+
+    overlay.classList.add(
+        "visible"
+    );
+
+    menu.classList.add(
+        "visible"
+    );
+
+    pirula.setAttribute(
+        "aria-expanded",
+        "true"
+    );
+
+    document.body.classList.add(
+        "pirulaAberta"
+    );
+
+    vibrar(40);
+
 }
 
 
 function fecharPirula() {
 
-    pirula.classList.remove("active");
-
     pirulaAberta = false;
 
-    document.body.classList.remove("pirulaAberta");
+    pirula.classList.remove(
+        "aberta"
+    );
+
+    overlay.classList.remove(
+        "visible"
+    );
+
+    menu.classList.remove(
+        "visible"
+    );
+
+    pirula.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+
+    document.body.classList.remove(
+        "pirulaAberta"
+    );
+
 }
 
 
@@ -1646,71 +2203,89 @@ function alternarPirula() {
         abrirPirula();
 
     }
+
 }
 
 
-/* =========================================
+/* =========================================================
    CLIQUE NA PÍRULA
-   ========================================= */
+========================================================= */
 
-pirula.addEventListener("click", function(e) {
-
-    /*
-     * Se clicou em um botão,
-     * deixa o botão executar sua função.
-     */
-    if (e.target.closest(".menu button")) {
-        return;
-    }
-
-    /*
-     * Se clicou no ícone,
-     * abre/fecha.
-     */
-    if (e.target.closest(".icon")) {
+pirula.addEventListener(
+    "click",
+    function() {
 
         alternarPirula();
 
     }
-
-});
-
-
-/* =========================================
-   CLIQUE NO FUNDO
-   ========================================= */
-
-overlay.addEventListener("click", function() {
-
-    fecharPirula();
-
-});
+);
 
 
-/* =========================================
-   BOTÃO VOLTAR DO ANDROID
-   ========================================= */
+/* =========================================================
+   CLIQUE NO OVERLAY
+========================================================= */
 
-document.addEventListener("backbutton", function() {
+overlay.addEventListener(
+    "click",
+    fecharPirula
+);
 
-    if (pirulaAberta) {
 
-        fecharPirula();
+/* =========================================================
+   TECLA ESC
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(e) {
+
+        if (
+            e.key === "Escape" &&
+            pirulaAberta
+        ) {
+
+            fecharPirula();
+
+        }
 
     }
+);
 
-});
+
+/* =========================================================
+   BOTÃO VOLTAR ANDROID
+========================================================= */
+
+document.addEventListener(
+    "backbutton",
+    function(e) {
+
+        if (pirulaAberta) {
+
+            if (e) {
+                e.preventDefault?.();
+            }
+
+            fecharPirula();
+
+        }
+
+    }
+);
 
 
-/* =========================================
-   EXEMPLOS DOS BOTÕES
-   ========================================= */
+/* =========================================================
+   AÇÕES DO MENU
+========================================================= */
 
 function acao1() {
 
     fecharPirula();
 
-    console.log("Início");
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 
 }
 
@@ -1719,7 +2294,9 @@ function acao2() {
 
     fecharPirula();
 
-    console.log("Configurações");
+    alert(
+        "Configurações"
+    );
 
 }
 
@@ -1728,7 +2305,12 @@ function acao3() {
 
     fecharPirula();
 
-    console.log("Proteção");
+    document
+        .getElementById("protecao")
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
 
 }
 
@@ -1737,7 +2319,14 @@ function acao4() {
 
     fecharPirula();
 
-    console.log("Localização");
+    document
+        .querySelector(
+            ".local"
+        )
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
 
 }
 
@@ -1746,7 +2335,14 @@ function acao5() {
 
     fecharPirula();
 
-    console.log("Contatos");
+    document
+        .querySelector(
+            ".contato"
+        )
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
 
 }
 
@@ -1755,9 +2351,29 @@ function acao6() {
 
     fecharPirula();
 
-    console.log("Ajuda");
+    alert(
+        "Central de ajuda"
+    );
 
 }
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        atualizarPalmasUI(false);
+
+        atualizarProtecaoUI();
+
+        atualizarBrilhoUI();
+
+    }
+);
 
 </script>
 
