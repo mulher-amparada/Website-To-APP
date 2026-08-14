@@ -57,7 +57,7 @@ html {
     width: 100%;
     min-height: 100%;
 
-    background: var(--bg);
+    background: black;
 
     scroll-behavior: smooth;
 }
@@ -124,12 +124,14 @@ margin-top: 5%;
 }
 
 @keyframes floatingPill {
-    0%, 100% {
-        transform: translateY(0);
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 12px, 0);
     }
 
-    50% {
-        transform: translateY(-5px);
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
     }
 }
 
@@ -1063,14 +1065,15 @@ button:focus-visible,
 </head>
 <body>
 
+<div class="pirula" onclick="window.location.href='index3.html'">
+    <div class="icon"></div>
+</div>
 
 <div class="mainUI">
 
 
     <!-- PAINEL FLUTUANTE -->
-<div class="pirula" onclick="window.location.href='index3.html'">
-    <div class="icon"></div>
-</div>
+
 
     <div class="hero">
 
