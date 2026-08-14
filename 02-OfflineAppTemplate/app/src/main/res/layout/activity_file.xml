@@ -101,9 +101,9 @@
 
             android:layout_weight="1"
 
-            android:text="Mulher Amparada"
+            android:text="Arquivos e pastas:"
 
-            android:textColor="#ff9999"
+            android:textColor="#fff"
             android:textSize="19sp"
             android:textStyle="bold"
 
