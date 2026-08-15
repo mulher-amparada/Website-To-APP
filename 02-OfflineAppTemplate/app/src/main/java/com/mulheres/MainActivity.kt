@@ -345,7 +345,6 @@ webView.webViewClient = object : WebViewClient() {
 
 
     return false
-}
     }  
 
     override fun onPageFinished(
