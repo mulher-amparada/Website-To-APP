@@ -659,6 +659,7 @@ animation: transformar 0.5s ease;
     .dock .icon,
     .dock .user2 {
         width: 46px;
+        border-radius: 200px;
         height: 46px;
     }
 }
@@ -690,6 +691,7 @@ animation: transformar 0.5s ease;
     .user2 {
         width: 53px;
         height: 53px;
+        border-radius: 200px;
     }
 
     .apps {
@@ -721,6 +723,7 @@ animation: transformar 0.5s ease;
     .user2 {
         width: 67px;
         height: 67px;
+        border-radius: 200px;
     }
 
 }
@@ -941,7 +944,7 @@ animation: transformar 0.5s ease;
 
     <div
     class="app"
-    style="border-radius: 200px;"
+    
     onclick="abrirUser2()">
 
         <img
@@ -1059,7 +1062,6 @@ animation: transformar 0.5s ease;
 
 
 </div>
-
 <script>
 
 /* =========================================================
@@ -1075,16 +1077,13 @@ function atualizarRelogio() {
     const date = document.getElementById("date");
 
     const horas =
-        String(agora.getHours())
-        .padStart(2, "0");
+        String(agora.getHours()).padStart(2, "0");
 
     const minutos =
-        String(agora.getMinutes())
-        .padStart(2, "0");
+        String(agora.getMinutes()).padStart(2, "0");
 
     if (clock) {
-        clock.textContent =
-            horas + ":" + minutos;
+        clock.textContent = horas + ":" + minutos;
     }
 
     const dias = [
@@ -1113,8 +1112,7 @@ function atualizarRelogio() {
     ];
 
     if (day) {
-        day.textContent =
-            dias[agora.getDay()];
+        day.textContent = dias[agora.getDay()];
     }
 
     if (date) {
@@ -1139,9 +1137,8 @@ setInterval(
 
 if ("getBattery" in navigator) {
 
-    navigator
-        .getBattery()
-        .then(function(battery) {
+    navigator.getBattery()
+        .then(function (battery) {
 
             function atualizarBateria() {
 
@@ -1157,15 +1154,17 @@ if ("getBattery" in navigator) {
                     document.getElementById("batteryBottom");
 
                 if (batteryElement) {
+
                     batteryElement.textContent =
                         valor + "%";
+
                 }
 
                 if (batteryBottom) {
+
                     batteryBottom.textContent =
-                        "Bateria " +
-                        valor +
-                        "%";
+                        "Bateria " + valor + "%";
+
                 }
             }
 
@@ -1177,10 +1176,10 @@ if ("getBattery" in navigator) {
             );
 
         })
-        .catch(function(erro) {
+        .catch(function (erro) {
 
             console.log(
-                "Erro ao acessar bateria:",
+                "Não foi possível acessar a bateria:",
                 erro
             );
 
@@ -1197,26 +1196,23 @@ function abrirIntent(pacote, acao) {
 
     try {
 
-        const intent =
+        const url =
             "intent:#Intent;" +
-            "action=" +
-            encodeURIComponent(acao) +
-            ";" +
-            "package=" +
-            encodeURIComponent(pacote) +
-            ";" +
+            "action=" + acao + ";" +
+            "package=" + pacote + ";" +
             "end";
 
-        window.location.href = intent;
+        window.location.href = url;
 
     } catch (erro) {
 
-        console.log(
+        console.error(
             "Erro ao abrir Intent:",
             erro
         );
 
     }
+
 }
 
 
@@ -1366,12 +1362,10 @@ function abrirRelogio() {
 
 function abrirConfiguracoes() {
 
-    const intent =
+    window.location.href =
         "intent:#Intent;" +
         "action=android.settings.SETTINGS;" +
         "end";
-
-    window.location.href = intent;
 
 }
 
@@ -1396,7 +1390,7 @@ let ultimoToque = 0;
 
 document.addEventListener(
     "touchend",
-    function(event) {
+    function (event) {
 
         const agora = Date.now();
 
@@ -1409,6 +1403,7 @@ document.addEventListener(
             console.log(
                 "Duplo toque detectado"
             );
+
         }
 
         ultimoToque = agora;
@@ -1420,7 +1415,6 @@ document.addEventListener(
 );
 
 </script>
-
 
 </body>
 </html>
