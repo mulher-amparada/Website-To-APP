@@ -48,20 +48,38 @@
         android:supportsRtl="true">
 
 
-        <!-- Tela principal -->
-        <activity
-           android:screenOrientation="portrait" android:name=".MainActivity"
-            android:exported="true">
 
-<intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
+<!-- Tela principal -->
+<activity
+    android:name=".MainActivity"
+    android:screenOrientation="portrait"
+    android:exported="true"
+    android:autoVerify="true">
 
-        <category android:name="android.intent.category.HOME"/>
-        <category android:name="android.intent.category.DEFAULT"/>
+    <intent-filter>
+
+        <action android:name="android.intent.action.VIEW" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <data
+            android:scheme="https"
+            android:host="mulher-amparada.github.io"
+            android:pathPrefix="/mulher-amparada-app/" />
+
     </intent-filter>
 
-        </activity>
+    <intent-filter>
 
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.HOME" />
+        <category android:name="android.intent.category.DEFAULT" />
+
+    </intent-filter>
+
+</activity>
 
         <!-- Serviço de detecção de palmas -->
         <service
