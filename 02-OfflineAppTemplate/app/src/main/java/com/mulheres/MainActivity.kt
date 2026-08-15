@@ -365,8 +365,6 @@ webView.webViewClient = object : WebViewClient() {
 }
 }
 
-}
-
 private fun carregarWebView() {
 webView.loadUrl("file:///android_asset/user1/index1.html")
 webView.visibility = View.VISIBLE
