@@ -46,464 +46,704 @@ import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity() {
 
-companion object {  
-    const val PERMISSION_CODE = 100  
-    const val PICK_CONTACT = 1  
-}  
+    companion object {
+        const val PERMISSION_CODE = 100
+        const val PICK_CONTACT = 1
+    }
 
-private var acelerometro: Sensor? = null  
-var destinoBiometria: Int = 0  
+    private var acelerometro: Sensor? = null
+    var destinoBiometria: Int = 0
 
-private lateinit var tiltBrightness: TiltBrightnessController
-private lateinit var locationClient: FusedLocationProviderClient  
-private var protecaoAtiva = false  
+    private lateinit var tiltBrightness: TiltBrightnessController
+    private lateinit var locationClient: FusedLocationProviderClient
+    private var protecaoAtiva = false
 
-private lateinit var sensorManager: SensorManager  
-private lateinit var shakeListener: SensorEventListener  
+    private lateinit var sensorManager: SensorManager
+    private lateinit var shakeListener: SensorEventListener
 
-private var ultimoShake: Long = 0  
+    private var ultimoShake: Long = 0L
 
-private lateinit var webView: WebView
+    private lateinit var webView: WebView
 
-override fun onCreate(savedInstanceState: Bundle?) {
-super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    val sensorManager =
-        getSystemService(SENSOR_SERVICE) as SensorManager
+        sensorManager =
+            getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
-    WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
-val controller = WindowInsetsControllerCompat(
-    window,
-    window.decorView
-)
+        val controller = WindowInsetsControllerCompat(
+            window,
+            window.decorView
+        )
 
-controller.hide(WindowInsetsCompat.Type.systemBars())
+        controller.hide(WindowInsetsCompat.Type.systemBars())
 
-controller.systemBarsBehavior =
-    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
-controller.isAppearanceLightStatusBars = false
-controller.isAppearanceLightNavigationBars = false
+        controller.isAppearanceLightStatusBars = false
+        controller.isAppearanceLightNavigationBars = false
 
-window.statusBarColor = Color.TRANSPARENT
-window.navigationBarColor = Color.TRANSPARENT
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
 
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-    window.isNavigationBarContrastEnforced = false
-}
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
 
-setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main)
 
-ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(
+            window.decorView
+        ) { view, insets ->
 
-    // Não adiciona espaço para status/navigation bar
-    view.setPadding(0, 0, 0, 0)
+            view.setPadding(0, 0, 0, 0)
 
-    insets
-}
-    
+            insets
+        }
 
-webView = findViewById(R.id.webview)  
+        webView = findViewById(R.id.webview)
 
-tiltBrightness =
-    TiltBrightnessController(
-        this,
-        sensorManager,
-        webView
-    )
-    
-    
-webView.setBackgroundColor(Color.BLACK)  
-webView.visibility = View.VISIBLE  
+        webView.setBackgroundColor(Color.BLACK)
+        webView.visibility = View.VISIBLE
 
-locationClient = LocationServices.getFusedLocationProviderClient(this)  
+        tiltBrightness = TiltBrightnessController(
+            this,
+            sensorManager,
+            webView
+        )
 
-configurarWebView()  
+        locationClient =
+            LocationServices.getFusedLocationProviderClient(this)
 
-val pagina = intent.getStringExtra("pagina")
+        configurarWebView()
 
-if (!pagina.isNullOrEmpty()) {
+        val pagina = intent?.getStringExtra("pagina")
 
-    webView.loadUrl(pagina)
+        if (!pagina.isNullOrEmpty()) {
+            webView.loadUrl(pagina)
+        } else {
+            webView.loadUrl(
+                "file:///android_asset/user1/index11.html"
+            )
+        }
 
-} else {
+        if (!temPermissoes()) {
+            pedirPermissoes()
+        }
 
-    webView.loadUrl(
-        "file:///android_asset/user1/index11.html"
-    )
-}
+        if (
+            intent?.getBooleanExtra(
+                "ABRIR_LOCALIZACAO",
+                false
+            ) == true
+        ) {
+            abrirWhatsAppComLocalizacao()
+        }
 
-if (!temPermissoes()) {  
-    pedirPermissoes()  
-}
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : androidx.activity.OnBackPressedCallback(true) {
 
-if (intent?.getBooleanExtra("ABRIR_LOCALIZACAO", false) == true) {
-    abrirWhatsAppComLocalizacao()
-}
+                override fun handleOnBackPressed() {
 
-onBackPressedDispatcher.addCallback(this,
-    object : androidx.activity.OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            if (webView.canGoBack()) {
-                webView.goBack()
+                    if (webView.canGoBack()) {
+                        webView.goBack()
+                    }
+                }
             }
-            // se não puder voltar, não faz nada
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (::webView.isInitialized) {
+            webView.onResume()
+        }
+
+        if (protecaoAtiva) {
+            iniciarSensor()
         }
     }
-)
 
-}
+    override fun onPause() {
+        pararSensor()
 
-override fun onRequestPermissionsResult(
-requestCode: Int,
-permissions: Array<out String>,
-grantResults: IntArray
-) {
-super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (::webView.isInitialized) {
+            webView.onPause()
+        }
 
-if (requestCode == 100) {  
-    carregarWebView3()  
+        super.onPause()
+    }
 
-    if (!temPermissoes()) {  
-        Toast.makeText(  
-            this,  
-            "Algumas permissões não foram concedidas.",  
-            Toast.LENGTH_LONG  
-        ).show()  
-    }  
-}
+    override fun onDestroy() {
+        pararSensor()
 
-}
+        if (::webView.isInitialized) {
+            webView.stopLoading()
+            webView.destroy()
+        }
 
+        super.onDestroy()
+    }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(
+            requestCode,
+            permissions,
+            grantResults
+        )
 
-private fun abrirIntentSMS(mensagem: String) {
-val prefs = getSharedPreferences("contatos", MODE_PRIVATE)
-val lista = prefs.getString("lista", "") ?: ""
+        if (requestCode == PERMISSION_CODE) {
 
-if (lista.trim().isEmpty()) {  
-    Toast.makeText(  
-        this,  
-        "Nenhum contato cadastrado",  
-        Toast.LENGTH_SHORT  
-    ).show()  
-    return  
-}  
+            carregarWebView3()
 
-val intent = Intent(Intent.ACTION_SENDTO).apply {  
-    data = Uri.parse("smsto:")  
-    putExtra("address", lista)  
-    putExtra("sms_body", mensagem)  
-}  
+            if (!temPermissoes()) {
+                Toast.makeText(
+                    this,
+                    "Algumas permissões não foram concedidas.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
 
-startActivity(intent)
+    private fun abrirIntentSMS(mensagem: String) {
 
-}
+        val prefs = getSharedPreferences(
+            "contatos",
+            MODE_PRIVATE
+        )
 
-private fun abrirConfiguracoes() {
-val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-data = Uri.fromParts("package", packageName, null)
-}
-startActivity(intent)
-}
+        val lista = prefs.getString(
+            "lista",
+            ""
+        ) ?: ""
 
-private fun configurarWebView() {
-webView.addJavascriptInterface(
-    WebAppInterface(this),
-    "Android"
-)
+        if (lista.trim().isEmpty()) {
 
-webView.addJavascriptInterface(
-        TiltBrightnessController.WebAppInterface(tiltBrightness),
-        "TiltBrightness"
-    )
-    
-webView.addJavascriptInterface(
-    Cripto(this),
-    "Cripto"
-)
+            Toast.makeText(
+                this,
+                "Nenhum contato cadastrado",
+                Toast.LENGTH_SHORT
+            ).show()
 
-val settings = webView.settings
-    
+            return
+        }
 
-settings.javaScriptEnabled = true  
-settings.mediaPlaybackRequiresUserGesture = false  
-settings.domStorageEnabled = true  
-settings.setGeolocationEnabled(true)  
+        val intent = Intent(
+            Intent.ACTION_SENDTO
+        ).apply {
 
-settings.allowFileAccess = true  
-settings.allowContentAccess = true  
-settings.javaScriptCanOpenWindowsAutomatically = true  
-settings.allowFileAccessFromFileURLs = true  
-settings.allowUniversalAccessFromFileURLs = true  
-
-webView.webChromeClient = object : WebChromeClient() {  
-
-    override fun onGeolocationPermissionsShowPrompt(  
-        origin: String?,  
-        callback: GeolocationPermissions.Callback?  
-    ) {  
-        callback?.invoke(origin, true, false)  
-    }  
-
-    override fun onPermissionRequest(request: PermissionRequest) {  
-        runOnUiThread {  
-            val resources = request.resources  
-
-            if (resources.contains(PermissionRequest.RESOURCE_AUDIO_CAPTURE)) {  
-                request.grant(  
-                    arrayOf(PermissionRequest.RESOURCE_AUDIO_CAPTURE)  
-                )  
-            } else {  
-                request.deny()  
-            }  
-        }  
-    }  
-}  
-
-webView.webViewClient = object : WebViewClient() {  
-
-    override fun shouldOverrideUrlLoading(
-    view: WebView?,
-    request: WebResourceRequest?
-): Boolean {
-
-    val url = request?.url.toString()
-
-    if (url.startsWith("intent:")) {
+            data = Uri.parse("smsto:")
+            putExtra("address", lista)
+            putExtra("sms_body", mensagem)
+        }
 
         try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(
+                this,
+                "Não foi possível abrir o aplicativo de SMS.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
-            val intent = Intent.parseUri(
-                url,
-                Intent.URI_INTENT_SCHEME
+    private fun abrirConfiguracoes() {
+
+        val intent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        ).apply {
+
+            data = Uri.fromParts(
+                "package",
+                packageName,
+                null
+            )
+        }
+
+        startActivity(intent)
+    }
+
+    private fun configurarWebView() {
+
+        webView.addJavascriptInterface(
+            WebAppInterface(this),
+            "Android"
+        )
+
+        webView.addJavascriptInterface(
+            TiltBrightnessController.WebAppInterface(
+                tiltBrightness
+            ),
+            "TiltBrightness"
+        )
+
+        webView.addJavascriptInterface(
+            Cripto(this),
+            "Cripto"
+        )
+
+        val settings = webView.settings
+
+        settings.javaScriptEnabled = true
+        settings.mediaPlaybackRequiresUserGesture = false
+        settings.domStorageEnabled = true
+        settings.setGeolocationEnabled(true)
+
+        settings.allowFileAccess = true
+        settings.allowContentAccess = true
+
+        settings.javaScriptCanOpenWindowsAutomatically = true
+
+        @Suppress("DEPRECATION")
+        settings.allowFileAccessFromFileURLs = true
+
+        @Suppress("DEPRECATION")
+        settings.allowUniversalAccessFromFileURLs = true
+
+        webView.webChromeClient = object : WebChromeClient() {
+
+            override fun onGeolocationPermissionsShowPrompt(
+                origin: String?,
+                callback: GeolocationPermissions.Callback?
+            ) {
+                callback?.invoke(
+                    origin,
+                    true,
+                    false
+                )
+            }
+
+            override fun onPermissionRequest(
+                request: PermissionRequest
+            ) {
+                runOnUiThread {
+
+                    val resources = request.resources
+
+                    if (
+                        resources.contains(
+                            PermissionRequest.RESOURCE_AUDIO_CAPTURE
+                        )
+                    ) {
+                        request.grant(
+                            arrayOf(
+                                PermissionRequest.RESOURCE_AUDIO_CAPTURE
+                            )
+                        )
+                    } else {
+                        request.deny()
+                    }
+                }
+            }
+        }
+
+        webView.webViewClient = object : WebViewClient() {
+
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+
+                val url = request?.url?.toString()
+                    ?: return false
+
+                if (url.startsWith("intent:")) {
+
+                    try {
+
+                        val intent = Intent.parseUri(
+                            url,
+                            Intent.URI_INTENT_SCHEME
+                        )
+
+                        if (
+                            intent.resolveActivity(
+                                packageManager
+                            ) != null
+                        ) {
+
+                            startActivity(intent)
+
+                        } else {
+
+                            val fallbackUrl =
+                                intent.getStringExtra(
+                                    "browser_fallback_url"
+                                )
+
+                            if (
+                                !fallbackUrl.isNullOrEmpty()
+                            ) {
+                                view?.loadUrl(
+                                    fallbackUrl
+                                )
+                            }
+                        }
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
+                    return true
+                }
+
+                if (url.startsWith("tel:")) {
+
+                    try {
+
+                        val intent = Intent(
+                            Intent.ACTION_DIAL,
+                            Uri.parse(url)
+                        )
+
+                        startActivity(intent)
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
+                    return true
+                }
+
+                if (
+                    url.startsWith(
+                        "https://wa.me"
+                    )
+                ) {
+
+                    try {
+
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(url)
+                        )
+
+                        startActivity(intent)
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
+                    return true
+                }
+
+                return false
+            }
+
+            override fun onPageFinished(
+                view: WebView?,
+                url: String?
+            ) {
+                super.onPageFinished(
+                    view,
+                    url
+                )
+
+                view?.evaluateJavascript(
+                    """
+                    if (typeof mostrarConteudo === 'function') {
+                        mostrarConteudo();
+                    }
+                    """.trimIndent(),
+                    null
+                )
+            }
+        }
+    }
+
+    private fun carregarWebView() {
+
+        webView.loadUrl(
+            "file:///android_asset/user1/index1.html"
+        )
+
+        webView.visibility = View.VISIBLE
+    }
+
+    private fun carregarWebView1() {
+
+        webView.loadUrl(
+            "file:///android_asset/user1/index1.html"
+        )
+
+        webView.visibility = View.VISIBLE
+    }
+
+    private fun carregarWebView2() {
+
+        webView.loadUrl(
+            "file:///android_asset/user1/index1.html"
+        )
+
+        webView.visibility = View.VISIBLE
+    }
+
+    private fun carregarWebView3() {
+
+        webView.loadUrl(
+            "file:///android_asset/user1/index1.html"
+        )
+
+        webView.visibility = View.VISIBLE
+    }
+
+    private fun carregarWebView4() {
+
+        webView.loadUrl(
+            "file:///android_asset/user1/botao.html"
+        )
+
+        webView.visibility = View.VISIBLE
+    }
+
+    private fun iniciarSensor() {
+
+        if (!::sensorManager.isInitialized) {
+            sensorManager =
+                getSystemService(
+                    Context.SENSOR_SERVICE
+                ) as SensorManager
+        }
+
+        if (!::shakeListener.isInitialized) {
+
+            shakeListener =
+                object : SensorEventListener {
+
+                    override fun onSensorChanged(
+                        event: SensorEvent
+                    ) {
+
+                        if (!protecaoAtiva) {
+                            return
+                        }
+
+                        val x = event.values[0]
+                        val y = event.values[1]
+                        val z = event.values[2]
+
+                        val aceleracao = sqrt(
+                            (
+                                x * x +
+                                y * y +
+                                z * z
+                            ).toDouble()
+                        )
+
+                        if (aceleracao > 18.0) {
+
+                            val agora =
+                                System.currentTimeMillis()
+
+                            if (
+                                agora - ultimoShake > 4000L
+                            ) {
+
+                                ultimoShake = agora
+
+                                val intent =
+                                    Intent(
+                                        Intent.ACTION_DIAL
+                                    ).apply {
+                                        data = Uri.parse(
+                                            "tel:180"
+                                        )
+                                    }
+
+                                try {
+                                    startActivity(intent)
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onAccuracyChanged(
+                        sensor: Sensor?,
+                        accuracy: Int
+                    ) {
+                        // Nada
+                    }
+                }
+        }
+
+        if (acelerometro == null) {
+
+            acelerometro =
+                sensorManager.getDefaultSensor(
+                    Sensor.TYPE_ACCELEROMETER
+                )
+        }
+
+        acelerometro?.let { sensor ->
+
+            sensorManager.unregisterListener(
+                shakeListener
             )
 
-            if (
-                intent.resolveActivity(
-                    packageManager
-                ) != null
-            ) {
+            sensorManager.registerListener(
+                shakeListener,
+                sensor,
+                SensorManager.SENSOR_DELAY_GAME
+            )
+        }
+    }
+
+    private fun pararSensor() {
+
+        if (
+            ::sensorManager.isInitialized &&
+            ::shakeListener.isInitialized
+        ) {
+
+            sensorManager.unregisterListener(
+                shakeListener
+            )
+        }
+    }
+
+    private fun abrirWhatsAppComLocalizacao() {
+
+        if (
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
+        locationClient.getCurrentLocation(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            null
+        ).addOnSuccessListener { location ->
+
+            if (location == null) {
+                Toast.makeText(
+                    this,
+                    "Não foi possível obter sua localização.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@addOnSuccessListener
+            }
+
+            val link =
+                "https://maps.google.com/?q=" +
+                    "${location.latitude}," +
+                    "${location.longitude}"
+
+            val intent = Intent(
+                Intent.ACTION_SEND
+            ).apply {
+
+                type = "text/plain"
+
+                setPackage("com.whatsapp")
+
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    "Minha localização:\n$link"
+                )
+            }
+
+            try {
+
                 startActivity(intent)
-            } else {
 
-                val fallbackUrl =
-                    intent.getStringExtra(
-                        "browser_fallback_url"
+            } catch (e: Exception) {
+
+                // Caso o WhatsApp não esteja instalado,
+                // abre o compartilhamento normal.
+                val fallback = Intent(
+                    Intent.ACTION_SEND
+                ).apply {
+
+                    type = "text/plain"
+
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        "Minha localização:\n$link"
                     )
+                }
 
-                if (!fallbackUrl.isNullOrEmpty()) {
-                    view?.loadUrl(fallbackUrl)
+                try {
+                    startActivity(
+                        Intent.createChooser(
+                            fallback,
+                            "Compartilhar localização"
+                        )
+                    )
+                } catch (exception: Exception) {
+                    exception.printStackTrace()
                 }
             }
 
-        } catch (e: Exception) {
-            e.printStackTrace()
+        }.addOnFailureListener { exception ->
+
+            exception.printStackTrace()
+
+            Toast.makeText(
+                this,
+                "Não foi possível obter sua localização.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun pedirPermissoes() {
+
+        val permissoes = mutableListOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.RECORD_AUDIO
+        )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Nenhuma permissão adicional necessária aqui
+            // para as funções atualmente usadas.
         }
 
-        return true
-    }
+        permissoes.add(
+            Manifest.permission.CALL_PHONE
+        )
 
-
-    if (url.startsWith("tel:")) {
-
-        try {
-
-            startActivity(
-                Intent(
-                    Intent.ACTION_DIAL,
-                    Uri.parse(url)
-                )
-            )
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return true
-    }
-
-
-    if (url.startsWith("https://wa.me")) {
-
-        try {
-
-            startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse(url)
-                )
-            )
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return true
-    }
-
-
-    return false
-    }  
-
-    override fun onPageFinished(
-    view: WebView?,
-    url: String?
-) {
-    super.onPageFinished(view, url)
-
-    view?.evaluateJavascript(
-        """
-        if(typeof mostrarConteudo === 'function'){
-            mostrarConteudo();
-        }
-        """.trimIndent(),
-        null
-    )
-}
-}
-
-private fun carregarWebView() {
-webView.loadUrl("file:///android_asset/user1/index1.html")
-webView.visibility = View.VISIBLE
-}
-
-private fun carregarWebView1() {
-webView.loadUrl("file:///android_asset/user1/index1.html")
-webView.visibility = View.VISIBLE
-}
-
-private fun carregarWebView2() {
-webView.loadUrl("file:///android_asset/user1/index1.html")
-webView.visibility = View.VISIBLE
-}
-
-private fun carregarWebView3() {
-webView.loadUrl("file:///android_asset/user1/index1.html")
-webView.visibility = View.VISIBLE
-}
-
-private fun carregarWebView4() {
-webView.loadUrl("file:///android_asset/user1/botao.html")
-webView.visibility = View.VISIBLE
-}
-
-private fun iniciarSensor() {
-
-sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager  
-
-acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)  
-
-shakeListener = object : SensorEventListener {  
-
-    override fun onSensorChanged(event: SensorEvent) {  
-
-        if (!protecaoAtiva) return  
-
-        val x = event.values[0]  
-        val y = event.values[1]  
-        val z = event.values[2]  
-
-        val aceleracao = sqrt(  
-            (x * x + y * y + z * z).toDouble()  
-        )  
-
-        if (aceleracao > 18.0) {  
-
-            val agora = System.currentTimeMillis()  
-
-if (agora - ultimoShake > 4000) {
-    ultimoShake = agora
-
-    val intent = Intent(Intent.ACTION_DIAL).apply {
-        data = Uri.parse("tel:180")
-    }
-    startActivity(intent)
-}
-        }  
-    }  
-
-    override fun onAccuracyChanged(  
-        sensor: Sensor?,  
-        accuracy: Int  
-    ) {  
-        // Nada  
-    }  
-}  
-
-acelerometro?.let {  
-    sensorManager.registerListener(  
-        shakeListener,  
-        it,  
-        SensorManager.SENSOR_DELAY_GAME  
-    )  
-}
-
-}
-
-private fun pararSensor() {
-
-    if (::sensorManager.isInitialized &&
-        ::shakeListener.isInitialized
-    ) {
-        sensorManager.unregisterListener(shakeListener)
-    }
-
-}
-
-private fun abrirWhatsAppComLocalizacao() {
-
-    val client = LocationServices.getFusedLocationProviderClient(this)
-
-    if (ActivityCompat.checkSelfPermission(
+        ActivityCompat.requestPermissions(
             this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        finish()
-        return
+            permissoes.toTypedArray(),
+            PERMISSION_CODE
+        )
     }
 
-    client.getCurrentLocation(
-        com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY,
-        null
-    ).addOnSuccessListener { location ->
+    private fun temPermissoes(): Boolean {
 
-        if (location != null) {
+        val permissoes = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.RECORD_AUDIO
+        )
 
-            val link =
-                "https://maps.google.com/?q=${location.latitude},${location.longitude}"
+        return permissoes.all { permissao ->
 
-            val intent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                setPackage("com.whatsapp")
-                putExtra(Intent.EXTRA_TEXT, "Minha localização:\n$link")
-            }
-
-            startActivity(intent)
+            ActivityCompat.checkSelfPermission(
+                this,
+                permissao
+            ) == PackageManager.PERMISSION_GRANTED
         }
-
-        finish()
-
-    }.addOnFailureListener {
-        finish()
     }
 }
-
-private fun pedirPermissoes() {
-ActivityCompat.requestPermissions(
-this,
-arrayOf(
-Manifest.permission.ACCESS_FINE_LOCATION,
-Manifest.permission.READ_CONTACTS,
-Manifest.permission.CALL_PHONE,
-Manifest.permission.RECORD_AUDIO
-),
-100
-)
-}
-
 
 private fun temPermissoes(): Boolean {
 return ContextCompat.checkSelfPermission(
