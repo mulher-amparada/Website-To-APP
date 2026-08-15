@@ -264,34 +264,88 @@ webView.webChromeClient = object : WebChromeClient() {
 
 webView.webViewClient = object : WebViewClient() {  
 
-    override fun shouldOverrideUrlLoading(  
-        view: WebView?,  
-        request: WebResourceRequest?  
-    ): Boolean {  
+    override fun shouldOverrideUrlLoading(
+    view: WebView?,
+    request: WebResourceRequest?
+): Boolean {
 
-        val url = request?.url.toString()  
+    val url = request?.url.toString()
 
-        if (url.startsWith("tel:")) {  
-            startActivity(  
-                Intent(  
-                    Intent.ACTION_DIAL,  
-                    Uri.parse(url)  
-                )  
-            )  
-            return true  
-        }  
+    if (url.startsWith("intent:")) {
 
-        if (url.startsWith("https://wa.me")) {  
-            startActivity(  
-                Intent(  
-                    Intent.ACTION_VIEW,  
-                    Uri.parse(url)  
-                )  
-            )  
-            return true  
-        }  
+        try {
 
-        return false  
+            val intent = Intent.parseUri(
+                url,
+                Intent.URI_INTENT_SCHEME
+            )
+
+            if (
+                intent.resolveActivity(
+                    packageManager
+                ) != null
+            ) {
+                startActivity(intent)
+            } else {
+
+                val fallbackUrl =
+                    intent.getStringExtra(
+                        "browser_fallback_url"
+                    )
+
+                if (!fallbackUrl.isNullOrEmpty()) {
+                    view?.loadUrl(fallbackUrl)
+                }
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return true
+    }
+
+
+    if (url.startsWith("tel:")) {
+
+        try {
+
+            startActivity(
+                Intent(
+                    Intent.ACTION_DIAL,
+                    Uri.parse(url)
+                )
+            )
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return true
+    }
+
+
+    if (url.startsWith("https://wa.me")) {
+
+        try {
+
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(url)
+                )
+            )
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return true
+    }
+
+
+    return false
+}
     }  
 
     override fun onPageFinished(
@@ -655,6 +709,7 @@ fun iniciarBiometriaMusica() {
 destinoBiometria = 4
 iniciarBiometria()
 }
+
 
 @JavascriptInterface
 fun ligarDireto(numero: String) {
