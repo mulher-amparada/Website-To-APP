@@ -1,259 +1,551 @@
 package com.mulheres
 
-import org.json.JSONArray
-import android.webkit.WebView
-import android.Manifest
-import android.os.Build
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import org.json.JSONObject
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.BitmapDrawable
-import android.util.Base64
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
-import java.io.ByteArrayOutputStream
 import android.app.Activity
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Parcelable
+import android.util.Base64
 import android.webkit.JavascriptInterface
+import android.webkit.WebView
+
+import org.json.JSONArray
+import org.json.JSONObject
+
+import java.io.ByteArrayOutputStream
 
 class WebAppInterface(
     private val activity: Activity
 ) {
 
-    private fun safeMainActivityCall(action: (MainActivity) -> Unit) {
+    /* =========================================================
+       CHAMADA SEGURA PARA MAINACTIVITY
+    ========================================================= */
+
+    private fun chamarMainActivity(
+        nomeMetodo: String,
+        vararg argumentos: Any?
+    ) {
+
         try {
-            val act = activity
-            if (act is MainActivity) {
-                action(act)
+
+            val metodo = MainActivity::class.java.methods.firstOrNull {
+                it.name == nomeMetodo &&
+                it.parameterTypes.size == argumentos.size
             }
-        } catch (_: Exception) {
+
+            if (metodo == null) {
+                android.util.Log.e(
+                    "WebAppInterface",
+                    "Método não encontrado: $nomeMetodo"
+                )
+                return
+            }
+
+            activity.runOnUiThread {
+
+                try {
+
+                    metodo.invoke(
+                        activity,
+                        *argumentos
+                    )
+
+                } catch (e: Exception) {
+
+                    e.printStackTrace()
+
+                    android.util.Log.e(
+                        "WebAppInterface",
+                        "Erro ao chamar $nomeMetodo",
+                        e
+                    )
+                }
+            }
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
         }
     }
-    
-@JavascriptInterface
-fun trocarParaUser2() {
-    activity.runOnUiThread {
-        activity.findViewById<WebView>(R.id.webview)
-            .evaluateJavascript(
-                "receberMensagemAndroid('user2')",
-                null
-            )
-    }
-}
 
-@JavascriptInterface
-fun obterApps(): String {
 
-    val pm = activity.packageManager
-    val lista = JSONArray()
+    /* =========================================================
+       USER 2
+    ========================================================= */
 
-    pm.getInstalledApplications(PackageManager.GET_META_DATA)
-        .sortedBy {
-            pm.getApplicationLabel(it).toString().lowercase()
-        }
-        .forEach { app ->
+    @JavascriptInterface
+    fun trocarParaUser2() {
 
-            val pacote = app.packageName.lowercase()
-
-            if (
-                pacote.contains("systemui") ||
-                pacote.contains("knox")
-            ) {
-                return@forEach
-            }
+        activity.runOnUiThread {
 
             try {
-                lista.put(JSONObject().apply {
-                    put(
-                        "nome",
-                        pm.getApplicationLabel(app).toString()
+
+                val webView =
+                    activity.findViewById<WebView>(
+                        R.id.webview
                     )
 
-                    put(
-                        "pacote",
-                        app.packageName
-                    )
+                webView?.evaluateJavascript(
+                    "receberMensagemAndroid('user2')",
+                    null
+                )
 
-                    put(
-                        "icone",
-                        drawableToBase64(
-                            pm.getApplicationIcon(app)
-                        )
-                    )
-                })
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+
+                e.printStackTrace()
+
             }
         }
-
-    return lista.toString()
-}
-
-@JavascriptInterface
-fun abrirApp(pacote: String) {
-    activity.packageManager
-        .getLaunchIntentForPackage(pacote)
-        ?.let(activity::startActivity)
-}
-
-private fun drawableToBase64(drawable: Drawable): String {
-    val bitmap = if (drawable is BitmapDrawable) {
-        drawable.bitmap
-    } else {
-        val bitmap = Bitmap.createBitmap(
-            drawable.intrinsicWidth.coerceAtLeast(1),
-            drawable.intrinsicHeight.coerceAtLeast(1),
-            Bitmap.Config.ARGB_8888
-        )
-
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-        bitmap
     }
 
-    val stream = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
 
-    return "data:image/png;base64," +
-        Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP)
-}
+    /* =========================================================
+       LISTAR APLICATIVOS
+    ========================================================= */
 
-@JavascriptInterface
-fun abrirPorIntent() {
-    val intent = Intent("com.assist.OPEN").apply {
-        setPackage("com.assist")
+    @JavascriptInterface
+    fun obterApps(): String {
+
+        return try {
+
+            val pm =
+                activity.packageManager
+
+            val lista =
+                JSONArray()
+
+            pm.getInstalledApplications(
+                PackageManager.GET_META_DATA
+            )
+                .sortedBy {
+
+                    pm.getApplicationLabel(it)
+                        .toString()
+                        .lowercase()
+
+                }
+                .forEach { app ->
+
+                    val pacote =
+                        app.packageName.lowercase()
+
+                    /*
+                     * Oculta alguns pacotes internos.
+                     */
+
+                    if (
+                        pacote.contains("systemui") ||
+                        pacote.contains("knox")
+                    ) {
+                        return@forEach
+                    }
+
+                    try {
+
+                        val nome =
+                            pm.getApplicationLabel(app)
+                                .toString()
+
+                        val icone =
+                            pm.getApplicationIcon(app)
+
+                        lista.put(
+                            JSONObject().apply {
+
+                                put(
+                                    "nome",
+                                    nome
+                                )
+
+                                put(
+                                    "pacote",
+                                    app.packageName
+                                )
+
+                                put(
+                                    "icone",
+                                    drawableToBase64(
+                                        icone
+                                    )
+                                )
+                            }
+                        )
+
+                    } catch (_: Exception) {
+                    }
+                }
+
+            lista.toString()
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
+            "[]"
+        }
     }
 
-    activity.startActivity(intent)
-}
-    
-@JavascriptInterface
-fun solicitarAdministrador() {
 
-    try {
+    /* =========================================================
+       ABRIR APLICATIVO
+    ========================================================= */
 
-        val component =
-            ComponentName(
-                activity,
-                MyDeviceAdminReceiver::class.java
+    @JavascriptInterface
+    fun abrirApp(pacote: String) {
+
+        try {
+
+            if (pacote.isBlank()) {
+                return
+            }
+
+            val intent =
+                activity.packageManager
+                    .getLaunchIntentForPackage(pacote)
+
+            if (intent != null) {
+
+                intent.addFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK
+                )
+
+                activity.startActivity(intent)
+
+            }
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
+        }
+    }
+
+
+    /* =========================================================
+       ÍCONE -> BASE64
+    ========================================================= */
+
+    private fun drawableToBase64(
+        drawable: Drawable
+    ): String {
+
+        return try {
+
+            val bitmap =
+                if (drawable is BitmapDrawable) {
+
+                    drawable.bitmap
+
+                } else {
+
+                    val largura =
+                        drawable.intrinsicWidth
+                            .coerceAtLeast(1)
+
+                    val altura =
+                        drawable.intrinsicHeight
+                            .coerceAtLeast(1)
+
+                    val bitmap =
+                        Bitmap.createBitmap(
+                            largura,
+                            altura,
+                            Bitmap.Config.ARGB_8888
+                        )
+
+                    val canvas =
+                        Canvas(bitmap)
+
+                    drawable.setBounds(
+                        0,
+                        0,
+                        canvas.width,
+                        canvas.height
+                    )
+
+                    drawable.draw(canvas)
+
+                    bitmap
+                }
+
+            val stream =
+                ByteArrayOutputStream()
+
+            bitmap.compress(
+                Bitmap.CompressFormat.PNG,
+                100,
+                stream
             )
 
+            "data:image/png;base64," +
+                    Base64.encodeToString(
+                        stream.toByteArray(),
+                        Base64.NO_WRAP
+                    )
 
-        val intent =
-            Intent(
-                DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
+            ""
+        }
+    }
+
+
+    /* =========================================================
+       ASSIST
+    ========================================================= */
+
+    @JavascriptInterface
+    fun abrirPorIntent() {
+
+        try {
+
+            val intent =
+                Intent("com.assist.OPEN").apply {
+
+                    setPackage(
+                        "com.assist"
+                    )
+                }
+
+            activity.startActivity(intent)
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
+        }
+    }
+
+
+    /* =========================================================
+       ADMINISTRADOR DO DISPOSITIVO
+    ========================================================= */
+
+    @JavascriptInterface
+    fun solicitarAdministrador() {
+
+        try {
+
+            val component =
+                ComponentName(
+                    activity,
+                    MyDeviceAdminReceiver::class.java
+                )
+
+            val intent =
+                Intent(
+                    DevicePolicyManager
+                        .ACTION_ADD_DEVICE_ADMIN
+                )
+
+            intent.putExtra(
+                DevicePolicyManager
+                    .EXTRA_DEVICE_ADMIN,
+                component
             )
 
+            intent.putExtra(
+                DevicePolicyManager
+                    .EXTRA_ADD_EXPLANATION,
+                "Este aplicativo precisa da permissão de Administrador do dispositivo."
+            )
 
-        intent.putExtra(
-            DevicePolicyManager.EXTRA_DEVICE_ADMIN,
-            component
-        )
+            activity.startActivity(intent)
 
+        } catch (e: Exception) {
 
-        intent.putExtra(
-            DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-            "Este aplicativo precisa da permissão de Administrador do dispositivo."
-        )
+            e.printStackTrace()
 
-
-        activity.startActivity(intent)
-
-
-    } catch (e: Exception) {
-
-        e.printStackTrace()
-
+        }
     }
 
-}
 
-@JavascriptInterface
-fun abrirGerenciador() {
-    val intent = Intent("com.gerenciar.OPEN").apply {
-        setPackage("com.gerenciar")
+    /* =========================================================
+       GERENCIADOR
+    ========================================================= */
+
+    @JavascriptInterface
+    fun abrirGerenciador() {
+
+        try {
+
+            val intent =
+                Intent("com.gerenciar.OPEN").apply {
+
+                    setPackage(
+                        "com.gerenciar"
+                    )
+                }
+
+            activity.startActivity(intent)
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
+        }
     }
 
-    activity.startActivity(intent)
-}
+
+    /* =========================================================
+       BLOQUEAR TELA
+    ========================================================= */
 
     @JavascriptInterface
     fun bloquearTela() {
-        val dpm = activity.getSystemService(Context.DEVICE_POLICY_SERVICE)
-                as DevicePolicyManager
 
-        val component = ComponentName(
-            activity,
-            MyDeviceAdminReceiver::class.java
-        )
+        try {
 
-        if (dpm.isAdminActive(component)) {
-            dpm.lockNow()
+            val dpm =
+                activity.getSystemService(
+                    Context.DEVICE_POLICY_SERVICE
+                ) as DevicePolicyManager
+
+            val component =
+                ComponentName(
+                    activity,
+                    MyDeviceAdminReceiver::class.java
+                )
+
+            if (
+                dpm.isAdminActive(component)
+            ) {
+
+                dpm.lockNow()
+
+            }
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
         }
     }
 
+
+    /* =========================================================
+       ARQUIVOS
+    ========================================================= */
+
     @JavascriptInterface
     fun openFiles() {
-        activity.startActivity(
-            Intent(activity, FileActivity::class.java)
-        )
+
+        try {
+
+            activity.startActivity(
+                Intent(
+                    activity,
+                    FileActivity::class.java
+                )
+            )
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
+        }
     }
 
-    @JavascriptInterface
-    fun abrirEscolherIcone() {
-        activity.startActivity(
-            Intent(activity, EscolherIconeActivity::class.java)
-        )
-    }
+
+    /* =========================================================
+       ESCOLHER ÍCONE
+    ========================================================= */
 
     @JavascriptInterface
-    fun salvar(chave: String, valor: String) {
-        val prefs = activity.getSharedPreferences(
-            "cripto",
-            Context.MODE_PRIVATE
-        )
+    fun abrirEscolherIcones() {
+
+        try {
+
+            activity.startActivity(
+                Intent(
+                    activity,
+                    EscolherIconeActivity::class.java
+                )
+            )
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
+        }
+    }
+
+
+    /* =========================================================
+       ARMAZENAMENTO
+    ========================================================= */
+
+    @JavascriptInterface
+    fun salvar(
+        chave: String,
+        valor: String
+    ) {
+
+        val prefs =
+            activity.getSharedPreferences(
+                "cripto",
+                Context.MODE_PRIVATE
+            )
 
         prefs.edit()
             .putString(chave, valor)
             .apply()
     }
 
-    @JavascriptInterface
-    fun carregar(chave: String): String {
-        val prefs = activity.getSharedPreferences(
-            "cripto",
-            Context.MODE_PRIVATE
-        )
 
-        return prefs.getString(chave, "") ?: ""
+    @JavascriptInterface
+    fun carregar(
+        chave: String
+    ): String {
+
+        val prefs =
+            activity.getSharedPreferences(
+                "cripto",
+                Context.MODE_PRIVATE
+            )
+
+        return prefs.getString(
+            chave,
+            ""
+        ) ?: ""
     }
 
+
     @JavascriptInterface
-    fun remover(chave: String) {
-        val prefs = activity.getSharedPreferences(
-            "cripto",
-            Context.MODE_PRIVATE
-        )
+    fun remover(
+        chave: String
+    ) {
+
+        val prefs =
+            activity.getSharedPreferences(
+                "cripto",
+                Context.MODE_PRIVATE
+            )
 
         prefs.edit()
             .remove(chave)
             .apply()
     }
 
+
     @JavascriptInterface
     fun limparTudo() {
-        val prefs = activity.getSharedPreferences(
-            "cripto",
-            Context.MODE_PRIVATE
-        )
+
+        val prefs =
+            activity.getSharedPreferences(
+                "cripto",
+                Context.MODE_PRIVATE
+            )
 
         prefs.edit()
             .clear()
@@ -261,123 +553,211 @@ fun abrirGerenciador() {
     }
 
 
+    /* =========================================================
+       CONTATOS
+    ========================================================= */
 
     @JavascriptInterface
     fun abrirContatos() {
-        safeMainActivityCall {
-            it.abrirContatos()
-        }
+
+        chamarMainActivity(
+            "abrirContatos"
+        )
     }
+
 
     @JavascriptInterface
     fun selecionarContato() {
-        safeMainActivityCall {
-            it.abrirContatos()
-        }
+
+        chamarMainActivity(
+            "abrirContatos"
+        )
     }
+
+
+    /* =========================================================
+       PROTEÇÃO POR PALMAS
+    ========================================================= */
 
     @JavascriptInterface
     fun ativarPalmas() {
-        safeMainActivityCall {
-            it.ativarPalmas()
-        }
+
+        chamarMainActivity(
+            "ativarPalmas"
+        )
     }
+
 
     @JavascriptInterface
     fun desativarPalmas() {
-        safeMainActivityCall {
-            it.desativarPalmas()
-        }
+
+        chamarMainActivity(
+            "desativarPalmas"
+        )
     }
+
+
+    /* =========================================================
+       PROTEÇÃO POR MOVIMENTO
+    ========================================================= */
 
     @JavascriptInterface
     fun ativarProtecao() {
-        safeMainActivityCall {
-            it.ativarProtecao()
-        }
+
+        chamarMainActivity(
+            "ativarProtecao"
+        )
     }
+
 
     @JavascriptInterface
     fun desativarProtecao() {
-        safeMainActivityCall {
-            it.desativarProtecao()
-        }
+
+        chamarMainActivity(
+            "desativarProtecao"
+        )
     }
+
+
+    /* =========================================================
+       SOS
+    ========================================================= */
 
     @JavascriptInterface
     fun enviarSOS() {
-        safeMainActivityCall {
-            it.enviarSOS()
-        }
+
+        chamarMainActivity(
+            "enviarSOS"
+        )
     }
+
+
+    /* =========================================================
+       BIOMETRIA
+    ========================================================= */
 
     @JavascriptInterface
     fun iniciarBiometria() {
-        safeMainActivityCall {
-            it.iniciarBiometria()
-        }
+
+        chamarMainActivity(
+            "iniciarBiometria"
+        )
     }
+
 
     @JavascriptInterface
     fun iniciarBiometriaAmor() {
-        safeMainActivityCall {
-            it.iniciarBiometriaAmor()
-        }
+
+        chamarMainActivity(
+            "iniciarBiometriaAmor"
+        )
     }
+
 
     @JavascriptInterface
     fun iniciarBiometriaMusica() {
-        safeMainActivityCall {
-            it.iniciarBiometriaMusica()
-        }
+
+        chamarMainActivity(
+            "iniciarBiometriaMusica"
+        )
     }
+
 
     @JavascriptInterface
     fun iniciarBiometriaPrincesa() {
-        safeMainActivityCall {
-            it.iniciarBiometriaPrincesa()
-        }
+
+        chamarMainActivity(
+            "iniciarBiometriaPrincesa"
+        )
     }
+
 
     @JavascriptInterface
     fun iniciarBiometriaPrincipe() {
-        safeMainActivityCall {
-            it.iniciarBiometriaPrincipe()
-        }
+
+        chamarMainActivity(
+            "iniciarBiometriaPrincipe"
+        )
     }
+
+
+    /* =========================================================
+       LOCALIZAÇÃO
+    ========================================================= */
 
     @JavascriptInterface
     fun pegarLocalizacao() {
-        safeMainActivityCall {
-            it.pegarLocalizacao()
-        }
+
+        chamarMainActivity(
+            "pegarLocalizacao"
+        )
     }
 
+
+    /* =========================================================
+       SALVAR CONTATOS
+    ========================================================= */
+
     @JavascriptInterface
-    fun salvarContatos(lista: String) {
-        val prefs = activity.getSharedPreferences(
-            "contatos",
-            Context.MODE_PRIVATE
-        )
+    fun salvarContatos(
+        lista: String
+    ) {
+
+        val prefs =
+            activity.getSharedPreferences(
+                "contatos",
+                Context.MODE_PRIVATE
+            )
 
         prefs.edit()
-            .putString("lista", lista)
+            .putString(
+                "lista",
+                lista
+            )
             .apply()
     }
-    
-    @JavascriptInterface
-fun openRecorder() {
-    activity.startActivity(
-        Intent(activity, GravarActivity::class.java)
-    )
-}
+
+
+    /* =========================================================
+       GRAVADOR
+    ========================================================= */
 
     @JavascriptInterface
-    fun ligarDireto(numero: String) {
-        val intent = Intent(Intent.ACTION_CALL).apply {
-            data = Uri.parse("tel:$numero")
+    fun openRecorder() {
+
+        try {
+
+            activity.startActivity(
+                Intent(
+                    activity,
+                    GravarActivity::class.java
+                )
+            )
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
+        }
+    }
+
+
+    /* =========================================================
+       LIGAÇÃO DIRETA
+    ========================================================= */
+
+    @JavascriptInterface
+    fun ligarDireto(
+        numero: String
+    ) {
+
+        if (numero.isBlank()) {
+            return
         }
 
-        activity.startActivity(intent)
+        chamarMainActivity(
+            "ligarDireto",
+            numero
+        )
     }
 }
