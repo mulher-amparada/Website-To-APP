@@ -403,7 +403,7 @@ animation: transformar 0.5s ease;
     width: 64px;
     height: 64px;
 
-    border-radius: 20px;
+    border-radius: 200px;
 
     object-fit: cover;
 
@@ -659,8 +659,8 @@ animation: transformar 0.5s ease;
     .dock .icon,
     .dock .user2 {
         width: 46px;
-        border-radius: 200px;
         height: 46px;
+        border-radius: 200px;
     }
 }
 
@@ -944,7 +944,7 @@ animation: transformar 0.5s ease;
 
     <div
     class="app"
-    
+    style="border-radius: 200px;"
     onclick="abrirUser2()">
 
         <img
@@ -1062,6 +1062,8 @@ animation: transformar 0.5s ease;
 
 
 </div>
+
+
 <script>
 
 /* =========================================================
@@ -1077,13 +1079,16 @@ function atualizarRelogio() {
     const date = document.getElementById("date");
 
     const horas =
-        String(agora.getHours()).padStart(2, "0");
+        String(agora.getHours())
+        .padStart(2, "0");
 
     const minutos =
-        String(agora.getMinutes()).padStart(2, "0");
+        String(agora.getMinutes())
+        .padStart(2, "0");
 
     if (clock) {
-        clock.textContent = horas + ":" + minutos;
+        clock.textContent =
+            horas + ":" + minutos;
     }
 
     const dias = [
@@ -1112,7 +1117,8 @@ function atualizarRelogio() {
     ];
 
     if (day) {
-        day.textContent = dias[agora.getDay()];
+        day.textContent =
+            dias[agora.getDay()];
     }
 
     if (date) {
@@ -1137,8 +1143,9 @@ setInterval(
 
 if ("getBattery" in navigator) {
 
-    navigator.getBattery()
-        .then(function (battery) {
+    navigator
+        .getBattery()
+        .then(function(battery) {
 
             function atualizarBateria() {
 
@@ -1154,17 +1161,15 @@ if ("getBattery" in navigator) {
                     document.getElementById("batteryBottom");
 
                 if (batteryElement) {
-
                     batteryElement.textContent =
                         valor + "%";
-
                 }
 
                 if (batteryBottom) {
-
                     batteryBottom.textContent =
-                        "Bateria " + valor + "%";
-
+                        "Bateria " +
+                        valor +
+                        "%";
                 }
             }
 
@@ -1176,196 +1181,14 @@ if ("getBattery" in navigator) {
             );
 
         })
-        .catch(function (erro) {
+        .catch(function(erro) {
 
             console.log(
-                "Não foi possível acessar a bateria:",
+                "Erro ao acessar bateria:",
                 erro
             );
 
         });
-
-}
-
-
-/* =========================================================
-   INTENT ANDROID
-========================================================= */
-
-function abrirIntent(pacote, acao) {
-
-    try {
-
-        const url =
-            "intent:#Intent;" +
-            "action=" + acao + ";" +
-            "package=" + pacote + ";" +
-            "end";
-
-        window.location.href = url;
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao abrir Intent:",
-            erro
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   CALCULADORA
-========================================================= */
-
-function abrirCalculadora() {
-
-    abrirIntent(
-        "com.google.android.calculator",
-        "android.intent.action.MAIN"
-    );
-
-}
-
-
-/* =========================================================
-   TELEFONE
-========================================================= */
-
-function abrirTelefone() {
-
-    abrirIntent(
-        "com.android.dialer",
-        "android.intent.action.DIAL"
-    );
-
-}
-
-
-/* =========================================================
-   MENSAGENS
-========================================================= */
-
-function abrirMensagens() {
-
-    abrirIntent(
-        "com.google.android.apps.messaging",
-        "android.intent.action.MAIN"
-    );
-
-}
-
-
-/* =========================================================
-   CÂMERA
-========================================================= */
-
-function abrirCamera() {
-
-    abrirIntent(
-        "com.android.camera",
-        "android.media.action.IMAGE_CAPTURE"
-    );
-
-}
-
-
-/* =========================================================
-   GALERIA
-========================================================= */
-
-function abrirGaleria() {
-
-    abrirIntent(
-        "com.google.android.apps.photos",
-        "android.intent.action.VIEW"
-    );
-
-}
-
-
-/* =========================================================
-   ARQUIVOS
-========================================================= */
-
-function abrirArquivos() {
-
-    abrirIntent(
-        "com.google.android.documentsui",
-        "android.intent.action.OPEN_DOCUMENT"
-    );
-
-}
-
-
-/* =========================================================
-   MÚSICA
-========================================================= */
-
-function abrirMusica() {
-
-    abrirIntent(
-        "com.google.android.apps.youtube.music",
-        "android.intent.action.MAIN"
-    );
-
-}
-
-
-/* =========================================================
-   NAVEGADOR
-========================================================= */
-
-function abrirNavegador() {
-
-    abrirIntent(
-        "com.android.chrome",
-        "android.intent.action.VIEW"
-    );
-
-}
-
-
-/* =========================================================
-   CALENDÁRIO
-========================================================= */
-
-function abrirCalendario() {
-
-    abrirIntent(
-        "com.google.android.calendar",
-        "android.intent.action.MAIN"
-    );
-
-}
-
-
-/* =========================================================
-   RELÓGIO
-========================================================= */
-
-function abrirRelogio() {
-
-    abrirIntent(
-        "com.google.android.deskclock",
-        "android.intent.action.SHOW_ALARMS"
-    );
-
-}
-
-
-/* =========================================================
-   CONFIGURAÇÕES
-========================================================= */
-
-function abrirConfiguracoes() {
-
-    window.location.href =
-        "intent:#Intent;" +
-        "action=android.settings.SETTINGS;" +
-        "end";
 
 }
 
@@ -1377,42 +1200,9 @@ function abrirConfiguracoes() {
 function abrirUser2() {
 
     window.location.href =
-        "index11.html";
+        "index1.html";
 
 }
-
-
-/* =========================================================
-   DUPLO TOQUE
-========================================================= */
-
-let ultimoToque = 0;
-
-document.addEventListener(
-    "touchend",
-    function (event) {
-
-        const agora = Date.now();
-
-        if (
-            agora - ultimoToque < 350
-        ) {
-
-            event.preventDefault();
-
-            console.log(
-                "Duplo toque detectado"
-            );
-
-        }
-
-        ultimoToque = agora;
-
-    },
-    {
-        passive: false
-    }
-);
 
 </script>
 
