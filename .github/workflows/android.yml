@@ -13,7 +13,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: 01-SimpleTemplate
+        working-directory: 02-OfflineAppTemplate
 
     steps:
       - name: Baixar código
@@ -29,6 +29,22 @@ jobs:
       - name: Dar permissão ao Gradle
         run: chmod +x gradlew
 
+      - name: Criar debug keystore
+        run: |
+          mkdir -p ~/.config/.android
+          keytool -genkeypair \
+            -v \
+            -keystore ~/.config/.android/debug.keystore \
+            -storepass android \
+            -alias AndroidDebugKey \
+            -keypass android \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US"
+
+      - name: Gerar informações da assinatura
+        run: ./gradlew signingReport
 
       - name: Compilar APK
         run: ./gradlew assembleDebug
@@ -37,4 +53,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: APK-Kotlin-Debug
-          path: 01-SimpleTemplate/app/build/outputs/apk/debug/*.apk
+          path: 02-OfflineAppTemplate/app/build/outputs/apk/debug/*.apk
