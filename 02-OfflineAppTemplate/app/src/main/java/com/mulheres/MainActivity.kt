@@ -73,25 +73,25 @@ super.onCreate(savedInstanceState)
 
     WindowCompat.setDecorFitsSystemWindows(window, false)
 
+window.statusBarColor = Color.TRANSPARENT
+window.navigationBarColor = Color.TRANSPARENT
+
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+    window.isStatusBarContrastEnforced = false
+    window.isNavigationBarContrastEnforced = false
+}
+
 val controller = WindowInsetsControllerCompat(
     window,
     window.decorView
 )
 
-controller.hide(WindowInsetsCompat.Type.systemBars())
+// NÃO esconde as barras
+controller.show(WindowInsetsCompat.Type.systemBars())
 
-controller.systemBarsBehavior =
-    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-
+// Ícones claros
 controller.isAppearanceLightStatusBars = false
 controller.isAppearanceLightNavigationBars = false
-
-window.statusBarColor = Color.TRANSPARENT
-window.navigationBarColor = Color.TRANSPARENT
-
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-    window.isNavigationBarContrastEnforced = false
-}
 
 setContentView(R.layout.activity_main)
 
