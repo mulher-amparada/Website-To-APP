@@ -3,7 +3,9 @@ package com.mulheres
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -11,111 +13,85 @@ import android.widget.Button
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
 class EscolherIconeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    super.onCreate(savedInstanceState)
 
-        // =====================================================
-        // FULLSCREEN
-        // =====================================================
+    // =====================================================
+    // BARRAS TRANSPARENTES — SEM FULLSCREEN
+    // =====================================================
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
 
-        val controller = WindowInsetsControllerCompat(
-            window,
-            window.decorView
-        )
+    window.statusBarColor = Color.TRANSPARENT
+    window.navigationBarColor = Color.TRANSPARENT
 
-        controller.hide(
-            WindowInsetsCompat.Type.systemBars()
-        )
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        window.isNavigationBarContrastEnforced = false
+    }
 
-        controller.systemBarsBehavior =
-            WindowInsetsControllerCompat
-                .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    val controller = WindowInsetsControllerCompat(
+        window,
+        window.decorView
+    )
 
-        controller.isAppearanceLightStatusBars = false
-        controller.isAppearanceLightNavigationBars = false
+    // Mantém as barras visíveis
+    controller.isAppearanceLightStatusBars = false
+    controller.isAppearanceLightNavigationBars = false
 
-        window.statusBarColor =
-            android.graphics.Color.TRANSPARENT
+    setContentView(
+        R.layout.activity_escolher_icone
+    )
 
-        window.navigationBarColor =
-            android.graphics.Color.TRANSPARENT
+    val raiz = findViewById<View>(
+        android.R.id.content
+    )
 
-        if (android.os.Build.VERSION.SDK_INT >= 29) {
-            window.isNavigationBarContrastEnforced = false
-        }
+    aplicarFonte(raiz)
 
-        setContentView(
-            R.layout.activity_escolher_icone
-        )
+    // =====================================================
+    // BOTÕES
+    // =====================================================
 
-        // =====================================================
-        // FONTE
-        // =====================================================
-
-        val raiz = findViewById<View>(
-            android.R.id.content
-        )
-
-        aplicarFonte(raiz)
-
-        // =====================================================
-        // BOTÕES
-        // =====================================================
-
-        findViewById<Button>(
-            R.id.btnIconeOriginal
-        ).setOnClickListener {
-
+    findViewById<Button>(R.id.btnIconeOriginal)
+        .setOnClickListener {
             trocarParaOriginal()
         }
 
-        findViewById<Button>(
-            R.id.btnIcone1
-        ).setOnClickListener {
-
+    findViewById<Button>(R.id.btnIcone1)
+        .setOnClickListener {
             trocarParaIcone1()
         }
 
-        findViewById<Button>(
-            R.id.btnIcone2
-        ).setOnClickListener {
-
+    findViewById<Button>(R.id.btnIcone2)
+        .setOnClickListener {
             trocarParaIcone2()
         }
 
-        findViewById<Button>(
-            R.id.btnIcone3
-        ).setOnClickListener {
-
+    findViewById<Button>(R.id.btnIcone3)
+        .setOnClickListener {
             trocarParaIcone3()
         }
-    }
+}
 
     // =========================================================
     // TROCAR ÍCONE
     // =========================================================
 
-    private fun trocarPara(
-        nomeAtivo: String
-    ) {
+    private fun trocarPara(nomeAtivo: String) {
 
         val pm = packageManager
 
         val icons = listOf(
-
             "com.mulheres.IconeOriginal",
-
             "com.mulheres.Icone1",
-
             "com.mulheres.Icone2",
-
             "com.mulheres.Icone3"
         )
 
@@ -127,7 +103,6 @@ class EscolherIconeActivity : AppCompatActivity() {
             )
 
             val estado =
-
                 if (nome == nomeAtivo) {
 
                     PackageManager
@@ -148,26 +123,15 @@ class EscolherIconeActivity : AppCompatActivity() {
     }
 
     // =========================================================
-    // ENVIAR MENSAGEM PARA O JAVASCRIPT
+    // MANDAR MENSAGEM PARA A MAINACTIVITY
     // =========================================================
 
-    private fun avisarJavaScript(
-        pagina: String
-    ) {
+    private fun avisarJavaScript(pagina: String) {
 
         val intent = Intent(
             this,
             MainActivity::class.java
         )
-
-        /*
-         * A única informação enviada é:
-         *
-         * user1
-         * ou
-         *
-         * user2
-         */
 
         intent.putExtra(
             "PAGINA_JS",
@@ -194,10 +158,8 @@ class EscolherIconeActivity : AppCompatActivity() {
             "com.mulheres.IconeOriginal"
         )
 
-        // ORIGINAL = USER1
-        avisarJavaScript(
-            "user1"
-        )
+        // Original = index1
+        avisarJavaScript("index1")
     }
 
     // =========================================================
@@ -210,10 +172,8 @@ class EscolherIconeActivity : AppCompatActivity() {
             "com.mulheres.Icone1"
         )
 
-        // ÍCONE 1 = USER1
-        avisarJavaScript(
-            "user1"
-        )
+        // Ícone 1 = index1
+        avisarJavaScript("index1")
     }
 
     // =========================================================
@@ -226,10 +186,8 @@ class EscolherIconeActivity : AppCompatActivity() {
             "com.mulheres.Icone2"
         )
 
-        // ÍCONE 2 = USER1
-        avisarJavaScript(
-            "user1"
-        )
+        // Ícone 2 = index1
+        avisarJavaScript("index1")
     }
 
     // =========================================================
@@ -242,19 +200,15 @@ class EscolherIconeActivity : AppCompatActivity() {
             "com.mulheres.Icone3"
         )
 
-        // ÍCONE 3 = USER2
-        avisarJavaScript(
-            "user2"
-        )
+        // Ícone 3 = index11
+        avisarJavaScript("index11")
     }
 
     // =========================================================
-    // APLICAR FONTE
+    // FONTE
     // =========================================================
 
-    private fun aplicarFonte(
-        view: View
-    ) {
+    private fun aplicarFonte(view: View) {
 
         val fonte = Typeface.createFromAsset(
             assets,
@@ -262,7 +216,6 @@ class EscolherIconeActivity : AppCompatActivity() {
         )
 
         if (view is android.widget.TextView) {
-
             view.typeface = fonte
         }
 
