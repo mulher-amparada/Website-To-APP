@@ -17,9 +17,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,164 +26,86 @@ import java.io.File
 import java.text.Collator
 import java.util.Locale
 
-
 class FileActivity : AppCompatActivity() {
 
     companion object {
-
         const val MANAGE_STORAGE_CODE = 101
         const val PERMISSION_CODE = 100
     }
-
 
     private lateinit var adapter: FolderAdapter
     private lateinit var recycler: RecyclerView
     private lateinit var pathText: TextView
     private lateinit var itemCount: TextView
 
-
-    private val history =
-        ArrayList<File>()
-
+    private val history = ArrayList<File>()
 
     private var index = -1
 
 
     // =========================================================
-    // CREATE
+    // ON CREATE
     // =========================================================
 
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
-
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        configurarSistema()
 
-        // =====================================================
-        // TELA CHEIA
-        // =====================================================
+        setContentView(R.layout.activity_file)
 
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
+        aplicarFonte(findViewById(android.R.id.content))
 
-
-        val controller =
-            WindowInsetsControllerCompat(
-                window,
-                window.decorView
-            )
-
-
-        controller.hide(
-            WindowInsetsCompat.Type.systemBars()
-        )
-
-
-        controller.systemBarsBehavior =
-            WindowInsetsControllerCompat
-                .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-
-
-        controller.isAppearanceLightStatusBars = false
-
-        controller.isAppearanceLightNavigationBars = false
-
-
-        window.statusBarColor =
-            Color.TRANSPARENT
-
-
-        window.navigationBarColor =
-            Color.TRANSPARENT
-
-
-        if (
-            Build.VERSION.SDK_INT >=
-            Build.VERSION_CODES.Q
-        ) {
-
-            window.isNavigationBarContrastEnforced =
-                false
-        }
-
-
-        ViewCompat.setOnApplyWindowInsetsListener(
-            window.decorView
-        ) { view, insets ->
-
-            view.setPadding(
-                0,
-                0,
-                0,
-                0
-            )
-
-            insets
-        }
-
-
-        // =====================================================
-        // LAYOUT
-        // =====================================================
-
-        setContentView(
-            R.layout.activity_file
-        )
-
-
-        val raiz =
-            findViewById<View>(
-                android.R.id.content
-            )
-
-
-        aplicarFonte(raiz)
-
-
-        // =====================================================
-        // VIEWS
-        // =====================================================
-
-        recycler =
-            findViewById(
-                R.id.recycler
-            )
-
-
-        pathText =
-            findViewById(
-                R.id.pathText
-            )
-
-
-        itemCount =
-            findViewById(
-                R.id.itemCount
-            )
-
+        recycler = findViewById(R.id.recycler)
+        pathText = findViewById(R.id.pathText)
+        itemCount = findViewById(R.id.itemCount)
 
         configurarRecycler()
-
         configurarBack()
 
-
-        // =====================================================
-        // PERMISSÃO
-        // =====================================================
-
         if (!temPermissao()) {
-
             pedirPermissao()
-
         } else {
-
             iniciar()
         }
     }
 
+
+    // =========================================================
+    // SISTEMA / TELA CHEIA
+    // =========================================================
+
+    private fun configurarSistema() {
+
+    // Permite que o conteúdo fique atrás das barras,
+    // mas NÃO esconde as barras.
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
+
+    // Barras totalmente transparentes
+    window.statusBarColor = Color.TRANSPARENT
+    window.navigationBarColor = Color.TRANSPARENT
+
+    // Remove o contraste automático da navigation bar
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        window.isNavigationBarContrastEnforced = false
+    }
+
+    val controller =
+        WindowInsetsControllerCompat(
+            window,
+            window.decorView
+        )
+
+    // Mantém as barras VISÍVEIS.
+    // Não usar controller.hide(...)
+
+    // Ícones/textos das barras em branco
+    controller.isAppearanceLightStatusBars = false
+    controller.isAppearanceLightNavigationBars = false
+}
 
     // =========================================================
     // RECYCLER
@@ -196,21 +116,17 @@ class FileActivity : AppCompatActivity() {
         recycler.layoutManager =
             LinearLayoutManager(this)
 
+        adapter = FolderAdapter { file ->
 
-        adapter =
-            FolderAdapter { file ->
+            abrirArquivoOuPasta(file)
+        }
 
-                abrirArquivoOuPasta(file)
-            }
-
-
-        recycler.adapter =
-            adapter
+        recycler.adapter = adapter
     }
 
 
     // =========================================================
-    // BACK
+    // BOTÃO VOLTAR
     // =========================================================
 
     private fun configurarBack() {
@@ -221,21 +137,11 @@ class FileActivity : AppCompatActivity() {
 
                 override fun handleOnBackPressed() {
 
-                    /*
-                     * Se estiver dentro de uma pasta,
-                     * volta para a anterior.
-                     */
-
                     if (index > 0) {
 
                         voltarDiretorio()
 
                     } else {
-
-                        /*
-                         * Se estiver na raiz,
-                         * fecha a FileActivity.
-                         */
 
                         finish()
                     }
@@ -255,7 +161,6 @@ class FileActivity : AppCompatActivity() {
             Environment
                 .getExternalStorageDirectory()
 
-
         abrirDiretorioInicial(root)
     }
 
@@ -273,7 +178,7 @@ class FileActivity : AppCompatActivity() {
 
 
     // =========================================================
-    // ABRIR ARQUIVO OU PASTA
+    // ABRIR PASTA OU ARQUIVO
     // =========================================================
 
     private fun abrirArquivoOuPasta(
@@ -305,13 +210,11 @@ class FileActivity : AppCompatActivity() {
 
 
         /*
-         * Remove histórico futuro.
+         * Se o usuário voltou e depois entrou
+         * em outra pasta, remove o histórico futuro.
          */
 
-        if (
-            index <
-            history.size - 1
-        ) {
+        if (index < history.size - 1) {
 
             history.subList(
                 index + 1,
@@ -321,7 +224,7 @@ class FileActivity : AppCompatActivity() {
 
 
         /*
-         * Evita duplicar a pasta atual.
+         * Evita adicionar a mesma pasta duas vezes.
          */
 
         if (
@@ -338,9 +241,7 @@ class FileActivity : AppCompatActivity() {
 
         history.add(file)
 
-        index =
-            history.lastIndex
-
+        index = history.lastIndex
 
         atualizarLista(file)
     }
@@ -370,7 +271,7 @@ class FileActivity : AppCompatActivity() {
         /*
          * Pastas primeiro.
          * Arquivos depois.
-         * Ambos em ordem alfabética.
+         * Dentro de cada grupo, ordem alfabética.
          */
 
         val sorted =
@@ -381,19 +282,15 @@ class FileActivity : AppCompatActivity() {
                         a.isDirectory &&
                         !b.isDirectory
                     ) {
-
                         return@Comparator -1
                     }
-
 
                     if (
                         !a.isDirectory &&
                         b.isDirectory
                     ) {
-
                         return@Comparator 1
                     }
-
 
                     collator.compare(
                         a.name,
@@ -405,15 +302,9 @@ class FileActivity : AppCompatActivity() {
 
         adapter.update(sorted)
 
+        atualizarCaminho(directory)
 
-        atualizarCaminho(
-            directory
-        )
-
-
-        atualizarContador(
-            sorted.size
-        )
+        atualizarContador(sorted.size)
     }
 
 
@@ -432,8 +323,7 @@ class FileActivity : AppCompatActivity() {
 
                 1 -> "1 item"
 
-                else ->
-                    "$quantidade itens"
+                else -> "$quantidade itens"
             }
     }
 
@@ -447,9 +337,7 @@ class FileActivity : AppCompatActivity() {
     ) {
 
         pathText.text =
-            obterCaminhoBonito(
-                directory
-            )
+            obterCaminhoBonito(directory)
     }
 
 
@@ -470,32 +358,23 @@ class FileActivity : AppCompatActivity() {
             directory.absolutePath
 
 
-        if (
-            currentPath ==
-            rootPath
-        ) {
+        if (currentPath == rootPath) {
 
             return "Armazenamento interno"
         }
 
 
         return if (
-            currentPath.startsWith(
-                rootPath
-            )
+            currentPath.startsWith(rootPath)
         ) {
 
             val relativo =
                 currentPath
-                    .removePrefix(
-                        rootPath
-                    )
+                    .removePrefix(rootPath)
                     .trim('/')
 
 
-            if (
-                relativo.isEmpty()
-            ) {
+            if (relativo.isEmpty()) {
 
                 "Armazenamento interno"
 
@@ -518,8 +397,7 @@ class FileActivity : AppCompatActivity() {
     private fun avancarDiretorio() {
 
         if (
-            index >=
-            history.size - 1
+            index >= history.size - 1
         ) {
             return
         }
@@ -532,13 +410,9 @@ class FileActivity : AppCompatActivity() {
             history[index]
 
 
-        if (
-            directory.isDirectory
-        ) {
+        if (directory.isDirectory) {
 
-            atualizarLista(
-                directory
-            )
+            atualizarLista(directory)
         }
     }
 
@@ -550,9 +424,6 @@ class FileActivity : AppCompatActivity() {
     private fun voltarDiretorio() {
 
         if (index <= 0) {
-
-            finish()
-
             return
         }
 
@@ -564,13 +435,9 @@ class FileActivity : AppCompatActivity() {
             history[index]
 
 
-        if (
-            directory.isDirectory
-        ) {
+        if (directory.isDirectory) {
 
-            atualizarLista(
-                directory
-            )
+            atualizarLista(directory)
         }
     }
 
@@ -596,9 +463,7 @@ class FileActivity : AppCompatActivity() {
 
             val extensao =
                 file.extension
-                    .lowercase(
-                        Locale.ROOT
-                    )
+                    .lowercase(Locale.ROOT)
 
 
             val mime =
@@ -619,7 +484,6 @@ class FileActivity : AppCompatActivity() {
                         uri,
                         mime
                     )
-
 
                     addFlags(
                         Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -642,14 +506,12 @@ class FileActivity : AppCompatActivity() {
 
 
     // =========================================================
-    // PERMISSÃO
+    // PERMISSÕES
     // =========================================================
 
     private fun pedirPermissao() {
 
-        if (
-            Build.VERSION.SDK_INT >= 30
-        ) {
+        if (Build.VERSION.SDK_INT >= 30) {
 
             if (
                 !Environment
@@ -734,17 +596,11 @@ class FileActivity : AppCompatActivity() {
 
         if (
             requestCode ==
-            MANAGE_STORAGE_CODE
+            MANAGE_STORAGE_CODE &&
+            temPermissao()
         ) {
 
-            if (temPermissao()) {
-
-                iniciar()
-
-            } else {
-
-                finish()
-            }
+            iniciar()
         }
     }
 
@@ -763,23 +619,14 @@ class FileActivity : AppCompatActivity() {
 
 
         if (
-            requestCode ==
-            PERMISSION_CODE
+            requestCode == PERMISSION_CODE &&
+            grantResults.isNotEmpty() &&
+            grantResults[0] ==
+            android.content.pm.PackageManager
+                .PERMISSION_GRANTED
         ) {
 
-            if (
-                grantResults.isNotEmpty() &&
-                grantResults[0] ==
-                android.content.pm.PackageManager
-                    .PERMISSION_GRANTED
-            ) {
-
-                iniciar()
-
-            } else {
-
-                finish()
-            }
+            iniciar()
         }
     }
 
@@ -792,24 +639,22 @@ class FileActivity : AppCompatActivity() {
         view: View
     ) {
 
-        val fonte =
-            try {
+        val fonte = try {
 
-                Typeface.createFromAsset(
-                    assets,
-                    "font.ttf"
-                )
+            Typeface.createFromAsset(
+                assets,
+                "font.ttf"
+            )
 
-            } catch (e: Exception) {
+        } catch (e: Exception) {
 
-                Typeface.DEFAULT
-            }
+            Typeface.DEFAULT
+        }
 
 
         if (view is TextView) {
 
-            view.typeface =
-                fonte
+            view.typeface = fonte
         }
 
 
