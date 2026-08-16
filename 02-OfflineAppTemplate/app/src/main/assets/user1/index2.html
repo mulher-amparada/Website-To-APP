@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 
 <head>
+
 <meta charset="UTF-8">
 
 <meta
@@ -31,6 +32,7 @@
 ========================================================= */
 
 :root {
+
     --bg: #000;
 
     --surface: #101218;
@@ -39,6 +41,7 @@
 
     --white: #fff;
     --text: #f7f7fa;
+
     --soft: #969baa;
     --muted: #626877;
 
@@ -67,11 +70,14 @@
 ========================================================= */
 
 * {
+
     box-sizing: border-box;
+
     margin: 0;
     padding: 0;
 
     font-family: "Quicksand", sans-serif;
+
     font-weight: 700;
 
     -webkit-tap-highlight-color: transparent;
@@ -79,21 +85,26 @@
 
 html,
 body {
+
     width: 100%;
     min-height: 100%;
 
-    background: var(--bg);
+    background: #000;
 
     color: var(--text);
 }
 
 body {
+
     min-height: 100vh;
 
     overflow-x: hidden;
 
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
+    padding-top:
+        env(safe-area-inset-top);
+
+    padding-bottom:
+        env(safe-area-inset-bottom);
 }
 
 
@@ -102,6 +113,7 @@ body {
 ========================================================= */
 
 @keyframes pageIn {
+
     from {
         opacity: 0;
         transform: translateY(15px);
@@ -113,22 +125,28 @@ body {
     }
 }
 
+
 @keyframes sosGlow {
+
     0%,
     100% {
+
         box-shadow:
             0 18px 50px rgba(255,64,84,.18),
             0 0 0 0 rgba(255,64,84,0);
     }
 
     50% {
+
         box-shadow:
             0 18px 55px rgba(255,64,84,.27),
             0 0 0 9px rgba(255,64,84,.035);
     }
 }
 
+
 @keyframes pulse {
+
     0%,
     100% {
         transform: scale(1);
@@ -139,7 +157,9 @@ body {
     }
 }
 
+
 @keyframes statusPulse {
+
     0%,
     100% {
         opacity: 1;
@@ -150,36 +170,60 @@ body {
     }
 }
 
-@keyframes pillFadeIn {
+
+/* =========================================================
+   ANIMAÇÃO DA PÍRULA
+   IMPORTANTE:
+   NÃO usa opacity:0 no elemento principal.
+========================================================= */
+
+@keyframes pirulaEntrada {
+
     from {
+
         opacity: 0;
-        transform: scale(.85);
+
+        transform:
+            scale(.72)
+            translateY(-8px);
     }
 
     to {
+
         opacity: 1;
-        transform: scale(1);
+
+        transform:
+            scale(1)
+            translateY(0);
     }
 }
 
-@keyframes floatingPill {
+
+@keyframes pirulaFlutuar {
+
     0%,
     100% {
-        transform: translateY(0);
+
+        transform:
+            translateY(0);
     }
 
     50% {
-        transform: translateY(-5px);
+
+        transform:
+            translateY(-4px);
     }
 }
 
 
 /* =========================================================
-   LAYOUT PRINCIPAL
+   LAYOUT
 ========================================================= */
 
 .mainUI {
+
     width: 100%;
+
     max-width: 680px;
 
     margin: 0 auto;
@@ -190,11 +234,13 @@ body {
         125px;
 
     display: flex;
+
     flex-direction: column;
 
     gap: 34px;
 
-    animation: pageIn .5s ease;
+    animation:
+        pageIn .5s ease;
 }
 
 
@@ -203,29 +249,38 @@ body {
 ========================================================= */
 
 .hero {
+
     width: 100%;
 
     display: flex;
+
     flex-direction: column;
 }
 
+
 .heroTag {
+
     width: fit-content;
 
     display: flex;
+
     align-items: center;
 
     gap: 8px;
 
-    padding: 7px 11px;
+    padding:
+        7px
+        11px;
 
     border-radius: 200px;
 
     color: #ff78a8;
 
-    background: rgba(255,63,130,.08);
+    background:
+        rgba(255,63,130,.08);
 
-    border: 1px solid rgba(255,63,130,.13);
+    border:
+        1px solid rgba(255,63,130,.13);
 
     font-size: 11px;
 
@@ -234,7 +289,9 @@ body {
     text-transform: uppercase;
 }
 
+
 .heroTag::before {
+
     content: "";
 
     width: 6px;
@@ -244,7 +301,8 @@ body {
 
     border-radius: 50%;
 
-    background: var(--pink);
+    background:
+        var(--pink);
 
     box-shadow:
         0 0 10px rgba(255,63,130,.85);
@@ -256,9 +314,11 @@ body {
 ========================================================= */
 
 .section {
+
     width: 100%;
 
     display: flex;
+
     flex-direction: column;
 
     gap: 11px;
@@ -267,8 +327,11 @@ body {
         pageIn .5s ease both;
 }
 
+
 .label {
+
     display: flex;
+
     align-items: center;
 
     gap: 8px;
@@ -284,7 +347,9 @@ body {
     text-transform: uppercase;
 }
 
+
 .label::before {
+
     content: "";
 
     width: 4px;
@@ -294,7 +359,8 @@ body {
 
     border-radius: 50%;
 
-    background: var(--pink);
+    background:
+        var(--pink);
 
     box-shadow:
         0 0 8px rgba(255,63,130,.5);
@@ -306,7 +372,9 @@ body {
 ========================================================= */
 
 .panic {
+
     width: 100%;
+
     height: 300px;
 
     position: relative;
@@ -314,8 +382,11 @@ body {
     overflow: hidden;
 
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
     justify-content: center;
 
     border-radius: 30px;
@@ -323,18 +394,21 @@ body {
     cursor: pointer;
 
     background:
+
         radial-gradient(
             circle at 50% 0%,
             rgba(255,255,255,.15),
             transparent 40%
         ),
+
         linear-gradient(
             145deg,
             #ff465a,
             #e92d43
         );
 
-    border: 1px solid rgba(255,255,255,.10);
+    border:
+        1px solid rgba(255,255,255,.10);
 
     animation:
         sosGlow 3s ease-in-out infinite;
@@ -344,7 +418,9 @@ body {
         filter .15s ease;
 }
 
+
 .panic::before {
+
     content: "";
 
     position: absolute;
@@ -363,14 +439,17 @@ body {
     pointer-events: none;
 }
 
+
 .panic span {
+
     position: relative;
+
     z-index: 2;
 
     color: white;
 
     font-size:
-        clamp(62px, 17vw, 88px);
+        clamp(62px,17vw,88px);
 
     line-height: .9;
 
@@ -380,30 +459,40 @@ body {
         0 5px 20px rgba(0,0,0,.17);
 }
 
+
 .panic small {
+
     position: relative;
+
     z-index: 2;
 
     margin-top: 17px;
 
-    color: rgba(255,255,255,.78);
+    color:
+        rgba(255,255,255,.78);
 
     font-size: 12px;
 
     letter-spacing: .5px;
 }
 
+
 .panic:active {
-    transform: scale(.965);
-    filter: brightness(1.08);
+
+    transform:
+        scale(.965);
+
+    filter:
+        brightness(1.08);
 }
 
 
 /* =========================================================
-   CARTÃO DE PROTEÇÃO POR SOM
+   PROTEÇÃO POR SOM
 ========================================================= */
 
 .palma {
+
     width: 100%;
 
     padding: 24px;
@@ -412,22 +501,27 @@ body {
 
     overflow: hidden;
 
-    border-radius: var(--radius);
+    border-radius:
+        var(--radius);
 
     background:
+
         linear-gradient(
             145deg,
             #161820,
             #0f1117
         );
 
-    border: 1px solid var(--border);
+    border:
+        1px solid var(--border);
 
     box-shadow:
         0 16px 40px rgba(0,0,0,.25);
 }
 
+
 .palma::before {
+
     content: "";
 
     position: absolute;
@@ -446,34 +540,11 @@ body {
     pointer-events: none;
 }
 
-.palma-icon {
-    width: 50px;
-    height: 50px;
 
-    margin-bottom: 18px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 16px;
-
-    background:
-        rgba(255,63,130,.09);
-
-    color: var(--pink);
-
-    font-size: 25px;
-
-    animation:
-        pulse 1.8s ease-in-out infinite;
-}
-
-.palma-icon::before {
-    content: "◉";
-}
 
 .palma h3 {
+
     color: white;
 
     font-size: 22px;
@@ -483,7 +554,9 @@ body {
     margin-bottom: 9px;
 }
 
+
 .palma p {
+
     max-width: 500px;
 
     margin-bottom: 21px;
@@ -505,27 +578,38 @@ body {
 .palma button,
 .local99,
 .local999 {
+
     width: 100%;
+
     min-height: 56px;
 
-    padding: 14px 17px;
+    padding:
+        14px
+        17px;
 
     border: 0;
+
     border-radius: 160px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
     color: white;
 
-    font-family: "Quicksand", sans-serif;
+    font-family:
+        "Quicksand",
+        sans-serif;
+
     font-size: 14px;
+
     font-weight: 700;
 
     cursor: pointer;
 
     user-select: none;
+
     -webkit-user-select: none;
 
     touch-action: manipulation;
@@ -537,21 +621,27 @@ body {
         background .2s ease;
 }
 
+
 .btn:active,
 .local:active,
 .palma button:active,
 .local99:active,
 .local999:active {
-    transform: scale(.965);
-    filter: brightness(1.08);
+
+    transform:
+        scale(.965);
+
+    filter:
+        brightness(1.08);
 }
 
 
 /* =========================================================
-   BOTÕES DE EMERGÊNCIA
+   EMERGÊNCIA
 ========================================================= */
 
 .policia {
+
     background:
         linear-gradient(
             135deg,
@@ -563,7 +653,9 @@ body {
         0 9px 24px rgba(77,140,255,.12);
 }
 
+
 .samu {
+
     background:
         linear-gradient(
             135deg,
@@ -575,7 +667,9 @@ body {
         0 9px 24px rgba(255,169,77,.10);
 }
 
+
 .mulher {
+
     background:
         linear-gradient(
             135deg,
@@ -587,7 +681,9 @@ body {
         0 9px 24px rgba(255,78,144,.11);
 }
 
+
 .zap {
+
     background:
         linear-gradient(
             135deg,
@@ -605,6 +701,7 @@ body {
 ========================================================= */
 
 #ativarPalmas {
+
     background:
         linear-gradient(
             135deg,
@@ -616,7 +713,9 @@ body {
         0 9px 25px rgba(255,63,130,.15);
 }
 
+
 #desativarPalmas {
+
     margin-top: 9px;
 
     color: #8d93a1;
@@ -634,7 +733,9 @@ body {
 ========================================================= */
 
 #protecao {
+
     width: 100%;
+
     min-height: 140px;
 
     padding: 25px;
@@ -644,11 +745,15 @@ body {
     overflow: hidden;
 
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
     justify-content: center;
 
-    border-radius: var(--radius);
+    border-radius:
+        var(--radius);
 
     text-align: center;
 
@@ -666,14 +771,20 @@ body {
         transform .15s ease;
 }
 
+
 #protecao:active {
-    transform: scale(.98);
+
+    transform:
+        scale(.98);
 }
 
+
 .desativado {
+
     color: #777d8b;
 
     background:
+
         linear-gradient(
             145deg,
             #11131a,
@@ -684,10 +795,13 @@ body {
         1px solid var(--border);
 }
 
+
 .ativo {
+
     color: #c9adff;
 
     background:
+
         linear-gradient(
             145deg,
             #211636,
@@ -701,7 +815,9 @@ body {
         0 15px 40px rgba(139,92,246,.12);
 }
 
+
 .ativo::after {
+
     content: "";
 
     position: absolute;
@@ -714,7 +830,8 @@ body {
 
     border-radius: 50%;
 
-    background: #a878ff;
+    background:
+        #a878ff;
 
     box-shadow:
         0 0 12px rgba(168,120,255,.8);
@@ -730,9 +847,11 @@ body {
 
 .local99,
 .local999 {
+
     min-height: 92px;
 
-    border-radius: var(--radius-small);
+    border-radius:
+        var(--radius-small);
 
     font-size: 14px;
 
@@ -741,10 +860,13 @@ body {
     text-align: center;
 }
 
+
 .local99 {
+
     color: #858c9b;
 
     background:
+
         linear-gradient(
             145deg,
             #11131a,
@@ -755,12 +877,16 @@ body {
         1px solid var(--border);
 }
 
+
 .local999 {
+
     position: relative;
 
-    color: var(--orange);
+    color:
+        var(--orange);
 
     background:
+
         linear-gradient(
             145deg,
             #211b0e,
@@ -774,7 +900,9 @@ body {
         0 12px 35px rgba(255,159,67,.07);
 }
 
+
 .local999::after {
+
     content: "";
 
     position: absolute;
@@ -787,7 +915,8 @@ body {
 
     border-radius: 50%;
 
-    background: var(--orange);
+    background:
+        var(--orange);
 
     box-shadow:
         0 0 12px rgba(255,159,67,.8);
@@ -802,7 +931,9 @@ body {
 ========================================================= */
 
 .local {
+
     background:
+
         linear-gradient(
             135deg,
             #26c8c1,
@@ -819,7 +950,9 @@ body {
 ========================================================= */
 
 .btn.contato {
+
     background:
+
         linear-gradient(
             135deg,
             #8b5cf6,
@@ -830,8 +963,11 @@ body {
         0 9px 25px rgba(139,92,246,.11);
 }
 
+
 .btn.sos-contatos {
+
     background:
+
         linear-gradient(
             135deg,
             #ed3d55,
@@ -848,55 +984,83 @@ body {
 ========================================================= */
 
 .pirula {
+
     position: fixed;
 
-    z-index: 1000;
+    z-index: 99999;
 
-    top: calc(16px + env(safe-area-inset-top));
+    top:
+        calc(
+            16px +
+            env(safe-area-inset-top)
+        );
+
     right: 16px;
 
     width: 64px;
     height: 64px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
     padding: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 
     border-radius: 50%;
 
-    background: #444;
+    background: royalblue;
 
-    border: 1px solid rgba(255,255,255,.15);
+    border:
+        1px solid
+        rgba(255,255,255,.18);
 
     box-shadow:
-        0 10px 30px rgba(0,0,0,.35);
+
+        0 10px 30px
+        rgba(0,0,0,.45),
+
+        0 0 0 1px
+        rgba(255,255,255,.03);
 
     overflow: hidden;
 
     cursor: pointer;
 
-    opacity: 0;
-
     /*
-     * As duas animações funcionam juntas:
-     * entrada + movimento flutuante
+     * VISÍVEL POR PADRÃO.
+     * Não depende de JavaScript.
      */
-    animation:
-        pillFadeIn .35s ease-out forwards,
-        floatingPill 4s ease-in-out 0.35s infinite;
 
-    transition:
-        width .25s ease,
-        height .25s ease,
-        border-radius .25s ease,
-        transform .2s ease,
-        box-shadow .2s ease,
-        background .2s ease;
+    opacity: 1;
+
+    
+    animation:
+        pirulaEntrada .35s ease-out both,
+        pirulaFlutuar 3.2s ease-in-out .35s infinite;
+    isolation: isolate;
+
+    appearance: none;
+
+    -webkit-appearance: none;
+
+    transform:
+        translateZ(0);
+
+    will-change:
+        transform;
 }
 
+
+
+
 .pirula .icon {
+
+    position: relative;
+
+    z-index: 2;
+
     width: 52px;
     height: 52px;
 
@@ -904,39 +1068,58 @@ body {
 
     border-radius: 50%;
 
-    background-image:
-        url("user1.png");
+    
+background: mediumslateblue;
+    
+border:
+        1px solid
+        rgba(255,255,255,.18);
+    
 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    display: flex;
 
-    border:
-        2px solid rgba(255,255,255,.18);
+    align-items: center;
 
-    box-shadow:
-        0 4px 15px rgba(0,0,0,.35),
-        0 0 18px rgba(255,192,203,.15);
+    justify-content: center;
 
     pointer-events: none;
+}
+
+
+.pirula .icon svg {
+
+    width: 32px;
+    height: 32px;
+
+    display: block;
 
     
+
+    flex-shrink: 0;
+}
+
+
+.pirula:active {
+
+    transform:
+        scale(.91);
 }
 
 
 /* =========================================================
-   OVERLAY DA PÍRULA
+   OVERLAY
 ========================================================= */
 
 .pirulaOverlay {
+
     position: fixed;
 
-    z-index: 999;
+    z-index: 9998;
 
     inset: 0;
 
     background:
-        rgba(0,0,0,.65);
+        rgba(0,0,0,.68);
 
     backdrop-filter:
         blur(8px);
@@ -945,32 +1128,45 @@ body {
         blur(8px);
 
     opacity: 0;
+
     visibility: hidden;
+
+    pointer-events: none;
 
     transition:
         opacity .25s ease,
         visibility .25s ease;
 }
 
+
 .pirulaOverlay.visible {
+
     opacity: 1;
+
     visibility: visible;
+
+    pointer-events: auto;
 }
 
 
 /* =========================================================
-   MENU DA PÍRULA
+   MENU
 ========================================================= */
 
 .menu {
+
     position: fixed;
 
-    z-index: 1001;
+    z-index: 10000;
 
     top:
-        calc(90px + env(safe-area-inset-top));
+        calc(
+            90px +
+            env(safe-area-inset-top)
+        );
 
     left: 18px;
+
     right: 18px;
 
     max-width: 500px;
@@ -980,6 +1176,7 @@ body {
     padding: 18px;
 
     display: flex;
+
     flex-direction: column;
 
     gap: 10px;
@@ -987,16 +1184,21 @@ body {
     border-radius: 25px;
 
     background:
-        rgba(20,21,28,.96);
+        rgba(20,21,28,.97);
 
     border:
-        1px solid var(--border-strong);
+        1px solid
+        var(--border-strong);
 
     box-shadow:
-        0 25px 70px rgba(0,0,0,.5);
+        0 25px 70px
+        rgba(0,0,0,.55);
 
     opacity: 0;
+
     visibility: hidden;
+
+    pointer-events: none;
 
     transform:
         translateY(-12px)
@@ -1008,28 +1210,42 @@ body {
         transform .25s ease;
 }
 
+
 .menu.visible {
+
     opacity: 1;
+
     visibility: visible;
+
+    pointer-events: auto;
 
     transform:
         translateY(0)
         scale(1);
 }
 
+
 .menu-title {
-    padding: 5px 7px 10px;
+
+    padding:
+        5px
+        7px
+        10px;
 
     color: white;
 
     font-size: 17px;
 }
 
+
 .menu button {
+
     width: 100%;
+
     min-height: 52px;
 
     border: 0;
+
     border-radius: 16px;
 
     background:
@@ -1037,8 +1253,12 @@ body {
 
     color: white;
 
-    font-family: "Quicksand", sans-serif;
+    font-family:
+        "Quicksand",
+        sans-serif;
+
     font-size: 14px;
+
     font-weight: 700;
 
     cursor: pointer;
@@ -1048,8 +1268,11 @@ body {
         background .14s ease;
 }
 
+
 .menu button:active {
-    transform: scale(.97);
+
+    transform:
+        scale(.97);
 
     background:
         rgba(255,255,255,.10);
@@ -1061,15 +1284,23 @@ body {
 ========================================================= */
 
 body.pirulaAberta {
+
     overflow: hidden;
 }
 
+
 .pirula.aberta {
-    transform: scale(.92);
+
+    transform:
+        scale(.92);
 
     box-shadow:
-        0 6px 25px rgba(0,0,0,.45),
-        0 0 25px rgba(255,192,203,.2);
+
+        0 6px 25px
+        rgba(0,0,0,.45),
+
+        0 0 25px
+        rgba(255,192,203,.20);
 }
 
 
@@ -1081,13 +1312,17 @@ button:focus-visible,
 .panic:focus-visible,
 #protecao:focus-visible,
 .pirula:focus-visible {
+
     outline:
-        2px solid rgba(255,63,130,.7);
+        2px solid
+        rgba(255,63,130,.7);
 
     outline-offset: 3px;
 }
 
+
 ::selection {
+
     color: white;
 
     background:
@@ -1096,12 +1331,13 @@ button:focus-visible,
 
 
 /* =========================================================
-   CELULARES PEQUENOS
+   CELULARES
 ========================================================= */
 
 @media (max-width: 420px) {
 
     .mainUI {
+
         padding:
             22px
             14px
@@ -1110,23 +1346,34 @@ button:focus-visible,
         gap: 30px;
     }
 
+
     .panic {
+
         height: 245px;
 
         border-radius: 26px;
     }
 
+
     .panic span {
+
         font-size: 60px;
     }
 
+
     .palma {
+
         padding: 21px;
     }
 
+
     .pirula {
+
         top:
-            calc(16px + env(safe-area-inset-top));
+            calc(
+                16px +
+                env(safe-area-inset-top)
+            );
 
         right: 16px;
 
@@ -1134,16 +1381,31 @@ button:focus-visible,
         height: 64px;
     }
 
+
     .pirula .icon {
-        width: 50px;
-        height: 50px;
+
+        width: 52px;
+        height: 52px;
     }
 
+
+    .pirula .icon svg {
+
+        width: 32px;
+        height: 32px;
+    }
+
+
     .menu {
+
         top:
-            calc(90px + env(safe-area-inset-top));
+            calc(
+                90px +
+                env(safe-area-inset-top)
+            );
 
         left: 14px;
+
         right: 14px;
 
         border-radius: 22px;
@@ -1158,7 +1420,9 @@ button:focus-visible,
 @media (min-width: 600px) {
 
     .mainUI {
+
         padding-left: 28px;
+
         padding-right: 28px;
     }
 }
@@ -1173,15 +1437,27 @@ button:focus-visible,
     *,
     *::before,
     *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: .01ms !important;
+
+        animation-duration:
+            .01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        scroll-behavior:
+            auto !important;
+
+        transition-duration:
+            .01ms !important;
     }
 }
 
 </style>
+
 </head>
+
+
+
 
 
 <body>
@@ -1208,7 +1484,9 @@ button:focus-visible,
     aria-label="Abrir menu"
     aria-expanded="false"
 >
-    <div class="icon"></div>
+    <div class="icon">
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21.0667 5C21.6586 5.95805 22 7.08604 22 8.29344C22 11.7692 19.1708 14.5869 15.6807 14.5869C15.0439 14.5869 13.5939 14.4405 12.8885 13.8551L12.0067 14.7333C11.272 15.465 11.8598 15.465 12.1537 16.0505C12.1537 16.0505 12.8885 17.075 12.1537 18.0995C11.7128 18.6849 10.4783 19.5045 9.06754 18.0995L8.77362 18.3922C8.77362 18.3922 9.65538 19.4167 8.92058 20.4412C8.4797 21.0267 7.30403 21.6121 6.27531 20.5876C6.22633 20.6364 5.952 20.9096 5.2466 21.6121C4.54119 22.3146 3.67905 21.9048 3.33616 21.6121L2.45441 20.7339C1.63143 19.9143 2.1115 19.0264 2.45441 18.6849L10.0963 11.0743C10.0963 11.0743 9.3615 9.90338 9.3615 8.29344C9.3615 4.81767 12.1907 2 15.6807 2C16.4995 2 17.282 2.15509 18 2.43738" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M17.8851 8.29353C17.8851 9.50601 16.8982 10.4889 15.6807 10.4889C14.4633 10.4889 13.4763 9.50601 13.4763 8.29353C13.4763 7.08105 14.4633 6.09814 15.6807 6.09814C16.8982 6.09814 17.8851 7.08105 17.8851 8.29353Z" stroke="#ffffff" stroke-width="1.5"></path> </g></svg>
+    </div>
 </button>
 
 <!-- =======================================================
