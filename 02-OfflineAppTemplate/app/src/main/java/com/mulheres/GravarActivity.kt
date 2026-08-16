@@ -1,26 +1,27 @@
 package com.mulheres
 
-import android.os.Build
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import android.Manifest
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.os.Build
 import android.os.Bundle
-import android.widget.*
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.content.pm.PackageManager
-import android.graphics.Color
-import android.view.animation.DecelerateInterpolator
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
+
 import java.io.File
-import android.graphics.Typeface
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 
 class GravarActivity : AppCompatActivity() {
 
@@ -33,63 +34,50 @@ class GravarActivity : AppCompatActivity() {
     private var currentFile: String = ""
     private var recording = false
 
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)  
+    window.statusBarColor = Color.TRANSPARENT
+    window.navigationBarColor = Color.TRANSPARENT
 
-WindowCompat.setDecorFitsSystemWindows(window, false)
-
-val controller = WindowInsetsControllerCompat(
-    window,
-    window.decorView
-)
-
-controller.hide(WindowInsetsCompat.Type.systemBars())
-
-controller.systemBarsBehavior =
-    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-
-controller.isAppearanceLightStatusBars = false
-controller.isAppearanceLightNavigationBars = false
-
-window.statusBarColor = Color.TRANSPARENT
-window.navigationBarColor = Color.TRANSPARENT
-
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-    window.isNavigationBarContrastEnforced = false
-}
-
-ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, insets ->
-    view.setPadding(0, 0, 0, 0)
-    insets
-}
-
-setContentView(R.layout.activity_gravar)
-
-val raiz = findViewById<View>(
-    android.R.id.content
-)
-
-aplicarFonte(raiz)
-
-        btnRecord = findViewById(R.id.btnRecord)
-        list = findViewById(R.id.list)
-
-        checkPermission()
-
-        btnRecord.setOnClickListener {
-
-            if (recording) {
-                stopRecord()
-            } else {
-                startRecord()
-            }
-
-        }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        window.isNavigationBarContrastEnforced = false
     }
 
+    val controller = WindowInsetsControllerCompat(
+        window,
+        window.decorView
+    )
+
+    controller.isAppearanceLightStatusBars = false
+    controller.isAppearanceLightNavigationBars = false
+
+    setContentView(R.layout.activity_gravar)
+
+    val raiz = findViewById<View>(
+        android.R.id.content
+    )
+
+    aplicarFonte(raiz)
+
+    btnRecord = findViewById(R.id.btnRecord)
+    list = findViewById(R.id.list)
+
+    checkPermission()
+
+    btnRecord.setOnClickListener {
+
+        if (recording) {
+            stopRecord()
+        } else {
+            startRecord()
+        }
+
+    }
+}
+    
 
     private fun checkPermission() {
 
