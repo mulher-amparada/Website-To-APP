@@ -75,14 +75,10 @@ WindowInsetsControllerCompat(
     window.decorView
 ).apply {
 
-    hide(
-        WindowInsetsCompat.Type.systemBars()
-    )
+    // Mantém status bar e navigation bar VISÍVEIS
+    show(WindowInsetsCompat.Type.systemBars())
 
-    systemBarsBehavior =
-        WindowInsetsControllerCompat
-            .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-
+    // Ícones claros
     isAppearanceLightStatusBars = false
     isAppearanceLightNavigationBars = false
 }
