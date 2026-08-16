@@ -6,245 +6,433 @@
 <title>Neo Calc</title>
 
 <style>
-
 @font-face {
-    font-family:"Quicksand";
-    src:url("font.ttf") format("truetype");
-    font-weight:400 800;
+    font-family: "Quicksand";
+    src: url("font.ttf") format("truetype");
+    font-weight: 400 800;
 }
 
-:root{
-    --bg:#000;
-    --panel:#101010;
-    --display:#080808;
-    --button:#1d1d1d;
-    --action:#303030;
-    --operator:#4f7cff;
-    --text:#fff;
+:root {
+    --bg: #000;
+    --button: #151515;
+    --button-hover: #202020;
+    --action: #292929;
+    --action-hover: #353535;
+    --operator: #4f7cff;
+    --operator-hover: #638cff;
+    --text: #fff;
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Quicksand",sans-serif;
-    -webkit-tap-highlight-color:transparent;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: "Quicksand", sans-serif;
+
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
 }
 
-html,body{
-    width:100%;
-    min-height:100%;
-    background:black;
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+
+    background: #000;
 }
 
-body{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:16px;
+body {
+    min-height: 100dvh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        max(12px, env(safe-area-inset-top))
+        max(12px, env(safe-area-inset-right))
+        max(12px, env(safe-area-inset-bottom))
+        max(12px, env(safe-area-inset-left));
+
+    overflow-x: hidden;
 }
 
-.calculadora{
-    width:100%;
-    max-width:380px;
+
+/* =====================================================
+   CALCULADORA
+===================================================== */
+
+.calculadora {
+    width: min(100%, 430px);
+
+    display: flex;
+    flex-direction: column;
+
+    gap: clamp(12px, 3vw, 22px);
 }
 
-/* VISOR */
 
-.tela{
-    width:100%;
-    height:120px;
-position: relative;
-    top:-65px;
-    padding:20px;
+/* =====================================================
+   VISOR
+===================================================== */
 
-    display:flex;
-    align-items:flex-end;
-    justify-content:flex-end;
+.tela {
+    width: 100%;
 
-    background:#000;
+    min-height: clamp(125px, 24dvh, 220px);
+
+    padding:
+        clamp(18px, 5vw, 30px)
+        clamp(18px, 5vw, 30px)
+        clamp(12px, 3vw, 22px);
+
+    display: flex;
+    margin-bottom: 30%;    align-items: flex-end;
+    justify-content: flex-end;
+
+    background: #000;
+
+    border-radius: clamp(20px, 5vw, 32px);
+
+    color: var(--text);
+
+    font-size: clamp(38px, 11vw, 64px);
+    font-weight: 600;
+
+    line-height: 1;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    user-select: none;
+
+    text-align: right;
+}
+
+
+/* =====================================================
+   GRID DOS BOTÕES
+===================================================== */
+
+.botoes {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
     
-    border-radius:22px;
-
-    color:var(--text);
-    font-size:42px;
-    font-weight:600;
-
-    overflow:hidden;
-    white-space:nowrap;
-    user-select:none;
+    
+    gap: clamp(8px, 2.5vw, 14px);
 }
 
-/* GRID REAL 4x5 */
 
-.botoes{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    grid-template-rows:repeat(5,1fr);
-    gap:10px;
-    width: 95%;
-    margin-left: 2.5%;
-    margin-top: 70px;
-}
+/* =====================================================
+   BOTÕES
+===================================================== */
 
-/* BOTÕES */
+button {
+    width: 100%;
+    aspect-ratio: 1 / 1;
 
-button{
-    width:100%;
-    height:72px;
+    min-width: 0;
+    min-height: 0;
 
-    border:0;
-    border-radius:200px;
+    border: 0;
+    outline: 0;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    border-radius: 50%;
 
-    background:var(--button);
-    color:white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    font-size:23px;
-    font-weight:600;
+    background: var(--button);
+    color: var(--text);
 
-    box-shadow:none;
+    font-size: clamp(20px, 6vw, 27px);
+    font-weight: 600;
+
+    padding: 0;
+
+    cursor: pointer;
 
     transition:
-        background .1s ease,
-        transform .1s ease;
+        transform .12s ease,
+        background .12s ease;
 }
 
-button:active{
-    transform:scale(.94);
-    background:#292929;
+
+/* =====================================================
+   HOVER
+===================================================== */
+
+button:hover {
+    background: var(--button-hover);
 }
 
-/* AÇÕES */
 
-.acao{
-    background:var(--action);
+/* =====================================================
+   CLIQUE
+===================================================== */
+
+button:active {
+    transform: scale(.90);
 }
 
-/* OPERADORES */
+
+/* =====================================================
+   BOTÕES DE AÇÃO
+===================================================== */
+
+.acao {
+    background: var(--action);
+}
+
+.acao:hover {
+    background: var(--action-hover);
+}
+
+
+/* =====================================================
+   OPERADORES
+===================================================== */
 
 .operador,
-.igual{
-    background:var(--operator);
+.igual {
+    background: var(--operator);
+}
+
+.operador:hover,
+.igual:hover {
+    background: var(--operator-hover);
 }
 
 .operador:active,
-.igual:active{
-    background:#638cff;
+.igual:active {
+    background: var(--operator-hover);
 }
 
-/* ZERO */
 
 
 
-/* SVG */
 
-svg{
-    width:28px;
-    height:28px;
-    pointer-events:none;
+
+
+/* =====================================================
+   SVG
+===================================================== */
+
+svg {
+    width: clamp(23px, 7vw, 31px);
+    height: clamp(23px, 7vw, 31px);
+
+    pointer-events: none;
 }
 
-/* RESPONSIVO */
 
-@media(max-width:420px){
+/* =====================================================
+   CELULARES PEQUENOS
+===================================================== */
 
-    body{
-        padding:12px;
+@media (max-width: 360px) {
+
+    body {
+        padding: 8px;
     }
 
-    .tela{
-        height:110px;
-        font-size:38px;
+    .calculadora {
+        gap: 10px;
     }
 
-    .botoes{
-        gap:9px;
+    .botoes {
+        gap: 7px;
     }
 
-    button{
-        height:68px;
-        font-size:21px;
+    .tela {
+        min-height: 100px;
+
+        padding: 15px;
+
+        font-size: 34px;
     }
 
-    svg{
-        width:26px;
-        height:26px;
+    button {
+        font-size: 19px;
     }
 
-/* ZERO */
+    .zero {
+        padding-left: 18px;
+    }
 
-.zero{
-    width:100%;
-    height:72px;
+    svg {
+        width: 23px;
+        height: 23px;
+    }
+}
 
-    border:0;
-    border-radius:200px;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+/* =====================================================
+   TELAS GRANDES
+===================================================== */
 
-    padding:0;
+@media (min-width: 600px) {
 
-    background:var(--button);
-    color:white;
+    .calculadora {
+        width: min(90vw, 430px);
+    }
+}
 
-    font-size:23px;
-    font-weight:600;
 
-    box-shadow:none;
+/* =====================================================
+   TELAS BAIXAS
+===================================================== */
 
-    transition:
-        background .1s ease,
-        transform .1s ease;
+@media (max-height: 700px) {
+
+    body {
+        align-items: flex-start;
+
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .calculadora {
+        margin-top: 0;
+    }
+
+    .tela {
+        min-height: 105px;
+    }
+}
+
+
+/* =====================================================
+   LANDSCAPE
+===================================================== */
+
+@media (orientation: landscape) and (max-height: 600px) {
+
+    body {
+        align-items: center;
+
+        overflow-y: auto;
+    }
+
+    .calculadora {
+        width: min(90vw, 650px);
+
+        display: grid;
+
+        grid-template-columns: .9fr 1.4fr;
+
+        align-items: center;
+
+        gap: 25px;
+    }
+
+    .tela {
+        min-height: 260px;
+
+        font-size: clamp(36px, 7vw, 58px);
+    }
+
+    .botoes {
+        gap: 8px;
+    }
+
+    button {
+        font-size: clamp(18px, 4vw, 25px);
+    }
+}
+
+
+/* =====================================================
+   ACESSIBILIDADE
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    button {
+        transition: none;
+    }
+}
+
+.zero {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border-radius: 50%;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="calculadora">
 
+    <!-- =================================================
+         VISOR
+    ================================================== -->
+
     <div
         class="tela"
         id="display"
         tabindex="0"
+        role="status"
+        aria-live="polite"
         aria-label="Visor da calculadora"
     >0</div>
 
+
+    <!-- =================================================
+         TECLADO
+    ================================================== -->
+
     <div class="botoes">
 
-        <!-- LINHA 1 -->
+        <!-- ================= LINHA 1 ================= -->
 
         <button
+            type="button"
+            class="acao"
             onclick="limpar()"
-            class="acao"
-        >AC</button>
+            aria-label="Limpar calculadora"
+        >
+            AC
+        </button>
 
         <button
-            onclick="apagar()"
+            type="button"
             class="acao"
-            aria-label="Apagar"
+            onclick="apagar()"
+            aria-label="Apagar último caractere"
         >
             <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
             >
                 <path
                     d="M11.142 20C8.91458 20 7.80085 20 6.87114 19.4986C5.94144 18.9971 5.35117 18.0781 4.17061 16.24L3.48981 15.18C2.4966 13.6336 2 12.8604 2 12C2 11.1396 2.4966 10.3664 3.48981 8.82001L4.17061 7.76001C5.35117 5.92191 5.94144 5.00286 6.87114 4.50143C7.80085 4 8.91458 4 11.142 4L13.779 4C17.6544 4 19.5921 4 20.7961 5.17157C22 6.34315 22 8.22876 22 12C22 15.7712 22 17.6569 20.7961 18.8284C19.5921 20 17.6544 20 13.779 20H11.142Z"
-                    stroke="white"
+                    stroke="currentColor"
                     stroke-width="1.5"
                 />
+
                 <path
                     d="M15.5 9.50002L10.5 14.5M10.5 9.5L15.5 14.5"
-                    stroke="white"
+                    stroke="currentColor"
                     stroke-width="1.5"
                     stroke-linecap="round"
                 />
@@ -252,69 +440,150 @@ svg{
         </button>
 
         <button
-            onclick="porcentagem()"
+            type="button"
             class="acao"
-        >%</button>
+            onclick="porcentagem()"
+            aria-label="Porcentagem"
+        >
+            %
+        </button>
 
         <button
+            type="button"
+            class="operador"
             onclick="operacao('/')"
-            class="operador"
-        >÷</button>
+            aria-label="Divisão"
+        >
+            ÷
+        </button>
 
 
-        <!-- LINHA 2 -->
-
-        <button onclick="add('7')">7</button>
-        <button onclick="add('8')">8</button>
-        <button onclick="add('9')">9</button>
+        <!-- ================= LINHA 2 ================= -->
 
         <button
+            type="button"
+            onclick="add('7')"
+            aria-label="7"
+        >7</button>
+
+        <button
+            type="button"
+            onclick="add('8')"
+            aria-label="8"
+        >8</button>
+
+        <button
+            type="button"
+            onclick="add('9')"
+            aria-label="9"
+        >9</button>
+
+        <button
+            type="button"
+            class="operador"
             onclick="operacao('*')"
-            class="operador"
-        >×</button>
+            aria-label="Multiplicação"
+        >
+            ×
+        </button>
 
 
-        <!-- LINHA 3 -->
-
-        <button onclick="add('4')">4</button>
-        <button onclick="add('5')">5</button>
-        <button onclick="add('6')">6</button>
+        <!-- ================= LINHA 3 ================= -->
 
         <button
+            type="button"
+            onclick="add('4')"
+            aria-label="4"
+        >4</button>
+
+        <button
+            type="button"
+            onclick="add('5')"
+            aria-label="5"
+        >5</button>
+
+        <button
+            type="button"
+            onclick="add('6')"
+            aria-label="6"
+        >6</button>
+
+        <button
+            type="button"
+            class="operador"
             onclick="operacao('-')"
-            class="operador"
-        >−</button>
+            aria-label="Subtração"
+        >
+            −
+        </button>
 
 
-        <!-- LINHA 4 -->
-
-        <button onclick="add('1')">1</button>
-        <button onclick="add('2')">2</button>
-        <button onclick="add('3')">3</button>
+        <!-- ================= LINHA 4 ================= -->
 
         <button
+            type="button"
+            onclick="add('1')"
+            aria-label="1"
+        >1</button>
+
+        <button
+            type="button"
+            onclick="add('2')"
+            aria-label="2"
+        >2</button>
+
+        <button
+            type="button"
+            onclick="add('3')"
+            aria-label="3"
+        >3</button>
+
+        <button
+            type="button"
+            class="operador"
             onclick="operacao('+')"
-            class="operador"
-        >+</button>
+            aria-label="Adição"
+        >
+            +
+        </button>
 
 
-        <!-- LINHA 5 -->
-        <button
-            
-            class="zero"
-        >()</button>
-        
-        <button
-            onclick="add('0')"
-            class="zero"
-        >0</button>
-
-        <button onclick="add('.')">.</button>
+        <!-- ================= LINHA 5 ================= -->
 
         <button
-            onclick="calcular()"
+            type="button"
+            class="especial"
+            onclick="add('(')"
+            aria-label="Parêntese esquerdo"
+        >
+            ()
+        </button>
+
+<button
+    type="button"
+    class="zero"
+    onclick="add('0')"
+    aria-label="0"
+>
+    0
+</button>
+
+        <button
+            type="button"
+            onclick="add('.')"
+            aria-label="Ponto decimal"
+        >
+            .
+        </button>
+
+        <button
+            type="button"
             class="igual"
-        >=</button>
+            onclick="calcular()"
+            aria-label="Calcular resultado"
+        >
+            =
+        </button>
 
     </div>
 
