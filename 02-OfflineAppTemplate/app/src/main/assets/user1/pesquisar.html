@@ -127,6 +127,19 @@ body {
    APP
 ========================================================= */
 
+@keyframes pageIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
 main {
 
     width: 100%;
@@ -142,6 +155,9 @@ main {
         110px
 
         max(16px, env(safe-area-inset-left));
+        
+        animation:
+        pageIn .6s ease both;
 }
 
 
