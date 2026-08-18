@@ -117,10 +117,15 @@ margin-bottom: 18%;
 }
 
 @keyframes entrada{
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+from {
+                opacity: 0;
+                transform: translateY(0px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(15px);
+            }
 }
 
 /* =========================================================
@@ -534,15 +539,15 @@ margin-bottom: 18%;
 }
 
 @keyframes cardEntrada{
-    from{
-        opacity:0;
-        transform:translateY(10px);
-    }
+    from {
+                opacity: 0;
+                transform: translateY(0px);
+            }
 
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+            to {
+                opacity: 1;
+                transform: translateY(15px);
+            }
 }
 
 .card::before{

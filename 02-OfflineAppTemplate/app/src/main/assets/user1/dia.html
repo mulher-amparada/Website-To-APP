@@ -75,10 +75,24 @@ margin-top: 5%;
    CONTAINER
 ========================================================= */
 
+@keyframes fade{
+    from {
+                opacity: 0;
+                transform: translateY(0px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(15px);
+            }
+}
+
+
 .app {
     width: min(100% - 28px, 850px);
     margin: auto;
     padding: 28px 0 50px;
+    animation:fade .55s ease;
 }
 
 
