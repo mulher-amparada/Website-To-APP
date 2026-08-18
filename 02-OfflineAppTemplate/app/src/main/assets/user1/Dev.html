@@ -581,59 +581,6 @@ a:hover{
         line-height:1.75;
     }
 }
-
-/* ================================
-   ACESSIBILIDADE
-================================ */
-
-@media(prefers-reduced-motion:reduce){
-
-    *,
-    *::before,
-    *::after{
-        animation:none !important;
-        transition:none !important;
-    }
-}
-
-.card video{
-    display:block;
-
-    width:100%;
-    max-width:100%;
-    height:auto;
-
-    max-height:600px;
-
-    margin:18px auto;
-
-    border-radius:18px;
-
-    background:#08080b;
-
-    border:
-        1px solid rgba(255,255,255,.09);
-
-    box-shadow:
-        0 12px 35px rgba(0,0,0,.35);
-
-    object-fit:contain;
-
-    transition:
-        transform .25s ease,
-        border-color .25s ease,
-        box-shadow .25s ease;
-}
-
-.card video:hover{
-    transform:scale(1.015);
-
-    border-color:
-        rgba(139,124,255,.30);
-
-    box-shadow:
-        0 18px 40px rgba(0,0,0,.45);
-}
 </style>
 </head>
 <body>
@@ -662,20 +609,6 @@ Os 3 aplicativos (o assistente de voz, o gerenciador de arquivos e o próprio mu
 <h2>Qual é a trajetória do desenvolvedor?</h2>
 
 <div class="card" id="texto"></div>
-
-
-<h2>Dia 18.08.2026 (o péssimo exemplo de vendedor)</h2>
-
-
-
-<div class="card">
-
-    <video controls playsinline>
-        <source src="video1.mp4" type="video/mp4">
-        Seu navegador não suporta vídeo.
-    </video>
-
-</div>
 
 <h2>Sobre o que acho dos vendedores de loja física que já vi (lembrando que só os que tive contato...):</h2>
 
