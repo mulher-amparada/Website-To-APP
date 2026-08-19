@@ -86,6 +86,11 @@ raiz.animate()
         .setOnClickListener {
             trocarParaIcone3()
         }
+        
+        findViewById<Button>(R.id.btnIcone4)
+    .setOnClickListener {
+        trocarParaIcone4()
+    }
 }
 
     // =========================================================
@@ -97,11 +102,12 @@ raiz.animate()
         val pm = packageManager
 
         val icons = listOf(
-            "com.mulheres.IconeOriginal",
-            "com.mulheres.Icone1",
-            "com.mulheres.Icone2",
-            "com.mulheres.Icone3"
-        )
+    "com.mulheres.IconeOriginal",
+    "com.mulheres.Icone1",
+    "com.mulheres.Icone2",
+    "com.mulheres.Icone3",
+    "com.mulheres.Icone4"
+)
 
         icons.forEach { nome ->
 
@@ -199,7 +205,7 @@ raiz.animate()
     }
 
     // =========================================================
-    // ÍCONE 3
+    // ÍCONE 3 e 4
     // =========================================================
 
     private fun trocarParaIcone3() {
@@ -211,6 +217,20 @@ raiz.animate()
         // Ícone 3 = index11
         avisarJavaScript("index11")
     }
+    
+    // =========================================================
+// ÍCONE 4
+// =========================================================
+
+private fun trocarParaIcone4() {
+
+    trocarPara(
+        "com.mulheres.Icone4"
+    )
+
+    // Ícone 4 = index1
+    avisarJavaScript("index1")
+}
 
     // =========================================================
     // FONTE
