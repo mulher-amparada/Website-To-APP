@@ -56,14 +56,22 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
     setContentView(R.layout.activity_gravar)
 
-    val raiz = findViewById<View>(
-        android.R.id.content
-    )
+val raiz = findViewById<View>(
+    android.R.id.content
+)
 
-    aplicarFonte(raiz)
+aplicarFonte(raiz)
 
-    btnRecord = findViewById(R.id.btnRecord)
-    list = findViewById(R.id.list)
+// Fade in — somente opacidade
+raiz.alpha = 0f
+
+raiz.animate()
+    .alpha(1f)
+    .setDuration(300L)
+    .start()
+
+btnRecord = findViewById(R.id.btnRecord)
+list = findViewById(R.id.list)
 
     checkPermission()
 
