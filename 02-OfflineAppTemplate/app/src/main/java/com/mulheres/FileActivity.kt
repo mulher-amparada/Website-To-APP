@@ -47,79 +47,107 @@ class FileActivity : AppCompatActivity() {
     // ON CREATE
     // =========================================================
 
-    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+        // ==========================================
+        // TRANSIÇÃO DA ACTIVITY — FADE RÁPIDO
+        // ==========================================
 
-    // ==========================================
-    // TRANSIÇÃO DA ACTIVITY — SOMENTE FADE
-    // ==========================================
+        overridePendingTransition(
+            android.R.anim.fade_in,
+            android.R.anim.fade_out
+        )
 
-    overridePendingTransition(
-        android.R.anim.fade_in,
-        android.R.anim.fade_out
-    )
+        configurarSistema()
 
-    configurarSistema()
+        setContentView(R.layout.activity_file)
 
-    setContentView(R.layout.activity_file)
+        val raiz = findViewById<View>(
+            android.R.id.content
+        )
 
-    val raiz = findViewById<View>(
-        android.R.id.content
-    )
+        aplicarFonte(raiz)
 
-    aplicarFonte(raiz)
+        // ==========================================
+        // FADE IN — RÁPIDO
+        // ==========================================
 
-    recycler = findViewById(R.id.recycler)
-    pathText = findViewById(R.id.pathText)
-    itemCount = findViewById(R.id.itemCount)
+        raiz.alpha = 0f
 
-    configurarRecycler()
-    configurarBack()
+        raiz.animate()
+            .alpha(1f)
+            .setDuration(180L)
+            .start()
 
-    if (!temPermissao()) {
-        pedirPermissao()
-    } else {
-        iniciar()
+        recycler = findViewById(R.id.recycler)
+        pathText = findViewById(R.id.pathText)
+        itemCount = findViewById(R.id.itemCount)
+
+        configurarRecycler()
+        configurarBack()
+
+        if (!temPermissao()) {
+            pedirPermissao()
+        } else {
+            iniciar()
+        }
     }
-}
+
 
     // =========================================================
-    // SISTEMA / TELA CHEIA
+    // FADE OUT + FINALIZAÇÃO
+    // =========================================================
+
+    private fun fecharComFade() {
+
+        val raiz = findViewById<View>(
+            android.R.id.content
+        )
+
+        raiz.animate()
+            .alpha(0f)
+            .setDuration(180L)
+            .withEndAction {
+                finish()
+
+                overridePendingTransition(
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
+                )
+            }
+            .start()
+    }
+
+
+    // =========================================================
+    // SISTEMA
     // =========================================================
 
     private fun configurarSistema() {
 
-    // Permite que o conteúdo fique atrás das barras,
-    // mas NÃO esconde as barras.
-    WindowCompat.setDecorFitsSystemWindows(
-        window,
-        false
-    )
-
-    // Barras totalmente transparentes
-    window.statusBarColor = Color.TRANSPARENT
-    window.navigationBarColor = Color.TRANSPARENT
-
-    // Remove o contraste automático da navigation bar
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        window.isNavigationBarContrastEnforced = false
-    }
-
-    val controller =
-        WindowInsetsControllerCompat(
+        WindowCompat.setDecorFitsSystemWindows(
             window,
-            window.decorView
+            false
         )
 
-    // Mantém as barras VISÍVEIS.
-    // Não usar controller.hide(...)
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
 
-    // Ícones/textos das barras em branco
-    controller.isAppearanceLightStatusBars = false
-    controller.isAppearanceLightNavigationBars = false
-}
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
+
+        val controller =
+            WindowInsetsControllerCompat(
+                window,
+                window.decorView
+            )
+
+        controller.isAppearanceLightStatusBars = false
+        controller.isAppearanceLightNavigationBars = false
+    }
+
 
     // =========================================================
     // RECYCLER
@@ -131,7 +159,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
             LinearLayoutManager(this)
 
         adapter = FolderAdapter { file ->
-
             abrirArquivoOuPasta(file)
         }
 
@@ -157,7 +184,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
                     } else {
 
-                        finish()
+                        fecharComFade()
                     }
                 }
             }
@@ -222,12 +249,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
             return
         }
 
-
-        /*
-         * Se o usuário voltou e depois entrou
-         * em outra pasta, remove o histórico futuro.
-         */
-
         if (index < history.size - 1) {
 
             history.subList(
@@ -235,11 +256,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
                 history.size
             ).clear()
         }
-
-
-        /*
-         * Evita adicionar a mesma pasta duas vezes.
-         */
 
         if (
             index >= 0 &&
@@ -251,7 +267,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
             return
         }
-
 
         history.add(file)
 
@@ -275,18 +290,10 @@ override fun onCreate(savedInstanceState: Bundle?) {
                 ?.toList()
                 ?: emptyList()
 
-
         val collator =
             Collator.getInstance(
                 Locale("pt", "BR")
             )
-
-
-        /*
-         * Pastas primeiro.
-         * Arquivos depois.
-         * Dentro de cada grupo, ordem alfabética.
-         */
 
         val sorted =
             files.sortedWith(
@@ -312,7 +319,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
                     )
                 }
             )
-
 
         adapter.update(sorted)
 
@@ -363,20 +369,15 @@ override fun onCreate(savedInstanceState: Bundle?) {
             Environment
                 .getExternalStorageDirectory()
 
-
         val rootPath =
             root.absolutePath
-
 
         val currentPath =
             directory.absolutePath
 
-
         if (currentPath == rootPath) {
-
             return "Armazenamento interno"
         }
-
 
         return if (
             currentPath.startsWith(rootPath)
@@ -386,7 +387,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
                 currentPath
                     .removePrefix(rootPath)
                     .trim('/')
-
 
             if (relativo.isEmpty()) {
 
@@ -410,22 +410,16 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
     private fun avancarDiretorio() {
 
-        if (
-            index >= history.size - 1
-        ) {
+        if (index >= history.size - 1) {
             return
         }
 
-
         index++
-
 
         val directory =
             history[index]
 
-
         if (directory.isDirectory) {
-
             atualizarLista(directory)
         }
     }
@@ -441,16 +435,12 @@ override fun onCreate(savedInstanceState: Bundle?) {
             return
         }
 
-
         index--
-
 
         val directory =
             history[index]
 
-
         if (directory.isDirectory) {
-
             atualizarLista(directory)
         }
     }
@@ -474,11 +464,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
                         file
                     )
 
-
             val extensao =
                 file.extension
                     .lowercase(Locale.ROOT)
-
 
             val mime =
                 MimeTypeMap
@@ -487,7 +475,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
                         extensao
                     )
                     ?: "*/*"
-
 
             val intent =
                 Intent(
@@ -503,7 +490,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
                         Intent.FLAG_GRANT_READ_URI_PERMISSION
                     )
                 }
-
 
             startActivity(
                 Intent.createChooser(
@@ -540,7 +526,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
                             "package:$packageName"
                         )
                     )
-
 
                 startActivityForResult(
                     intent,
@@ -607,7 +592,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
             data
         )
 
-
         if (
             requestCode ==
             MANAGE_STORAGE_CODE &&
@@ -630,7 +614,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
             permissions,
             grantResults
         )
-
 
         if (
             requestCode == PERMISSION_CODE &&
@@ -665,12 +648,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
             Typeface.DEFAULT
         }
 
-
         if (view is TextView) {
-
             view.typeface = fonte
         }
-
 
         if (view is ViewGroup) {
 

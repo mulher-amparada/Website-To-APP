@@ -17,86 +17,76 @@ import androidx.core.view.WindowInsetsControllerCompat
 
 class EscolherIconeActivity : AppCompatActivity() {
 
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    // =====================================================
-    // TRANSIÇÃO DA ACTIVITY — SOMENTE FADE
-    // =====================================================
+        // =====================================================
+        // BARRAS TRANSPARENTES — SEM FULLSCREEN
+        // =====================================================
 
-    overridePendingTransition(
-        android.R.anim.fade_in,
-        android.R.anim.fade_out
-    )
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
-    // =====================================================
-    // BARRAS TRANSPARENTES — SEM FULLSCREEN
-    // =====================================================
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
 
-    WindowCompat.setDecorFitsSystemWindows(
-        window,
-        false
-    )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
 
-    window.statusBarColor = Color.TRANSPARENT
-    window.navigationBarColor = Color.TRANSPARENT
+        val controller = WindowInsetsControllerCompat(
+            window,
+            window.decorView
+        )
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        window.isNavigationBarContrastEnforced = false
+        controller.isAppearanceLightStatusBars = false
+        controller.isAppearanceLightNavigationBars = false
+
+        // =====================================================
+        // LAYOUT
+        // =====================================================
+
+        setContentView(
+            R.layout.activity_escolher_icone
+        )
+
+        val raiz = findViewById<View>(
+            android.R.id.content
+        )
+
+        aplicarFonte(raiz)
+
+        // =====================================================
+        // BOTÕES
+        // =====================================================
+
+        findViewById<Button>(R.id.btnIconeOriginal)
+            .setOnClickListener {
+                trocarParaOriginal()
+            }
+
+        findViewById<Button>(R.id.btnIcone1)
+            .setOnClickListener {
+                trocarParaIcone1()
+            }
+
+        findViewById<Button>(R.id.btnIcone2)
+            .setOnClickListener {
+                trocarParaIcone2()
+            }
+
+        findViewById<Button>(R.id.btnIcone3)
+            .setOnClickListener {
+                trocarParaIcone3()
+            }
+
+        findViewById<Button>(R.id.btnIcone4)
+            .setOnClickListener {
+                trocarParaIcone4()
+            }
     }
-
-    val controller = WindowInsetsControllerCompat(
-        window,
-        window.decorView
-    )
-
-    // Mantém as barras visíveis
-    controller.isAppearanceLightStatusBars = false
-    controller.isAppearanceLightNavigationBars = false
-
-    // =====================================================
-    // LAYOUT
-    // =====================================================
-
-    setContentView(
-        R.layout.activity_escolher_icone
-    )
-
-    val raiz = findViewById<View>(
-        android.R.id.content
-    )
-
-    aplicarFonte(raiz)
-
-    // =====================================================
-    // BOTÕES
-    // =====================================================
-
-    findViewById<Button>(R.id.btnIconeOriginal)
-        .setOnClickListener {
-            trocarParaOriginal()
-        }
-
-    findViewById<Button>(R.id.btnIcone1)
-        .setOnClickListener {
-            trocarParaIcone1()
-        }
-
-    findViewById<Button>(R.id.btnIcone2)
-        .setOnClickListener {
-            trocarParaIcone2()
-        }
-
-    findViewById<Button>(R.id.btnIcone3)
-        .setOnClickListener {
-            trocarParaIcone3()
-        }
-
-    findViewById<Button>(R.id.btnIcone4)
-        .setOnClickListener {
-            trocarParaIcone4()
-        }
-}
 
     // =========================================================
     // TROCAR ÍCONE
@@ -107,12 +97,12 @@ override fun onCreate(savedInstanceState: Bundle?) {
         val pm = packageManager
 
         val icons = listOf(
-    "com.mulheres.IconeOriginal",
-    "com.mulheres.Icone1",
-    "com.mulheres.Icone2",
-    "com.mulheres.Icone3",
-    "com.mulheres.Icone4"
-)
+            "com.mulheres.IconeOriginal",
+            "com.mulheres.Icone1",
+            "com.mulheres.Icone2",
+            "com.mulheres.Icone3",
+            "com.mulheres.Icone4"
+        )
 
         icons.forEach { nome ->
 
@@ -164,6 +154,15 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
         startActivity(intent)
 
+        // =====================================================
+        // SAÍDA — FADE RÁPIDO
+        // =====================================================
+
+        overridePendingTransition(
+            android.R.anim.fade_in,
+            android.R.anim.fade_out
+        )
+
         finish()
     }
 
@@ -177,7 +176,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
             "com.mulheres.IconeOriginal"
         )
 
-        // Original = index1
         avisarJavaScript("index1")
     }
 
@@ -191,7 +189,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
             "com.mulheres.Icone1"
         )
 
-        // Ícone 1 = index1
         avisarJavaScript("index1")
     }
 
@@ -205,12 +202,11 @@ override fun onCreate(savedInstanceState: Bundle?) {
             "com.mulheres.Icone2"
         )
 
-        // Ícone 2 = index1
         avisarJavaScript("index1")
     }
 
     // =========================================================
-    // ÍCONE 3 e 4
+    // ÍCONE 3
     // =========================================================
 
     private fun trocarParaIcone3() {
@@ -219,23 +215,21 @@ override fun onCreate(savedInstanceState: Bundle?) {
             "com.mulheres.Icone3"
         )
 
-        // Ícone 3 = index11
         avisarJavaScript("index11")
     }
-    
+
     // =========================================================
-// ÍCONE 4
-// =========================================================
+    // ÍCONE 4
+    // =========================================================
 
-private fun trocarParaIcone4() {
+    private fun trocarParaIcone4() {
 
-    trocarPara(
-        "com.mulheres.Icone4"
-    )
+        trocarPara(
+            "com.mulheres.Icone4"
+        )
 
-    // Ícone 4 = index1
-    avisarJavaScript("index1")
-}
+        avisarJavaScript("index1")
+    }
 
     // =========================================================
     // FONTE

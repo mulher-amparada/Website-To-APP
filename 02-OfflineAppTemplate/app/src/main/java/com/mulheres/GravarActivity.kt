@@ -34,63 +34,144 @@ class GravarActivity : AppCompatActivity() {
     private var currentFile: String = ""
     private var recording = false
 
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
 
-    // ==========================================
-    // TRANSIÇÃO DA ACTIVITY — SOMENTE FADE IN
-    // ==========================================
+    // =========================================================
+    // ON CREATE
+    // =========================================================
 
-    overridePendingTransition(
-        android.R.anim.fade_in,
-        android.R.anim.fade_out
-    )
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    WindowCompat.setDecorFitsSystemWindows(
-        window,
-        false
-    )
+        // =====================================================
+        // TRANSIÇÃO DA ACTIVITY — FADE
+        // =====================================================
 
-    window.statusBarColor = Color.TRANSPARENT
-    window.navigationBarColor = Color.TRANSPARENT
+        overridePendingTransition(
+            android.R.anim.fade_in,
+            android.R.anim.fade_out
+        )
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        window.isNavigationBarContrastEnforced = false
-    }
+        // =====================================================
+        // BARRAS TRANSPARENTES
+        // =====================================================
 
-    val controller = WindowInsetsControllerCompat(
-        window,
-        window.decorView
-    )
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
-    controller.isAppearanceLightStatusBars = false
-    controller.isAppearanceLightNavigationBars = false
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
 
-    setContentView(
-        R.layout.activity_gravar
-    )
-
-    val raiz = findViewById<View>(
-        android.R.id.content
-    )
-
-    aplicarFonte(raiz)
-
-    btnRecord = findViewById(R.id.btnRecord)
-    list = findViewById(R.id.list)
-
-    checkPermission()
-
-    btnRecord.setOnClickListener {
-
-        if (recording) {
-            stopRecord()
-        } else {
-            startRecord()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
         }
 
+        val controller = WindowInsetsControllerCompat(
+            window,
+            window.decorView
+        )
+
+        controller.isAppearanceLightStatusBars = false
+        controller.isAppearanceLightNavigationBars = false
+
+        // =====================================================
+        // LAYOUT
+        // =====================================================
+
+        setContentView(
+            R.layout.activity_gravar
+        )
+
+        val raiz = findViewById<View>(
+            android.R.id.content
+        )
+
+        aplicarFonte(raiz)
+
+        // =====================================================
+        // FADE IN — 180ms
+        // =====================================================
+
+        raiz.alpha = 0f
+
+        raiz.animate()
+            .alpha(1f)
+            .setDuration(180L)
+            .start()
+
+        // =====================================================
+        // COMPONENTES
+        // =====================================================
+
+        btnRecord = findViewById(
+            R.id.btnRecord
+        )
+
+        list = findViewById(
+            R.id.list
+        )
+
+        checkPermission()
+
+        // =====================================================
+        // BOTÃO DE GRAVAÇÃO
+        // =====================================================
+
+        btnRecord.setOnClickListener {
+
+            if (recording) {
+
+                stopRecord()
+
+            } else {
+
+                startRecord()
+            }
+        }
     }
-}
+
+
+    // =========================================================
+    // FADE OUT
+    // =========================================================
+
+    private fun fecharComFade() {
+
+        val raiz = findViewById<View>(
+            android.R.id.content
+        )
+
+        raiz.animate()
+            .alpha(0f)
+            .setDuration(180L)
+            .withEndAction {
+
+                finish()
+
+                overridePendingTransition(
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
+                )
+            }
+            .start()
+    }
+
+
+    // =========================================================
+    // BOTÃO VOLTAR
+    // =========================================================
+
+    @Deprecated("Compatibilidade")
+    override fun onBackPressed() {
+
+        fecharComFade()
+    }
+
+
+    // =========================================================
+    // PERMISSÃO
+    // =========================================================
 
     private fun checkPermission() {
 
@@ -103,43 +184,54 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.RECORD_AUDIO),
+                arrayOf(
+                    Manifest.permission.RECORD_AUDIO
+                ),
                 1
             )
         }
     }
 
 
+    // =========================================================
+    // INICIAR GRAVAÇÃO
+    // =========================================================
+
     private fun startRecord() {
 
         try {
 
-            val dir = getExternalFilesDir(null)
-                ?: return
+            val dir =
+                getExternalFilesDir(null)
+                    ?: return
 
             currentFile =
                 "${dir.absolutePath}/rec_${System.currentTimeMillis()}.3gp"
 
 
-            recorder = MediaRecorder().apply {
+            recorder =
+                MediaRecorder().apply {
 
-                setAudioSource(
-                    MediaRecorder.AudioSource.MIC
-                )
+                    setAudioSource(
+                        MediaRecorder.AudioSource.MIC
+                    )
 
-                setOutputFormat(
-                    MediaRecorder.OutputFormat.THREE_GPP
-                )
+                    setOutputFormat(
+                        MediaRecorder.OutputFormat.THREE_GPP
+                    )
 
-                setAudioEncoder(
-                    MediaRecorder.AudioEncoder.AMR_NB
-                )
+                    setAudioEncoder(
+                        MediaRecorder.AudioEncoder.AMR_NB
+                    )
 
-                setOutputFile(currentFile)
+                    setOutputFile(
+                        currentFile
+                    )
 
-                prepare()
-                start()
-            }
+                    prepare()
+
+                    start()
+                }
 
 
             recording = true
@@ -147,37 +239,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
             btnRecord.setImageResource(
                 R.drawable.mic1
             )
-
-
-        } catch (e: Exception) {
-
-            e.printStackTrace()
-
-        }
-    }
-
-
-    private fun stopRecord() {
-
-        try {
-
-            recorder?.apply {
-                stop()
-                release()
-            }
-
-            recorder = null
-
-            recording = false
-
-
-            btnRecord.setImageResource(
-                R.drawable.mic
-            )
-
-
-            addToList(currentFile)
-
 
         } catch (e: Exception) {
 
@@ -190,39 +251,96 @@ override fun onCreate(savedInstanceState: Bundle?) {
     }
 
 
-    private fun playAudio(path: String) {
+    // =========================================================
+    // PARAR GRAVAÇÃO
+    // =========================================================
+
+    private fun stopRecord() {
 
         try {
 
-            player?.release()
+            recorder?.apply {
 
-            player = MediaPlayer().apply {
+                stop()
 
-                setDataSource(path)
-
-                prepare()
-
-                start()
+                release()
             }
 
+            recorder = null
+
+            recording = false
+
+            btnRecord.setImageResource(
+                R.drawable.mic
+            )
+
+            addToList(
+                currentFile
+            )
 
         } catch (e: Exception) {
 
             e.printStackTrace()
 
+            recorder?.release()
+
+            recorder = null
+
+            recording = false
+
+            btnRecord.setImageResource(
+                R.drawable.mic
+            )
         }
     }
 
 
-    private fun addToList(path: String) {
+    // =========================================================
+    // REPRODUZIR ÁUDIO
+    // =========================================================
+
+    private fun playAudio(
+        path: String
+    ) {
+
+        try {
+
+            player?.release()
+
+            player =
+                MediaPlayer().apply {
+
+                    setDataSource(path)
+
+                    prepare()
+
+                    start()
+                }
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+        }
+    }
+
+
+    // =========================================================
+    // ADICIONAR GRAVAÇÃO À LISTA
+    // =========================================================
+
+    private fun addToList(
+        path: String
+    ) {
 
         val file = File(path)
 
-        if (!file.exists())
+        if (!file.exists()) {
             return
+        }
 
 
-        val container = LinearLayout(this)
+        val container =
+            LinearLayout(this)
 
         container.orientation =
             LinearLayout.HORIZONTAL
@@ -233,7 +351,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
             28,
             28
         )
-
 
         container.setBackgroundResource(
             R.drawable.bg_record_item
@@ -253,34 +370,57 @@ override fun onCreate(savedInstanceState: Bundle?) {
             20
         )
 
-        container.layoutParams = params
+        container.layoutParams =
+            params
 
 
-        val icon = ImageView(this)
+        // =====================================================
+        // ÍCONE
+        // =====================================================
 
-icon.setImageResource(
-    R.drawable.ic_audio
-)
+        val icon =
+            ImageView(this)
 
-icon.layoutParams =
-    LinearLayout.LayoutParams(
-        60,
-        60
-    )
-    
-    val text = TextView(this)
+        icon.setImageResource(
+            R.drawable.ic_audio
+        )
 
-text.text = file.name
-text.textSize = 16f
-text.setTextColor(Color.WHITE)
-text.setPadding(24, 0, 24, 0)
+        icon.layoutParams =
+            LinearLayout.LayoutParams(
+                60,
+                60
+            )
 
-text.typeface = Typeface.createFromAsset(
-    assets,
-    "font.ttf"
-)
 
-        text.setTextColor(Color.WHITE)
+        // =====================================================
+        // NOME
+        // =====================================================
+
+        val text =
+            TextView(this)
+
+        text.text =
+            file.name
+
+        text.textSize =
+            16f
+
+        text.setTextColor(
+            Color.WHITE
+        )
+
+        text.setPadding(
+            24,
+            0,
+            24,
+            0
+        )
+
+        text.typeface =
+            Typeface.createFromAsset(
+                assets,
+                "font.ttf"
+            )
 
         text.layoutParams =
             LinearLayout.LayoutParams(
@@ -290,69 +430,101 @@ text.typeface = Typeface.createFromAsset(
             )
 
 
-        val delete = ImageView(this)
+        // =====================================================
+        // EXCLUIR
+        // =====================================================
 
-delete.setImageResource(
-    R.drawable.ic_delete
-)
+        val delete =
+            ImageView(this)
 
-delete.layoutParams =
-    LinearLayout.LayoutParams(
-        60,
-        60
-    )
+        delete.setImageResource(
+            R.drawable.ic_delete
+        )
+
+        delete.layoutParams =
+            LinearLayout.LayoutParams(
+                60,
+                60
+            )
 
         delete.setBackgroundColor(
             Color.TRANSPARENT
         )
 
-        
 
+        // =====================================================
+        // ADICIONAR COMPONENTES
+        // =====================================================
 
         container.addView(icon)
-container.addView(text)
-container.addView(delete)
+        container.addView(text)
+        container.addView(delete)
 
+
+        // =====================================================
+        // REPRODUZIR
+        // =====================================================
 
         text.setOnClickListener {
 
             playAudio(path)
-
         }
 
+
+        icon.setOnClickListener {
+
+            playAudio(path)
+        }
+
+
+        // =====================================================
+        // EXCLUIR COM ANIMAÇÃO
+        // =====================================================
 
         delete.setOnClickListener {
 
             container.animate()
                 .alpha(0f)
                 .translationX(80f)
-                .setDuration(200)
+                .setDuration(180L)
                 .withEndAction {
 
-                    list.removeView(container)
-                    file.delete()
+                    list.removeView(
+                        container
+                    )
 
+                    file.delete()
                 }
                 .start()
-
         }
 
 
-        list.addView(container)
+        // =====================================================
+        // ADICIONAR À LISTA
+        // =====================================================
 
+        list.addView(
+            container
+        )
+
+
+        // =====================================================
+        // ANIMAÇÃO DE ENTRADA DO ITEM
+        // =====================================================
 
         container.alpha = 0f
+
         container.scaleX = 0.95f
         container.scaleY = 0.95f
-        container.translationY = 40f
 
+        container.translationY = 40f
 
         container.animate()
             .alpha(1f)
             .scaleX(1f)
             .scaleY(1f)
             .translationY(0f)
-            .setDuration(300)
+            .setDuration(260L)
             .setInterpolator(
                 DecelerateInterpolator()
             )
@@ -360,36 +532,68 @@ container.addView(delete)
     }
 
 
+    // =========================================================
+    // DESTROY
+    // =========================================================
+
     override fun onDestroy() {
 
-        super.onDestroy()
-
         recorder?.release()
+        recorder = null
 
         player?.release()
+        player = null
+
+        super.onDestroy()
     }
 
-private fun aplicarFonte(view: View) {
 
-    val fonte = resources.assets
-        .open("font.ttf")
-        .let {
-            android.graphics.Typeface.createFromAsset(
-                assets,
-                "font.ttf"
-            )
+    // =========================================================
+    // FONTE
+    // =========================================================
+
+    private fun aplicarFonte(
+        view: View
+    ) {
+
+        val fonte =
+            try {
+
+                Typeface.createFromAsset(
+                    assets,
+                    "font.ttf"
+                )
+
+            } catch (e: Exception) {
+
+                Typeface.DEFAULT
+            }
+
+
+        if (view is TextView) {
+
+            view.typeface =
+                fonte
         }
 
-    if (view is android.widget.TextView) {
-        view.typeface = fonte
-    }
 
-    if (view is android.view.ViewGroup) {
-        for (i in 0 until view.childCount) {
-            aplicarFonte(view.getChildAt(i))
+        if (view is ViewGroup) {
+
+            for (
+                i in 0 until view.childCount
+            ) {
+
+                aplicarFonte(
+                    view.getChildAt(i)
+                )
+            }
         }
     }
-}
+
+
+    // =========================================================
+    // RESULTADO DA PERMISSÃO
+    // =========================================================
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -404,15 +608,15 @@ private fun aplicarFonte(view: View) {
         )
 
 
-        if(requestCode == 1) {
+        if (requestCode == 1) {
 
-            if(
+            if (
                 grantResults.isEmpty() ||
-                grantResults[0] != PackageManager.PERMISSION_GRANTED
+                grantResults[0] !=
+                PackageManager.PERMISSION_GRANTED
             ) {
 
-                finish()
-
+                fecharComFade()
             }
         }
     }
