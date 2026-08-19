@@ -46,14 +46,22 @@ class EscolherIconeActivity : AppCompatActivity() {
     controller.isAppearanceLightNavigationBars = false
 
     setContentView(
-        R.layout.activity_escolher_icone
-    )
+    R.layout.activity_escolher_icone
+)
 
-    val raiz = findViewById<View>(
-        android.R.id.content
-    )
+val raiz = findViewById<View>(
+    android.R.id.content
+)
 
-    aplicarFonte(raiz)
+aplicarFonte(raiz)
+
+// Fade in somente de opacidade
+raiz.alpha = 0f
+
+raiz.animate()
+    .alpha(1f)
+    .setDuration(300L)
+    .start()
 
     // =====================================================
     // BOTÕES
