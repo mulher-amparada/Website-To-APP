@@ -280,6 +280,65 @@
                 android:stateListAnimator="@null" />
 
         </LinearLayout>
+        
+        <!-- =====================================================
+     ÍCONE 4
+====================================================== -->
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:background="@drawable/bg_card"
+    android:clipToOutline="true"
+    android:elevation="4dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OPÇÃO 04"
+        android:textColor="#8E8E93"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.12" />
+
+    <ImageView
+        android:id="@+id/icone4"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="18dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="Ícone 4"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="Ícone 4"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnIcone4"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_button"
+        android:minHeight="0dp"
+        android:text="Usar ícone 4"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:fontFamily="sans"
+        android:stateListAnimator="@null" />
+
+</LinearLayout>
 
     </LinearLayout>
 
