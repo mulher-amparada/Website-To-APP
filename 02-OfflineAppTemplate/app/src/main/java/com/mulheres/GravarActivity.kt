@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -41,15 +40,6 @@ class GravarActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // =====================================================
-        // TRANSIÇÃO DA ACTIVITY — FADE
-        // =====================================================
-
-        overridePendingTransition(
-            android.R.anim.fade_in,
-            android.R.anim.fade_out
-        )
 
         // =====================================================
         // BARRAS TRANSPARENTES
@@ -90,17 +80,6 @@ class GravarActivity : AppCompatActivity() {
         aplicarFonte(raiz)
 
         // =====================================================
-        // FADE IN — 180ms
-        // =====================================================
-
-        raiz.alpha = 0f
-
-        raiz.animate()
-            .alpha(1f)
-            .setDuration(180L)
-            .start()
-
-        // =====================================================
         // COMPONENTES
         // =====================================================
 
@@ -133,39 +112,12 @@ class GravarActivity : AppCompatActivity() {
 
 
     // =========================================================
-    // FADE OUT
-    // =========================================================
-
-    private fun fecharComFade() {
-
-        val raiz = findViewById<View>(
-            android.R.id.content
-        )
-
-        raiz.animate()
-            .alpha(0f)
-            .setDuration(180L)
-            .withEndAction {
-
-                finish()
-
-                overridePendingTransition(
-                    android.R.anim.fade_in,
-                    android.R.anim.fade_out
-                )
-            }
-            .start()
-    }
-
-
-    // =========================================================
     // BOTÃO VOLTAR
     // =========================================================
 
-    @Deprecated("Compatibilidade")
     override fun onBackPressed() {
 
-        fecharComFade()
+        finish()
     }
 
 
@@ -208,7 +160,6 @@ class GravarActivity : AppCompatActivity() {
             currentFile =
                 "${dir.absolutePath}/rec_${System.currentTimeMillis()}.3gp"
 
-
             recorder =
                 MediaRecorder().apply {
 
@@ -233,7 +184,6 @@ class GravarActivity : AppCompatActivity() {
                     start()
                 }
 
-
             recording = true
 
             btnRecord.setImageResource(
@@ -246,7 +196,12 @@ class GravarActivity : AppCompatActivity() {
 
             recorder?.release()
             recorder = null
+
             recording = false
+
+            btnRecord.setImageResource(
+                R.drawable.mic
+            )
         }
     }
 
@@ -338,6 +293,10 @@ class GravarActivity : AppCompatActivity() {
             return
         }
 
+
+        // =====================================================
+        // CONTAINER
+        // =====================================================
 
         val container =
             LinearLayout(this)
@@ -456,9 +415,17 @@ class GravarActivity : AppCompatActivity() {
         // ADICIONAR COMPONENTES
         // =====================================================
 
-        container.addView(icon)
-        container.addView(text)
-        container.addView(delete)
+        container.addView(
+            icon
+        )
+
+        container.addView(
+            text
+        )
+
+        container.addView(
+            delete
+        )
 
 
         // =====================================================
@@ -470,7 +437,6 @@ class GravarActivity : AppCompatActivity() {
             playAudio(path)
         }
 
-
         icon.setOnClickListener {
 
             playAudio(path)
@@ -478,24 +444,16 @@ class GravarActivity : AppCompatActivity() {
 
 
         // =====================================================
-        // EXCLUIR COM ANIMAÇÃO
+        // EXCLUIR
         // =====================================================
 
         delete.setOnClickListener {
 
-            container.animate()
-                .alpha(0f)
-                .translationX(80f)
-                .setDuration(180L)
-                .withEndAction {
+            list.removeView(
+                container
+            )
 
-                    list.removeView(
-                        container
-                    )
-
-                    file.delete()
-                }
-                .start()
+            file.delete()
         }
 
 
@@ -506,29 +464,6 @@ class GravarActivity : AppCompatActivity() {
         list.addView(
             container
         )
-
-
-        // =====================================================
-        // ANIMAÇÃO DE ENTRADA DO ITEM
-        // =====================================================
-
-        container.alpha = 0f
-
-        container.scaleX = 0.95f
-        container.scaleY = 0.95f
-
-        container.translationY = 40f
-
-        container.animate()
-            .alpha(1f)
-            .scaleX(1f)
-            .scaleY(1f)
-            .translationY(0f)
-            .setDuration(260L)
-            .setInterpolator(
-                DecelerateInterpolator()
-            )
-            .start()
     }
 
 
@@ -607,7 +542,6 @@ class GravarActivity : AppCompatActivity() {
             grantResults
         )
 
-
         if (requestCode == 1) {
 
             if (
@@ -616,7 +550,7 @@ class GravarActivity : AppCompatActivity() {
                 PackageManager.PERMISSION_GRANTED
             ) {
 
-                fecharComFade()
+                finish()
             }
         }
     }

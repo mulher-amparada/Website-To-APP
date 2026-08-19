@@ -41,6 +41,7 @@ class EscolherIconeActivity : AppCompatActivity() {
             window.decorView
         )
 
+        // Mantém as barras visíveis
         controller.isAppearanceLightStatusBars = false
         controller.isAppearanceLightNavigationBars = false
 
@@ -153,15 +154,6 @@ class EscolherIconeActivity : AppCompatActivity() {
         )
 
         startActivity(intent)
-
-        // =====================================================
-        // SAÍDA — FADE RÁPIDO
-        // =====================================================
-
-        overridePendingTransition(
-            android.R.anim.fade_in,
-            android.R.anim.fade_out
-        )
 
         finish()
     }

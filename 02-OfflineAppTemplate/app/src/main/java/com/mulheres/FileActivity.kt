@@ -42,22 +42,12 @@ class FileActivity : AppCompatActivity() {
 
     private var index = -1
 
-
     // =========================================================
     // ON CREATE
     // =========================================================
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // ==========================================
-        // TRANSIÇÃO DA ACTIVITY — FADE RÁPIDO
-        // ==========================================
-
-        overridePendingTransition(
-            android.R.anim.fade_in,
-            android.R.anim.fade_out
-        )
 
         configurarSistema()
 
@@ -68,17 +58,6 @@ class FileActivity : AppCompatActivity() {
         )
 
         aplicarFonte(raiz)
-
-        // ==========================================
-        // FADE IN — RÁPIDO
-        // ==========================================
-
-        raiz.alpha = 0f
-
-        raiz.animate()
-            .alpha(1f)
-            .setDuration(180L)
-            .start()
 
         recycler = findViewById(R.id.recycler)
         pathText = findViewById(R.id.pathText)
@@ -93,32 +72,6 @@ class FileActivity : AppCompatActivity() {
             iniciar()
         }
     }
-
-
-    // =========================================================
-    // FADE OUT + FINALIZAÇÃO
-    // =========================================================
-
-    private fun fecharComFade() {
-
-        val raiz = findViewById<View>(
-            android.R.id.content
-        )
-
-        raiz.animate()
-            .alpha(0f)
-            .setDuration(180L)
-            .withEndAction {
-                finish()
-
-                overridePendingTransition(
-                    android.R.anim.fade_in,
-                    android.R.anim.fade_out
-                )
-            }
-            .start()
-    }
-
 
     // =========================================================
     // SISTEMA
@@ -148,7 +101,6 @@ class FileActivity : AppCompatActivity() {
         controller.isAppearanceLightNavigationBars = false
     }
 
-
     // =========================================================
     // RECYCLER
     // =========================================================
@@ -164,7 +116,6 @@ class FileActivity : AppCompatActivity() {
 
         recycler.adapter = adapter
     }
-
 
     // =========================================================
     // BOTÃO VOLTAR
@@ -184,13 +135,12 @@ class FileActivity : AppCompatActivity() {
 
                     } else {
 
-                        fecharComFade()
+                        finish()
                     }
                 }
             }
         )
     }
-
 
     // =========================================================
     // INÍCIO
@@ -205,7 +155,6 @@ class FileActivity : AppCompatActivity() {
         abrirDiretorioInicial(root)
     }
 
-
     private fun abrirDiretorioInicial(
         file: File
     ) {
@@ -216,7 +165,6 @@ class FileActivity : AppCompatActivity() {
 
         abrirDiretorio(file)
     }
-
 
     // =========================================================
     // ABRIR PASTA OU ARQUIVO
@@ -235,7 +183,6 @@ class FileActivity : AppCompatActivity() {
             abrirExterno(file)
         }
     }
-
 
     // =========================================================
     // ABRIR DIRETÓRIO
@@ -274,7 +221,6 @@ class FileActivity : AppCompatActivity() {
 
         atualizarLista(file)
     }
-
 
     // =========================================================
     // ATUALIZAR LISTA
@@ -327,7 +273,6 @@ class FileActivity : AppCompatActivity() {
         atualizarContador(sorted.size)
     }
 
-
     // =========================================================
     // CONTADOR
     // =========================================================
@@ -347,7 +292,6 @@ class FileActivity : AppCompatActivity() {
             }
     }
 
-
     // =========================================================
     // CAMINHO
     // =========================================================
@@ -359,7 +303,6 @@ class FileActivity : AppCompatActivity() {
         pathText.text =
             obterCaminhoBonito(directory)
     }
-
 
     private fun obterCaminhoBonito(
         directory: File
@@ -403,7 +346,6 @@ class FileActivity : AppCompatActivity() {
         }
     }
 
-
     // =========================================================
     // AVANÇAR
     // =========================================================
@@ -424,7 +366,6 @@ class FileActivity : AppCompatActivity() {
         }
     }
 
-
     // =========================================================
     // VOLTAR DIRETÓRIO
     // =========================================================
@@ -444,7 +385,6 @@ class FileActivity : AppCompatActivity() {
             atualizarLista(directory)
         }
     }
-
 
     // =========================================================
     // ABRIR ARQUIVO
@@ -504,7 +444,6 @@ class FileActivity : AppCompatActivity() {
         }
     }
 
-
     // =========================================================
     // PERMISSÕES
     // =========================================================
@@ -550,7 +489,6 @@ class FileActivity : AppCompatActivity() {
         }
     }
 
-
     private fun temPermissao(): Boolean {
 
         return if (
@@ -571,7 +509,6 @@ class FileActivity : AppCompatActivity() {
                     .PERMISSION_GRANTED
         }
     }
-
 
     // =========================================================
     // RESULTADO DA PERMISSÃO
@@ -602,7 +539,6 @@ class FileActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -626,7 +562,6 @@ class FileActivity : AppCompatActivity() {
             iniciar()
         }
     }
-
 
     // =========================================================
     // FONTE
