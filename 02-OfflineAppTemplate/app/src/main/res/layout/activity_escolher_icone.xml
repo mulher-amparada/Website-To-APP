@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    android:fillViewport="true"
+    android:background="#000000"
+    android:clipToPadding="false"
+    android:overScrollMode="never">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:paddingStart="20dp"
+        android:paddingTop="28dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="40dp">
+
+        <!-- =====================================================
+             CABEÇALHO
+        ====================================================== -->
 
         <TextView
             android:layout_width="wrap_content"
@@ -16,134 +28,256 @@
             android:text="Escolha um ícone"
             android:textColor="#FFFFFF"
             android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:fontFamily="sans"
+            android:letterSpacing="-0.02" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="Personalize a aparência do aplicativo"
-            android:textColor="#8A8A8A"
-            android:textSize="14sp" />
+            android:textColor="#8E8E93"
+            android:textSize="14sp"
+            android:fontFamily="sans" />
 
+
+        <!-- =====================================================
+             ÍCONE ORIGINAL
+        ====================================================== -->
 
         <LinearLayout
-            android:layout_width="280dp"
-            android:layout_height="280dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:background="@drawable/bg_card"
+            android:clipToOutline="true"
+            android:elevation="4dp"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PADRÃO"
+                android:textColor="#8E8E93"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.12" />
 
             <ImageView
                 android:id="@+id/iconeOriginal"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_marginTop="18dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="Ícone original do aplicativo"
+                android:scaleType="fitCenter"
                 android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Ícone original"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnIconeOriginal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
                 android:layout_marginTop="16dp"
-                android:background="@null"
+                android:background="@drawable/bg_button"
+                android:minHeight="0dp"
                 android:text="Usar ícone original"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:textSize="15sp"
+                android:fontFamily="sans"
+                android:stateListAnimator="@null" />
 
         </LinearLayout>
 
 
+        <!-- =====================================================
+             ÍCONE 1
+        ====================================================== -->
+
         <LinearLayout
-            android:layout_width="280dp"
-            android:layout_height="280dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/bg_card"
+            android:clipToOutline="true"
+            android:elevation="4dp"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OPÇÃO 01"
+                android:textColor="#8E8E93"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.12" />
 
             <ImageView
                 android:id="@+id/icone1"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_marginTop="18dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="Ícone 1"
+                android:scaleType="fitCenter"
                 android:src="@drawable/icon1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Ícone 1"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnIcone1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
                 android:layout_marginTop="16dp"
-                android:background="@null"
+                android:background="@drawable/bg_button"
+                android:minHeight="0dp"
                 android:text="Usar ícone 1"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:textSize="15sp"
+                android:fontFamily="sans"
+                android:stateListAnimator="@null" />
 
         </LinearLayout>
 
 
+        <!-- =====================================================
+             ÍCONE 2
+        ====================================================== -->
+
         <LinearLayout
-            android:layout_width="280dp"
-            android:layout_height="280dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/bg_card"
+            android:clipToOutline="true"
+            android:elevation="4dp"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OPÇÃO 02"
+                android:textColor="#8E8E93"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.12" />
 
             <ImageView
                 android:id="@+id/icone2"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_marginTop="18dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="Ícone 2"
+                android:scaleType="fitCenter"
                 android:src="@drawable/icon2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Ícone 2"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnIcone2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
                 android:layout_marginTop="16dp"
-                android:background="@null"
+                android:background="@drawable/bg_button"
+                android:minHeight="0dp"
                 android:text="Usar ícone 2"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:textSize="15sp"
+                android:fontFamily="sans"
+                android:stateListAnimator="@null" />
 
         </LinearLayout>
 
 
+        <!-- =====================================================
+             ÍCONE 3
+        ====================================================== -->
+
         <LinearLayout
-            android:layout_width="280dp"
-            android:layout_height="280dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="24dp"
             android:background="@drawable/bg_card"
+            android:clipToOutline="true"
+            android:elevation="4dp"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="24dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OPÇÃO 03"
+                android:textColor="#8E8E93"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.12" />
+
             <ImageView
                 android:id="@+id/icone3"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_marginTop="18dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="Ícone 3"
+                android:scaleType="fitCenter"
                 android:src="@drawable/icon3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Ícone 3"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnIcone3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
                 android:layout_marginTop="16dp"
-                android:background="@null"
+                android:background="@drawable/bg_button"
+                android:minHeight="0dp"
                 android:text="Usar ícone 3"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:textSize="15sp"
+                android:fontFamily="sans"
+                android:stateListAnimator="@null" />
 
         </LinearLayout>
 
