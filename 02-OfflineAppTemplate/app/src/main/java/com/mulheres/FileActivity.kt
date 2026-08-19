@@ -47,28 +47,7 @@ class FileActivity : AppCompatActivity() {
     // ON CREATE
     // =========================================================
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        configurarSistema()
-
-        setContentView(R.layout.activity_file)
-
-        aplicarFonte(findViewById(android.R.id.content))
-
-        recycler = findViewById(R.id.recycler)
-        pathText = findViewById(R.id.pathText)
-        itemCount = findViewById(R.id.itemCount)
-
-        configurarRecycler()
-        configurarBack()
-
-        if (!temPermissao()) {
-            pedirPermissao()
-        } else {
-            iniciar()
-        }
-    }
+    
 
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
