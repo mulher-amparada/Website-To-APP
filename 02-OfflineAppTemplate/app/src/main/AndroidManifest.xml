@@ -177,6 +177,21 @@ android:screenOrientation="portrait"
 
 </activity-alias>
 
+<activity-alias
+    android:name=".Icone4"
+    android:targetActivity=".MainActivity"
+    android:icon="@drawable/icon4"
+    android:label="✅️Mulher Amparada"
+    android:enabled="false"
+    android:exported="true">
+
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+    </intent-filter>
+
+</activity-alias>
+
         <activity
             android:name=".GravarActivity"
            android:screenOrientation="portrait" android:exported="false"/>
