@@ -17,8 +17,17 @@ import androidx.core.view.WindowInsetsControllerCompat
 
 class EscolherIconeActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    // =====================================================
+    // TRANSIÇÃO DA ACTIVITY — SOMENTE FADE
+    // =====================================================
+
+    overridePendingTransition(
+        android.R.anim.fade_in,
+        android.R.anim.fade_out
+    )
 
     // =====================================================
     // BARRAS TRANSPARENTES — SEM FULLSCREEN
@@ -45,23 +54,19 @@ class EscolherIconeActivity : AppCompatActivity() {
     controller.isAppearanceLightStatusBars = false
     controller.isAppearanceLightNavigationBars = false
 
+    // =====================================================
+    // LAYOUT
+    // =====================================================
+
     setContentView(
-    R.layout.activity_escolher_icone
-)
+        R.layout.activity_escolher_icone
+    )
 
-val raiz = findViewById<View>(
-    android.R.id.content
-)
+    val raiz = findViewById<View>(
+        android.R.id.content
+    )
 
-aplicarFonte(raiz)
-
-// Fade in somente de opacidade
-raiz.alpha = 0f
-
-raiz.animate()
-    .alpha(1f)
-    .setDuration(300L)
-    .start()
+    aplicarFonte(raiz)
 
     // =====================================================
     // BOTÕES
@@ -86,11 +91,11 @@ raiz.animate()
         .setOnClickListener {
             trocarParaIcone3()
         }
-        
-        findViewById<Button>(R.id.btnIcone4)
-    .setOnClickListener {
-        trocarParaIcone4()
-    }
+
+    findViewById<Button>(R.id.btnIcone4)
+        .setOnClickListener {
+            trocarParaIcone4()
+        }
 }
 
     // =========================================================

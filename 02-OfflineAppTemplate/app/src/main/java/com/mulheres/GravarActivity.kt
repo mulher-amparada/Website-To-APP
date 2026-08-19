@@ -37,7 +37,19 @@ class GravarActivity : AppCompatActivity() {
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    WindowCompat.setDecorFitsSystemWindows(window, false)
+    // ==========================================
+    // TRANSIÇÃO DA ACTIVITY — SOMENTE FADE IN
+    // ==========================================
+
+    overridePendingTransition(
+        android.R.anim.fade_in,
+        android.R.anim.fade_out
+    )
+
+    WindowCompat.setDecorFitsSystemWindows(
+        window,
+        false
+    )
 
     window.statusBarColor = Color.TRANSPARENT
     window.navigationBarColor = Color.TRANSPARENT
@@ -54,24 +66,18 @@ override fun onCreate(savedInstanceState: Bundle?) {
     controller.isAppearanceLightStatusBars = false
     controller.isAppearanceLightNavigationBars = false
 
-    setContentView(R.layout.activity_gravar)
+    setContentView(
+        R.layout.activity_gravar
+    )
 
-val raiz = findViewById<View>(
-    android.R.id.content
-)
+    val raiz = findViewById<View>(
+        android.R.id.content
+    )
 
-aplicarFonte(raiz)
+    aplicarFonte(raiz)
 
-// Fade in — somente opacidade
-raiz.alpha = 0f
-
-raiz.animate()
-    .alpha(1f)
-    .setDuration(300L)
-    .start()
-
-btnRecord = findViewById(R.id.btnRecord)
-list = findViewById(R.id.list)
+    btnRecord = findViewById(R.id.btnRecord)
+    list = findViewById(R.id.list)
 
     checkPermission()
 
@@ -85,7 +91,6 @@ list = findViewById(R.id.list)
 
     }
 }
-    
 
     private fun checkPermission() {
 

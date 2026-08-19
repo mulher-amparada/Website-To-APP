@@ -52,24 +52,24 @@ class FileActivity : AppCompatActivity() {
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
+    // ==========================================
+    // TRANSIÇÃO DA ACTIVITY — SOMENTE FADE
+    // ==========================================
+
+    overridePendingTransition(
+        android.R.anim.fade_in,
+        android.R.anim.fade_out
+    )
+
     configurarSistema()
 
     setContentView(R.layout.activity_file)
 
-    val raiz = findViewById<View>(android.R.id.content)
+    val raiz = findViewById<View>(
+        android.R.id.content
+    )
 
     aplicarFonte(raiz)
-
-    // ==========================================
-    // FADE IN — SOMENTE OPACIDADE
-    // ==========================================
-
-    raiz.alpha = 0f
-
-    raiz.animate()
-        .alpha(1f)
-        .setDuration(300L)
-        .start()
 
     recycler = findViewById(R.id.recycler)
     pathText = findViewById(R.id.pathText)
