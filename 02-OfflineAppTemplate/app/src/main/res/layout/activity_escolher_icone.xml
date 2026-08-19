@@ -41,49 +41,6 @@
             android:textSize="14sp"
             android:fontFamily="sans" />
 
-        <!-- =====================================================
-             DESTAQUE
-        ====================================================== -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_marginTop="28dp"
-            android:background="@drawable/bg_card"
-            android:clipToOutline="true"
-            android:elevation="8dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="22dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ÍCONE ATUAL"
-                android:textColor="#777777"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.18" />
-
-            <ImageView
-                android:id="@+id/iconeOriginal"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:layout_marginTop="14dp"
-                android:contentDescription="Ícone atual"
-                android:scaleType="fitCenter"
-                android:src="@mipmap/ic_launcher" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Original"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
 
         <!-- =====================================================
              TÍTULO DAS OPÇÕES
