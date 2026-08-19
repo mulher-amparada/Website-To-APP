@@ -70,6 +70,41 @@ class FileActivity : AppCompatActivity() {
         }
     }
 
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    configurarSistema()
+
+    setContentView(R.layout.activity_file)
+
+    val raiz = findViewById<View>(android.R.id.content)
+
+    aplicarFonte(raiz)
+
+    // ==========================================
+    // FADE IN — SOMENTE OPACIDADE
+    // ==========================================
+
+    raiz.alpha = 0f
+
+    raiz.animate()
+        .alpha(1f)
+        .setDuration(300L)
+        .start()
+
+    recycler = findViewById(R.id.recycler)
+    pathText = findViewById(R.id.pathText)
+    itemCount = findViewById(R.id.itemCount)
+
+    configurarRecycler()
+    configurarBack()
+
+    if (!temPermissao()) {
+        pedirPermissao()
+    } else {
+        iniciar()
+    }
+}
 
     // =========================================================
     // SISTEMA / TELA CHEIA
