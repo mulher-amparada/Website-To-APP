@@ -15,6 +15,7 @@
     font-family: "Quicksand";
     src: url("file:///android_asset/font.ttf") format("truetype");
     font-weight: 400 800;
+    font-display: swap;
 }
 
 
@@ -79,20 +80,26 @@ body {
     width: 100%;
     min-height: 100vh;
 
+    margin: 0;
+
     overflow-x: hidden;
 
-    background: black;
+    background: #000;
 
     color: var(--text);
+
+    /* Evita algumas reconstruções desnecessárias */
+    -webkit-overflow-scrolling: touch;
 }
 
 
 /* =====================================================
-   ANIMAÇÕES
+   ANIMAÇÃO DE ENTRADA
    ===================================================== */
 
 @keyframes pageIn {
-        from {
+
+    from {
         opacity: 0;
         
     }
@@ -100,22 +107,6 @@ body {
     to {
         opacity: 1;
         
-    }
-}
-
-
-@keyframes buttonGlow {
-    0%,
-    100% {
-        box-shadow:
-            0 14px 32px
-            rgba(89,72,210,.18);
-    }
-
-    50% {
-        box-shadow:
-            0 18px 42px
-            rgba(89,72,210,.30);
     }
 }
 
@@ -179,6 +170,7 @@ body {
     display: inline-flex;
 
     align-items: center;
+
     justify-content: flex-start;
 
     padding:
@@ -217,8 +209,6 @@ body {
 }
 
 
-/* PONTO ROSA */
-
 .heroTag::before {
     content: "";
 
@@ -241,7 +231,7 @@ body {
 
 
 /* =====================================================
-   MENSAGENS DO DESENVOLVEDOR
+   LINKS DO CABEÇALHO
    ===================================================== */
 
 .heroTag1 {
@@ -250,6 +240,7 @@ body {
     display: inline-flex;
 
     align-items: center;
+
     justify-content: flex-start;
 
     padding:
@@ -321,6 +312,10 @@ body {
 
     gap: 17px;
 
+    position: relative;
+
+    z-index: 5;
+
     animation:
         pageIn .55s ease both;
 }
@@ -390,7 +385,8 @@ body {
     padding:
         20px;
 
-    border: none;
+    border:
+        none;
 
     border-radius:
         var(--radius);
@@ -408,25 +404,79 @@ body {
     cursor:
         pointer;
 
+    position:
+        relative;
+
+    z-index:
+        10;
+
+    /*
+     * Força o WebView a tratar o botão
+     * como uma camada estável.
+     */
+    transform:
+        translateZ(0);
+
+    -webkit-transform:
+        translateZ(0);
+
+    backface-visibility:
+        hidden;
+
+    -webkit-backface-visibility:
+        hidden;
+
+    /*
+     * Sombra estática.
+     * Não fica sendo recalculada infinitamente
+     * durante o scroll.
+     */
     box-shadow:
         0 14px 32px
         rgba(89,72,210,.18);
 
-    animation:
-        buttonGlow 3s ease-in-out infinite;
-
     transition:
         transform .15s ease,
-        filter .15s ease;
+        filter .15s ease,
+        box-shadow .15s ease;
+
+    /*
+     * Impede seleção acidental.
+     */
+    -webkit-user-select:
+        none;
+
+    user-select:
+        none;
+
+    /*
+     * Evita comportamentos estranhos
+     * de gesto no botão.
+     */
+    touch-action:
+        manipulation;
 }
 
 
+/* =====================================================
+   BOTÃO PRESSIONADO
+   ===================================================== */
+
 .bigButton:active {
     transform:
+        translateZ(0)
+        scale(.965);
+
+    -webkit-transform:
+        translateZ(0)
         scale(.965);
 
     filter:
         brightness(1.10);
+
+    box-shadow:
+        0 18px 42px
+        rgba(89,72,210,.30);
 }
 
 
@@ -435,7 +485,8 @@ body {
    ===================================================== */
 
 .protect {
-    display: block;
+    display:
+        block;
 
     color:
         white;
@@ -448,6 +499,15 @@ body {
 
     line-height:
         1.15;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    pointer-events:
+        none;
 }
 
 
@@ -479,14 +539,40 @@ body {
         0 16px 40px
         rgba(0,0,0,.32);
 
-    backdrop-filter:
-        blur(16px);
-
-    -webkit-backdrop-filter:
-        blur(16px);
-
     text-align:
         center;
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    /*
+     * Mantemos o visual de vidro,
+     * mas sem backdrop-filter.
+     *
+     * No WebView Android o blur pode
+     * provocar reconstruções de camada
+     * durante scroll.
+     */
+    backdrop-filter:
+        none;
+
+    -webkit-backdrop-filter:
+        none;
+
+    transform:
+        translateZ(0);
+
+    -webkit-transform:
+        translateZ(0);
+
+    backface-visibility:
+        hidden;
+
+    -webkit-backface-visibility:
+        hidden;
 
     animation:
         pageIn .6s ease both;
@@ -494,7 +580,7 @@ body {
 
 
 /* =====================================================
-   TÍTULOS DO INFO
+   TÍTULOS
    ===================================================== */
 
 .info h3 {
@@ -519,7 +605,7 @@ body {
 
 
 /* =====================================================
-   TEXTO DO INFO
+   TEXTOS
    ===================================================== */
 
 .info p {
@@ -539,10 +625,6 @@ body {
         1.78;
 }
 
-
-/* =====================================================
-   DESTAQUES
-   ===================================================== */
 
 .info b {
     color:
@@ -571,11 +653,17 @@ body {
    ===================================================== */
 
 button {
-    -webkit-user-select: none;
-    user-select: none;
+    -webkit-user-select:
+        none;
+
+    user-select:
+        none;
 
     touch-action:
         manipulation;
+
+    -webkit-tap-highlight-color:
+        transparent;
 }
 
 
@@ -585,6 +673,7 @@ button {
 
 button:focus-visible,
 .heroTag1:focus-visible {
+
     outline:
         2px solid
         rgba(255,79,163,.75);
@@ -599,7 +688,8 @@ button:focus-visible,
    ===================================================== */
 
 ::-webkit-scrollbar {
-    width: 4px;
+    width:
+        4px;
 }
 
 
@@ -765,6 +855,61 @@ button:focus-visible,
         font-size:
             17px;
     }
+}
+
+
+/* =====================================================
+   CORREÇÃO EXTRA PARA WEBVIEW ANDROID
+   ===================================================== */
+
+/*
+ * Evita que elementos animados sejam tratados como
+ * conteúdo que precisa ser constantemente repintado.
+ */
+
+.hero,
+.section,
+.info,
+.bigButton {
+    -webkit-backface-visibility:
+        hidden;
+
+    backface-visibility:
+        hidden;
+}
+
+
+/*
+ * O botão recebe uma camada própria estável.
+ */
+
+.bigButton {
+    isolation:
+        isolate;
+
+    contain:
+        layout paint;
+}
+
+
+/*
+ * Mantém o conteúdo interno do botão estável.
+ */
+
+.bigButton .protect {
+    will-change:
+        auto;
+}
+
+
+/*
+ * Evita que o botão seja afetado por
+ * possíveis efeitos de overflow dos pais.
+ */
+
+.section {
+    overflow:
+        visible;
 }
 </style>
 </head>
