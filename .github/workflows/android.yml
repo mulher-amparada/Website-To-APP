@@ -1,56 +1,41 @@
-name: Build Android Kotlin App
+name: Mover projeto para a raiz
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  build:
-    name: Compilar APK Kotlin
+  mover:
+    name: Mover conteúdo de 02-OfflineAppTemplate
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: 02-OfflineAppTemplate
-
     steps:
-      - name: Baixar código
+      - name: Baixar repositório
         uses: actions/checkout@v4
-
-      - name: Configurar Java 17
-        uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: "17"
-          cache: gradle
+          fetch-depth: 0
 
-      - name: Dar permissão ao Gradle
-        run: chmod +x gradlew
-
-      - name: Criar debug keystore
+      - name: Mover conteúdo para a raiz
         run: |
-          mkdir -p ~/.config/.android
-          keytool -genkeypair \
-            -v \
-            -keystore ~/.config/.android/debug.keystore \
-            -storepass android \
-            -alias AndroidDebugKey \
-            -keypass android \
-            -keyalg RSA \
-            -keysize 2048 \
-            -validity 10000 \
-            -dname "CN=Android Debug,O=Android,C=US"
+          shopt -s dotglob nullglob
 
-      - name: Gerar informações da assinatura
-        run: ./gradlew signingReport
+          for item in 02-OfflineAppTemplate/*; do
+            name=$(basename "$item")
 
-      - name: Compilar APK
-        run: ./gradlew assembleDebug
+            if [ "$name" != "." ] && [ "$name" != ".." ]; then
+              mv "$item" .
+            fi
+          done
 
-      - name: Enviar APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: APK-Kotlin-Debug
-          path: 02-OfflineAppTemplate/app/build/outputs/apk/debug/*.apk
+          rmdir 02-OfflineAppTemplate
+
+      - name: Salvar alterações
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+          git commit -m "Mover projeto para a raiz"
+          git push
