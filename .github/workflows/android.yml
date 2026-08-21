@@ -1,6 +1,9 @@
 name: Mover projeto para a raiz
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -17,16 +20,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Verificar pasta
+        run: |
+          echo "Conteúdo da raiz:"
+          ls -la
+
+          echo "Conteúdo de 02-OfflineAppTemplate:"
+          ls -la 02-OfflineAppTemplate
+
       - name: Mover conteúdo para a raiz
         run: |
           shopt -s dotglob nullglob
 
           for item in 02-OfflineAppTemplate/*; do
-            name=$(basename "$item")
-
-            if [ "$name" != "." ] && [ "$name" != ".." ]; then
-              mv "$item" .
-            fi
+            mv "$item" .
           done
 
           rmdir 02-OfflineAppTemplate
@@ -37,5 +44,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add -A
+
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração para fazer."
+            exit 0
+          fi
+
           git commit -m "Mover projeto para a raiz"
           git push
