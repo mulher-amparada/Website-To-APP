@@ -170,49 +170,6 @@ body {
 }
 
 
-/* =========================================================
-   ANIMAÇÃO DA PÍRULA
-   IMPORTANTE:
-   NÃO usa opacity:0 no elemento principal.
-========================================================= */
-
-@keyframes pirulaEntrada {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            scale(.72)
-            translateY(-8px);
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            scale(1)
-            translateY(0);
-    }
-}
-
-
-@keyframes pirulaFlutuar {
-
-    0%,
-    100% {
-
-        transform:
-            translateY(0);
-    }
-
-    50% {
-
-        transform:
-            translateY(-4px);
-    }
-}
 
 
 /* =========================================================
@@ -977,329 +934,7 @@ body {
 }
 
 
-/* =========================================================
-   PÍRULA
-========================================================= */
 
-.pirula {
-
-    position: fixed;
-
-    z-index: 99999;
-
-    top:
-        calc(
-            16px +
-            env(safe-area-inset-top)
-        );
-
-    right: 16px;
-
-    width: 64px;
-    height: 64px;
-
-    padding: 0;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: royalblue;
-
-    border:
-        1px solid
-        rgba(255,255,255,.18);
-
-    box-shadow:
-
-        0 10px 30px
-        rgba(0,0,0,.45),
-
-        0 0 0 1px
-        rgba(255,255,255,.03);
-
-    overflow: hidden;
-
-    cursor: pointer;
-
-    /*
-     * VISÍVEL POR PADRÃO.
-     * Não depende de JavaScript.
-     */
-
-    opacity: 1;
-
-    
-    animation:
-        pirulaEntrada .35s ease-out both,
-        pirulaFlutuar 3.2s ease-in-out .35s infinite;
-    isolation: isolate;
-
-    appearance: none;
-
-    -webkit-appearance: none;
-
-    transform:
-        translateZ(0);
-
-    will-change:
-        transform;
-}
-
-
-
-
-.pirula .icon {
-
-    position: relative;
-
-    z-index: 2;
-
-    width: 52px;
-    height: 52px;
-
-    flex-shrink: 0;
-
-    border-radius: 50%;
-
-    
-background: mediumslateblue;
-    
-border:
-        1px solid
-        rgba(255,255,255,.18);
-    
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    pointer-events: none;
-}
-
-
-.pirula .icon svg {
-
-    width: 32px;
-    height: 32px;
-
-    display: block;
-
-    
-
-    flex-shrink: 0;
-}
-
-
-.pirula:active {
-
-    transform:
-        scale(.91);
-}
-
-
-/* =========================================================
-   OVERLAY
-========================================================= */
-
-.pirulaOverlay {
-
-    position: fixed;
-
-    z-index: 9998;
-
-    inset: 0;
-
-    background:
-        rgba(0,0,0,.68);
-
-    backdrop-filter:
-        blur(8px);
-
-    -webkit-backdrop-filter:
-        blur(8px);
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    pointer-events: none;
-
-    transition:
-        opacity .25s ease,
-        visibility .25s ease;
-}
-
-
-.pirulaOverlay.visible {
-
-    opacity: 1;
-
-    visibility: visible;
-
-    pointer-events: auto;
-}
-
-
-/* =========================================================
-   MENU
-========================================================= */
-
-.menu {
-
-    position: fixed;
-
-    z-index: 10000;
-
-    top:
-        calc(
-            90px +
-            env(safe-area-inset-top)
-        );
-
-    left: 18px;
-
-    right: 18px;
-
-    max-width: 500px;
-
-    margin: 0 auto;
-
-    padding: 18px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 10px;
-
-    border-radius: 25px;
-
-    background:
-        rgba(20,21,28,.97);
-
-    border:
-        1px solid
-        var(--border-strong);
-
-    box-shadow:
-        0 25px 70px
-        rgba(0,0,0,.55);
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    pointer-events: none;
-
-    transform:
-        translateY(-12px)
-        scale(.97);
-
-    transition:
-        opacity .25s ease,
-        visibility .25s ease,
-        transform .25s ease;
-}
-
-
-.menu.visible {
-
-    opacity: 1;
-
-    visibility: visible;
-
-    pointer-events: auto;
-
-    transform:
-        translateY(0)
-        scale(1);
-}
-
-
-.menu-title {
-
-    padding:
-        5px
-        7px
-        10px;
-
-    color: white;
-
-    font-size: 17px;
-}
-
-
-.menu button {
-
-    width: 100%;
-
-    min-height: 52px;
-
-    border: 0;
-
-    border-radius: 16px;
-
-    background:
-        rgba(255,255,255,.06);
-
-    color: white;
-
-    font-family:
-        "Quicksand",
-        sans-serif;
-
-    font-size: 14px;
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    transition:
-        transform .14s ease,
-        background .14s ease;
-}
-
-
-.menu button:active {
-
-    transform:
-        scale(.97);
-
-    background:
-        rgba(255,255,255,.10);
-}
-
-
-/* =========================================================
-   PÍRULA ABERTA
-========================================================= */
-
-body.pirulaAberta {
-
-    overflow: hidden;
-}
-
-
-.pirula.aberta {
-
-    transform:
-        scale(.92);
-
-    box-shadow:
-
-        0 6px 25px
-        rgba(0,0,0,.45),
-
-        0 0 25px
-        rgba(255,192,203,.20);
-}
 
 
 /* =========================================================
@@ -1308,8 +943,7 @@ body.pirulaAberta {
 
 button:focus-visible,
 .panic:focus-visible,
-#protecao:focus-visible,
-.pirula:focus-visible {
+#protecao:focus-visible {
 
     outline:
         2px solid
@@ -1365,49 +999,7 @@ button:focus-visible,
     }
 
 
-    .pirula {
 
-        top:
-            calc(
-                16px +
-                env(safe-area-inset-top)
-            );
-
-        right: 16px;
-
-        width: 64px;
-        height: 64px;
-    }
-
-
-    .pirula .icon {
-
-        width: 52px;
-        height: 52px;
-    }
-
-
-    .pirula .icon svg {
-
-        width: 32px;
-        height: 32px;
-    }
-
-
-    .menu {
-
-        top:
-            calc(
-                90px +
-                env(safe-area-inset-top)
-            );
-
-        left: 14px;
-
-        right: 14px;
-
-        border-radius: 22px;
-    }
 }
 
 
@@ -1452,6 +1044,48 @@ button:focus-visible,
 
 </style>
 
+<style>
+/* TOGGLE */
+.toggle {
+  width: 60%;
+  height: 65px;
+  background: royalblue;
+  border-radius: 80px;
+  padding: 5px;
+
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+}
+
+.alavanca {
+  background: blue;
+  width: 50%;
+  height: 100%;
+  border-radius: 80px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: transform 0.3s ease;
+}
+
+/* ícones */
+svg {
+  width: 28px;
+  height: 28px;
+}
+
+.icon2 {
+  display: none;
+}
+</style>
+
 </head>
 
 
@@ -1461,70 +1095,6 @@ button:focus-visible,
 <body>
 
 
-<!-- =======================================================
-     SOBREPOSIÇÃO DA PÍRULA
-======================================================== -->
-
-<div
-    class="pirulaOverlay"
-    id="pirulaOverlay"
-></div>
-
-
-<!-- =======================================================
-     PÍRULA
-======================================================== -->
-
-<button
-    class="pirula"
-    id="pirula"
-    type="button"
-    aria-label="Abrir menu"
-    aria-expanded="false"
->
-    <div class="icon">
-<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21.0667 5C21.6586 5.95805 22 7.08604 22 8.29344C22 11.7692 19.1708 14.5869 15.6807 14.5869C15.0439 14.5869 13.5939 14.4405 12.8885 13.8551L12.0067 14.7333C11.272 15.465 11.8598 15.465 12.1537 16.0505C12.1537 16.0505 12.8885 17.075 12.1537 18.0995C11.7128 18.6849 10.4783 19.5045 9.06754 18.0995L8.77362 18.3922C8.77362 18.3922 9.65538 19.4167 8.92058 20.4412C8.4797 21.0267 7.30403 21.6121 6.27531 20.5876C6.22633 20.6364 5.952 20.9096 5.2466 21.6121C4.54119 22.3146 3.67905 21.9048 3.33616 21.6121L2.45441 20.7339C1.63143 19.9143 2.1115 19.0264 2.45441 18.6849L10.0963 11.0743C10.0963 11.0743 9.3615 9.90338 9.3615 8.29344C9.3615 4.81767 12.1907 2 15.6807 2C16.4995 2 17.282 2.15509 18 2.43738" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M17.8851 8.29353C17.8851 9.50601 16.8982 10.4889 15.6807 10.4889C14.4633 10.4889 13.4763 9.50601 13.4763 8.29353C13.4763 7.08105 14.4633 6.09814 15.6807 6.09814C16.8982 6.09814 17.8851 7.08105 17.8851 8.29353Z" stroke="#ffffff" stroke-width="1.5"></path> </g></svg>
-    </div>
-</button>
-
-<!-- =======================================================
-     MENU DA PÍRULA
-======================================================== -->
-
-<div
-    class="menu"
-    id="menu"
->
-
-    <div class="menu-title">
-        Controle rápido
-    </div>
-
-    <button type="button" onclick="acao1()">
-        Início
-    </button>
-
-    <button type="button" onclick="acao2()">
-        Configurações
-    </button>
-
-    <button type="button" onclick="acao3()">
-        Proteção
-    </button>
-
-    <button type="button" onclick="acao4()">
-        Localização
-    </button>
-
-    <button type="button" onclick="acao5()">
-        Contatos
-    </button>
-
-    <button type="button" onclick="acao6()">
-        Ajuda
-    </button>
-
-</div>
 
 
 <!-- =======================================================
@@ -1776,6 +1346,15 @@ button:focus-visible,
 
 </main>
 
+<div class="toggle" id="toggle">
+  <div class="alavanca" id="alavanca">
+
+    <!-- Ícone alerta -->
+<svg class="icon1"  viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M18.2202 21.25H5.78015C5.14217 21.2775 4.50834 21.1347 3.94373 20.8364C3.37911 20.5381 2.90402 20.095 2.56714 19.5526C2.23026 19.0101 2.04372 18.3877 2.02667 17.7494C2.00963 17.111 2.1627 16.4797 2.47015 15.92L8.69013 5.10999C9.03495 4.54078 9.52077 4.07013 10.1006 3.74347C10.6804 3.41681 11.3346 3.24518 12.0001 3.24518C12.6656 3.24518 13.3199 3.41681 13.8997 3.74347C14.4795 4.07013 14.9654 4.54078 15.3102 5.10999L21.5302 15.92C21.8376 16.4797 21.9907 17.111 21.9736 17.7494C21.9566 18.3877 21.7701 19.0101 21.4332 19.5526C21.0963 20.095 20.6211 20.5381 20.0565 20.8364C19.4919 21.1347 18.8581 21.2775 18.2202 21.25V21.25Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M10.8809 17.15C10.8809 17.0021 10.9102 16.8556 10.9671 16.7191C11.024 16.5825 11.1074 16.4586 11.2125 16.3545C11.3175 16.2504 11.4422 16.1681 11.5792 16.1124C11.7163 16.0567 11.8629 16.0287 12.0109 16.03C12.2291 16.034 12.4413 16.1021 12.621 16.226C12.8006 16.3499 12.9398 16.5241 13.0211 16.7266C13.1023 16.9292 13.122 17.1512 13.0778 17.3649C13.0335 17.5786 12.9272 17.7745 12.7722 17.9282C12.6172 18.0818 12.4203 18.1863 12.2062 18.2287C11.9921 18.2711 11.7703 18.2494 11.5685 18.1663C11.3666 18.0833 11.1938 17.9426 11.0715 17.7618C10.9492 17.5811 10.8829 17.3683 10.8809 17.15ZM11.2409 14.42L11.1009 9.20001C11.0876 9.07453 11.1008 8.94766 11.1398 8.82764C11.1787 8.70761 11.2424 8.5971 11.3268 8.5033C11.4112 8.40949 11.5144 8.33449 11.6296 8.28314C11.7449 8.2318 11.8697 8.20526 11.9959 8.20526C12.1221 8.20526 12.2469 8.2318 12.3621 8.28314C12.4774 8.33449 12.5805 8.40949 12.6649 8.5033C12.7493 8.5971 12.8131 8.70761 12.852 8.82764C12.8909 8.94766 12.9042 9.07453 12.8909 9.20001L12.7609 14.42C12.7609 14.6215 12.6808 14.8149 12.5383 14.9574C12.3957 15.0999 12.2024 15.18 12.0009 15.18C11.7993 15.18 11.606 15.0999 11.4635 14.9574C11.321 14.8149 11.2409 14.6215 11.2409 14.42Z" fill="#ffffff"></path> </g></svg>
+    <!-- Ícone info -->
+<svg class="icon2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21.0667 5C21.6586 5.95805 22 7.08604 22 8.29344C22 11.7692 19.1708 14.5869 15.6807 14.5869C15.0439 14.5869 13.5939 14.4405 12.8885 13.8551L12.0067 14.7333C11.272 15.465 11.8598 15.465 12.1537 16.0505C12.1537 16.0505 12.8885 17.075 12.1537 18.0995C11.7128 18.6849 10.4783 19.5045 9.06754 18.0995L8.77362 18.3922C8.77362 18.3922 9.65538 19.4167 8.92058 20.4412C8.4797 21.0267 7.30403 21.6121 6.27531 20.5876C6.22633 20.6364 5.952 20.9096 5.2466 21.6121C4.54119 22.3146 3.67905 21.9048 3.33616 21.6121L2.45441 20.7339C1.63143 19.9143 2.1115 19.0264 2.45441 18.6849L10.0963 11.0743C10.0963 11.0743 9.3615 9.90338 9.3615 8.29344C9.3615 4.81767 12.1907 2 15.6807 2C16.4995 2 17.282 2.15509 18 2.43738" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M17.8851 8.29353C17.8851 9.50601 16.8982 10.4889 15.6807 10.4889C14.4633 10.4889 13.4763 9.50601 13.4763 8.29353C13.4763 7.08105 14.4633 6.09814 15.6807 6.09814C16.8982 6.09814 17.8851 7.08105 17.8851 8.29353Z" stroke="#ffffff" stroke-width="1.5"></path> </g></svg>
+  </div>
+</div>
 
 <script>
 
@@ -1787,13 +1366,12 @@ function vibrar(duracao = 100) {
 
     try {
 
-        if (
-            navigator.vibrate
-        ) {
+        if (navigator.vibrate) {
             navigator.vibrate(duracao);
         }
 
     } catch (e) {}
+
 }
 
 
@@ -1873,6 +1451,7 @@ function ativarSOS() {
             console.warn(e);
 
         }
+
     }
 
 
@@ -1966,6 +1545,7 @@ function enviarLocalizacao() {
         );
 
         return;
+
     }
 
 
@@ -2078,10 +1658,9 @@ ativarPalmas.addEventListener(
 
         vibrar(70);
 
-        const resultado =
-            chamarAndroid(
-                "ativarPalmas"
-            );
+        chamarAndroid(
+            "ativarPalmas"
+        );
 
         /*
          * Mantém a interface funcionando
@@ -2385,255 +1964,6 @@ function enviarSOSContatos() {
 
 
 /* =========================================================
-   MENU DA PÍRULA
-========================================================= */
-
-const pirula =
-    document.getElementById(
-        "pirula"
-    );
-
-const overlay =
-    document.getElementById(
-        "pirulaOverlay"
-    );
-
-const menu =
-    document.getElementById(
-        "menu"
-    );
-
-
-let pirulaAberta = false;
-
-
-function abrirPirula() {
-
-    pirulaAberta = true;
-
-    pirula.classList.add(
-        "aberta"
-    );
-
-    overlay.classList.add(
-        "visible"
-    );
-
-    menu.classList.add(
-        "visible"
-    );
-
-    pirula.setAttribute(
-        "aria-expanded",
-        "true"
-    );
-
-    document.body.classList.add(
-        "pirulaAberta"
-    );
-
-    vibrar(40);
-
-}
-
-
-function fecharPirula() {
-
-    pirulaAberta = false;
-
-    pirula.classList.remove(
-        "aberta"
-    );
-
-    overlay.classList.remove(
-        "visible"
-    );
-
-    menu.classList.remove(
-        "visible"
-    );
-
-    pirula.setAttribute(
-        "aria-expanded",
-        "false"
-    );
-
-    document.body.classList.remove(
-        "pirulaAberta"
-    );
-
-}
-
-
-function alternarPirula() {
-
-    if (pirulaAberta) {
-
-        fecharPirula();
-
-    } else {
-
-        abrirPirula();
-
-    }
-
-}
-
-
-/* =========================================================
-   CLIQUE NA PÍRULA
-========================================================= */
-
-pirula.addEventListener(
-    "click",
-    function() {
-
-        vibrar(40);
-
-        window.location.href = "index3.html";
-
-    }
-);
-
-
-/* =========================================================
-   CLIQUE NO OVERLAY
-========================================================= */
-
-overlay.addEventListener(
-    "click",
-    fecharPirula
-);
-
-
-/* =========================================================
-   TECLA ESC
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    function(e) {
-
-        if (
-            e.key === "Escape" &&
-            pirulaAberta
-        ) {
-
-            fecharPirula();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   BOTÃO VOLTAR ANDROID
-========================================================= */
-
-document.addEventListener(
-    "backbutton",
-    function(e) {
-
-        if (pirulaAberta) {
-
-            if (e) {
-                e.preventDefault?.();
-            }
-
-            fecharPirula();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   AÇÕES DO MENU
-========================================================= */
-
-function acao1() {
-
-    fecharPirula();
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
-}
-
-
-function acao2() {
-
-    fecharPirula();
-
-    alert(
-        "Configurações"
-    );
-
-}
-
-
-function acao3() {
-
-    fecharPirula();
-
-    document
-        .getElementById("protecao")
-        .scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-
-}
-
-
-function acao4() {
-
-    fecharPirula();
-
-    document
-        .querySelector(
-            ".local"
-        )
-        .scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-
-}
-
-
-function acao5() {
-
-    fecharPirula();
-
-    document
-        .querySelector(
-            ".contato"
-        )
-        .scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-
-}
-
-
-function acao6() {
-
-    fecharPirula();
-
-    alert(
-        "Central de ajuda"
-    );
-
-}
-
-
-/* =========================================================
    INICIALIZAÇÃO
 ========================================================= */
 
@@ -2651,6 +1981,57 @@ document.addEventListener(
 );
 
 </script>
+
+<script>
+const toggle = document.getElementById("toggle");
+const alavanca = document.getElementById("alavanca");
+
+const info = document.getElementById("info");
+const info1 = document.getElementById("info1");
+
+const icon1 = document.querySelector(".icon1");
+const icon2 = document.querySelector(".icon2");
+
+let ativo = false;
+
+function limparAnimacao(el) {
+  el.classList.remove("fadeIn");
+  el.classList.remove("fadeOut");
+}
+
+toggle.addEventListener("click", () => {
+  ativo = !ativo;
+
+  // move alavanca
+  alavanca.style.transform = ativo
+    ? "translateX(100%)"
+    : "translateX(0)";
+
+  // troca ícones
+  icon1.style.display = ativo ? "none" : "block";
+  icon2.style.display = ativo ? "block" : "none";
+
+  if (ativo) {
+
+    // Vai para index3.html ao ativar
+    window.location.href = "index3.html";
+
+  } else {
+
+    limparAnimacao(info);
+    info.classList.add("fadeOut");
+
+    setTimeout(() => {
+      info.style.display = "none";
+
+      limparAnimacao(info1);
+      info1.style.display = "block";
+      info1.classList.add("fadeIn");
+    }, 300);
+  }
+});
+</script>
+
 
 </body>
 </html>
