@@ -63,10 +63,7 @@
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
 
-        <data
-            android:scheme="https"
-            android:host="mulher-amparada.github.io"
-            android:pathPrefix="/mulher-amparada-app/" />
+
 
     </intent-filter>
 
