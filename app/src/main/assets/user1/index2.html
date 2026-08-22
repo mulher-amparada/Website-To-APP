@@ -228,6 +228,8 @@ body {
         7px
         11px;
 
+position: relative;
+top: 5%;
     border-radius: 200px;
 
     color: #ff78a8;
@@ -1017,31 +1019,6 @@ button:focus-visible,
     }
 }
 
-
-/* =========================================================
-   REDUÇÃO DE MOVIMENTO
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-
-        animation-duration:
-            .01ms !important;
-
-        animation-iteration-count:
-            1 !important;
-
-        scroll-behavior:
-            auto !important;
-
-        transition-duration:
-            .01ms !important;
-    }
-}
-
 </style>
 
 <style>
@@ -1049,7 +1026,7 @@ button:focus-visible,
 .toggle {
   width: 60%;
   height: 65px;
-  background: royalblue;
+  background: #444;
   border-radius: 80px;
   padding: 5px;
 
@@ -1063,7 +1040,7 @@ button:focus-visible,
 }
 
 .alavanca {
-  background: blue;
+  background: #222;
   width: 50%;
   height: 100%;
   border-radius: 80px;
@@ -1986,52 +1963,57 @@ document.addEventListener(
 const toggle = document.getElementById("toggle");
 const alavanca = document.getElementById("alavanca");
 
-const info = document.getElementById("info");
-const info1 = document.getElementById("info1");
-
 const icon1 = document.querySelector(".icon1");
 const icon2 = document.querySelector(".icon2");
 
 let ativo = false;
 
-function limparAnimacao(el) {
-  el.classList.remove("fadeIn");
-  el.classList.remove("fadeOut");
-}
-
 toggle.addEventListener("click", () => {
-  ativo = !ativo;
 
-  // move alavanca
-  alavanca.style.transform = ativo
-    ? "translateX(100%)"
-    : "translateX(0)";
+    ativo = !ativo;
 
-  // troca ícones
-  icon1.style.display = ativo ? "none" : "block";
-  icon2.style.display = ativo ? "block" : "none";
+    /* ================================
+       PRIMEIRO: MOVE A ALAVANCA
+    ================================= */
 
-  if (ativo) {
+    alavanca.style.transform = ativo
+        ? "translateX(100%)"
+        : "translateX(0)";
 
-    // Vai para index3.html ao ativar
-    window.location.href = "index3.html";
 
-  } else {
-
-    limparAnimacao(info);
-    info.classList.add("fadeOut");
+    /* ================================
+       DEPOIS: TROCA O ÍCONE
+    ================================= */
 
     setTimeout(() => {
-      info.style.display = "none";
 
-      limparAnimacao(info1);
-      info1.style.display = "block";
-      info1.classList.add("fadeIn");
+        icon1.style.display = ativo
+            ? "none"
+            : "block";
+
+        icon2.style.display = ativo
+            ? "block"
+            : "none";
+
+
+        /* ================================
+           POR ÚLTIMO: REDIRECIONA
+        ================================= */
+
+        if (ativo) {
+
+            window.location.href = "index3.html";
+
+        } else {
+
+            window.location.href = "index2.html";
+
+        }
+
     }, 300);
-  }
+
 });
 </script>
-
 
 </body>
 </html>

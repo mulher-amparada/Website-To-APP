@@ -1,29 +1,39 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0">
-    <title>Mulher Amparada</title>
-    <style>
-/* =====================================================
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#000000">
+
+<title>Controle</title>
+
+<style>
+
+/* =========================================================
    FONTE
-   ===================================================== */
+========================================================= */
 
 @font-face {
     font-family: "Quicksand";
-    src: url("file:///android_asset/font.ttf") format("truetype");
+    src: url("font.ttf") format("truetype");
     font-weight: 400 800;
     font-display: swap;
 }
 
 
-/* =====================================================
+/* =========================================================
    VARIÁVEIS
-   ===================================================== */
+========================================================= */
 
 :root {
+
     --bg: #050505;
 
     --surface: #111216;
@@ -50,9 +60,9 @@
 }
 
 
-/* =====================================================
+/* =========================================================
    RESET
-   ===================================================== */
+========================================================= */
 
 * {
     box-sizing: border-box;
@@ -60,90 +70,93 @@
     margin: 0;
     padding: 0;
 
-    font-family: "Quicksand", sans-serif;
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-weight: 700;
 
     -webkit-tap-highlight-color: transparent;
 }
 
 
-html {
+html,
+body {
+
     width: 100%;
     min-height: 100%;
-
-    background: var(--bg);
-
-    scroll-behavior: smooth;
-}
-
-
-body {
-    width: 100%;
-    min-height: 100vh;
-
-    margin: 0;
-
-    overflow-x: hidden;
 
     background: #000;
 
     color: var(--text);
-
-    /* Evita algumas reconstruções desnecessárias */
-    -webkit-overflow-scrolling: touch;
 }
 
 
-/* =====================================================
-   ANIMAÇÃO DE ENTRADA
-   ===================================================== */
+body {
+
+    min-height: 100vh;
+
+    overflow-x: hidden;
+
+    padding-top:
+        env(safe-area-inset-top);
+
+    padding-bottom:
+        env(safe-area-inset-bottom);
+}
+
+
+/* =========================================================
+   ANIMAÇÃO
+========================================================= */
 
 @keyframes pageIn {
 
     from {
         opacity: 0;
-        
     }
 
     to {
         opacity: 1;
-        
     }
 }
 
 
-/* =====================================================
+/* =========================================================
    LAYOUT PRINCIPAL
-   ===================================================== */
+========================================================= */
 
 .mainUI {
+
     width: 100%;
-    max-width: 720px;
 
-    min-height: 100vh;
+    max-width: 680px;
 
-    margin: 0 auto;
+    margin-top: 5px;
 
     padding:
-        26px 18px 55px;
+        22px
+        18px
+        125px;
 
     display: flex;
 
     flex-direction: column;
 
-    align-items: center;
+    gap: 30px;
 
-    gap: 40px;
+    animation:
+        pageIn .5s ease;
 }
 
 
-/* =====================================================
+/* =========================================================
    HERO
-   ===================================================== */
+========================================================= */
 
 .hero {
-    width: 100%;
 
-    margin-top: 20px;
+    width: 100%;
 
     display: flex;
 
@@ -151,58 +164,54 @@ body {
 
     align-items: flex-start;
 
-    justify-content: flex-start;
-
     text-align: left;
 
-    animation:
-        pageIn .55s ease both;
+    
+    
+    
 }
 
 
-/* =====================================================
+/* =========================================================
    TAG PRINCIPAL
-   ===================================================== */
+========================================================= */
 
 .heroTag {
+
     width: fit-content;
 
-    display: inline-flex;
+
+margin-bottom: 20px;
+    display: flex;
 
     align-items: center;
 
-    justify-content: flex-start;
+    gap: 8px;
 
     padding:
-        9px 15px;
-
-    margin-bottom:
-        15px;
+        9px 14px;
 
     border-radius:
-        999px;
+        200px;
+
+    color:
+        #ff78a8;
 
     background:
-        rgba(255,79,163,.075);
+        rgba(255,63,130,.08);
 
     border:
         1px solid
-        rgba(255,79,163,.14);
-
-    color:
-        var(--pink-light);
+        rgba(255,63,130,.13);
 
     font-size:
-        13px;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        1.5px;
+        11px;
 
     line-height:
         1;
+
+    letter-spacing:
+        1.3px;
 
     text-transform:
         uppercase;
@@ -210,14 +219,13 @@ body {
 
 
 .heroTag::before {
+
     content: "";
 
     width: 6px;
     height: 6px;
 
     flex-shrink: 0;
-
-    margin-right: 8px;
 
     border-radius: 50%;
 
@@ -226,15 +234,16 @@ body {
 
     box-shadow:
         0 0 10px
-        rgba(255,79,163,.8);
+        rgba(255,63,130,.85);
 }
 
 
-/* =====================================================
-   LINKS DO CABEÇALHO
-   ===================================================== */
+/* =========================================================
+   LINKS DO HERO
+========================================================= */
 
 .heroTag1 {
+
     width: fit-content;
 
     display: inline-flex;
@@ -244,7 +253,7 @@ body {
     justify-content: flex-start;
 
     padding:
-        7px 0;
+        6px 0;
 
     color:
         var(--blue-light);
@@ -284,6 +293,7 @@ body {
 
 
 .heroTag1:active {
+
     transform:
         scale(.96);
 
@@ -295,37 +305,34 @@ body {
 }
 
 
-/* =====================================================
+/* =========================================================
    SEÇÕES
-   ===================================================== */
+========================================================= */
 
 .section {
-    width: 100%;
 
-    max-width: 440px;
+    width: 100%;
 
     display: flex;
 
     flex-direction: column;
 
-    align-items: center;
-
-    gap: 17px;
-
-    position: relative;
-
-    z-index: 5;
+    gap: 11px;
 
     animation:
-        pageIn .55s ease both;
+        pageIn .5s ease both;
+
+    overflow:
+        visible;
 }
 
 
-/* =====================================================
+/* =========================================================
    LABEL
-   ===================================================== */
+========================================================= */
 
 .label {
+
     width: 100%;
 
     display: flex;
@@ -355,6 +362,7 @@ body {
 
 
 .label::before {
+
     content: "";
 
     width: 4px;
@@ -373,11 +381,12 @@ body {
 }
 
 
-/* =====================================================
-   BOTÃO DA ÁREA PROTEGIDA
-   ===================================================== */
+/* =========================================================
+   BOTÃO ÁREA PROTEGIDA
+========================================================= */
 
 .bigButton {
+
     width: 100%;
 
     min-height: 112px;
@@ -410,10 +419,6 @@ body {
     z-index:
         10;
 
-    /*
-     * Força o WebView a tratar o botão
-     * como uma camada estável.
-     */
     transform:
         translateZ(0);
 
@@ -426,11 +431,12 @@ body {
     -webkit-backface-visibility:
         hidden;
 
-    /*
-     * Sombra estática.
-     * Não fica sendo recalculada infinitamente
-     * durante o scroll.
-     */
+    isolation:
+        isolate;
+
+    contain:
+        layout paint;
+
     box-shadow:
         0 14px 32px
         rgba(89,72,210,.18);
@@ -440,29 +446,23 @@ body {
         filter .15s ease,
         box-shadow .15s ease;
 
-    /*
-     * Impede seleção acidental.
-     */
     -webkit-user-select:
         none;
 
     user-select:
         none;
 
-    /*
-     * Evita comportamentos estranhos
-     * de gesto no botão.
-     */
     touch-action:
         manipulation;
 }
 
 
-/* =====================================================
+/* =========================================================
    BOTÃO PRESSIONADO
-   ===================================================== */
+========================================================= */
 
 .bigButton:active {
+
     transform:
         translateZ(0)
         scale(.965);
@@ -480,11 +480,12 @@ body {
 }
 
 
-/* =====================================================
+/* =========================================================
    TEXTO DO BOTÃO
-   ===================================================== */
+========================================================= */
 
 .protect {
+
     display:
         block;
 
@@ -492,7 +493,11 @@ body {
         white;
 
     font-size:
-        clamp(22px, 6vw, 29px);
+        clamp(
+            22px,
+            6vw,
+            29px
+        );
 
     font-weight:
         800;
@@ -508,14 +513,18 @@ body {
 
     pointer-events:
         none;
+
+    will-change:
+        auto;
 }
 
 
-/* =====================================================
+/* =========================================================
    CARTÃO DE EXPLICAÇÕES
-   ===================================================== */
+========================================================= */
 
 .info {
+
     width: 100%;
 
     padding:
@@ -548,14 +557,6 @@ body {
     z-index:
         1;
 
-    /*
-     * Mantemos o visual de vidro,
-     * mas sem backdrop-filter.
-     *
-     * No WebView Android o blur pode
-     * provocar reconstruções de camada
-     * durante scroll.
-     */
     backdrop-filter:
         none;
 
@@ -579,11 +580,12 @@ body {
 }
 
 
-/* =====================================================
+/* =========================================================
    TÍTULOS
-   ===================================================== */
+========================================================= */
 
 .info h3 {
+
     margin:
         0 0 19px;
 
@@ -604,11 +606,12 @@ body {
 }
 
 
-/* =====================================================
+/* =========================================================
    TEXTOS
-   ===================================================== */
+========================================================= */
 
 .info p {
+
     margin:
         19px 0;
 
@@ -627,6 +630,7 @@ body {
 
 
 .info b {
+
     color:
         white;
 
@@ -638,21 +642,23 @@ body {
 }
 
 
-/* =====================================================
-   ESPAÇAMENTO DOS BLOCOS
-   ===================================================== */
+/* =========================================================
+   ESPAÇAMENTO
+========================================================= */
 
 .info p + h3 {
+
     margin-top:
         36px;
 }
 
 
-/* =====================================================
+/* =========================================================
    BOTÕES / TOUCH
-   ===================================================== */
+========================================================= */
 
 button {
+
     -webkit-user-select:
         none;
 
@@ -667,9 +673,9 @@ button {
 }
 
 
-/* =====================================================
+/* =========================================================
    FOCO
-   ===================================================== */
+========================================================= */
 
 button:focus-visible,
 .heroTag1:focus-visible {
@@ -683,23 +689,26 @@ button:focus-visible,
 }
 
 
-/* =====================================================
+/* =========================================================
    SCROLLBAR
-   ===================================================== */
+========================================================= */
 
 ::-webkit-scrollbar {
+
     width:
         4px;
 }
 
 
 ::-webkit-scrollbar-track {
+
     background:
         transparent;
 }
 
 
 ::-webkit-scrollbar-thumb {
+
     background:
         #292929;
 
@@ -708,11 +717,12 @@ button:focus-visible,
 }
 
 
-/* =====================================================
+/* =========================================================
    SELEÇÃO
-   ===================================================== */
+========================================================= */
 
 ::selection {
+
     color:
         white;
 
@@ -721,24 +731,45 @@ button:focus-visible,
 }
 
 
-/* =====================================================
+/* =========================================================
+   CORREÇÃO WEBVIEW
+========================================================= */
+
+.hero,
+.section,
+.info,
+.bigButton {
+
+    -webkit-backface-visibility:
+        hidden;
+
+    backface-visibility:
+        hidden;
+}
+
+
+/* =========================================================
    CELULARES
-   ===================================================== */
+========================================================= */
 
 @media (max-width: 420px) {
 
     .mainUI {
+
         padding:
-            22px 14px 45px;
+            18px
+            14px
+            110px;
 
         gap:
-            36px;
+            30px;
     }
 
 
     .hero {
+
         margin-top:
-            18px;
+            0;
 
         align-items:
             flex-start;
@@ -749,18 +780,17 @@ button:focus-visible,
 
 
     .heroTag {
+
         padding:
-            9px 14px;
+            7px 11px;
 
         font-size:
             11px;
-
-        margin-bottom:
-            13px;
     }
 
 
     .heroTag1 {
+
         font-size:
             18px;
 
@@ -770,12 +800,14 @@ button:focus-visible,
 
 
     .section {
+
         max-width:
             100%;
     }
 
 
     .bigButton {
+
         min-height:
             100px;
 
@@ -785,12 +817,14 @@ button:focus-visible,
 
 
     .protect {
+
         font-size:
             23px;
     }
 
 
     .info {
+
         padding:
             27px 18px;
 
@@ -800,12 +834,14 @@ button:focus-visible,
 
 
     .info h3 {
+
         font-size:
             20px;
     }
 
 
     .info p {
+
         font-size:
             16px;
 
@@ -815,19 +851,21 @@ button:focus-visible,
 
 
     .info b {
+
         font-size:
             16px;
     }
 }
 
 
-/* =====================================================
+/* =========================================================
    TELAS MAIORES
-   ===================================================== */
+========================================================= */
 
 @media (min-width: 600px) {
 
     .mainUI {
+
         padding-left:
             28px;
 
@@ -837,6 +875,7 @@ button:focus-visible,
 
 
     .hero {
+
         align-items:
             flex-start;
 
@@ -846,75 +885,45 @@ button:focus-visible,
 
 
     .heroTag1 {
+
         font-size:
             21px;
     }
 
 
     .info p {
+
         font-size:
             17px;
     }
 }
 
 
-/* =====================================================
-   CORREÇÃO EXTRA PARA WEBVIEW ANDROID
-   ===================================================== */
+/* =========================================================
+   REDUÇÃO DE MOVIMENTO
+========================================================= */
 
-/*
- * Evita que elementos animados sejam tratados como
- * conteúdo que precisa ser constantemente repintado.
- */
+@media (prefers-reduced-motion: reduce) {
 
-.hero,
-.section,
-.info,
-.bigButton {
-    -webkit-backface-visibility:
-        hidden;
+    *,
+    *::before,
+    *::after {
 
-    backface-visibility:
-        hidden;
+        animation-duration:
+            .01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            .01ms !important;
+    }
 }
 
 
-/*
- * O botão recebe uma camada própria estável.
- */
-
-.bigButton {
-    isolation:
-        isolate;
-
-    contain:
-        layout paint;
-}
-
-
-/*
- * Mantém o conteúdo interno do botão estável.
- */
-
-.bigButton .protect {
-    will-change:
-        auto;
-}
-
-
-/*
- * Evita que o botão seja afetado por
- * possíveis efeitos de overflow dos pais.
- */
-
-.section {
-    overflow:
-        visible;
-}
-
-/* =====================================================
+/* =========================================================
    TOGGLE
-===================================================== */
+========================================================= */
 
 .toggle {
 
@@ -955,7 +964,7 @@ button:focus-visible,
         80px;
 
     background:
-        royalblue;
+        #444;
 
     z-index:
         9999;
@@ -1002,7 +1011,7 @@ button:focus-visible,
         80px;
 
     background:
-        blue;
+        #222;
 
     transition:
         transform .3s ease;
@@ -1022,6 +1031,17 @@ button:focus-visible,
 }
 
 
+/*
+ * A segunda opção é a inicial.
+ */
+
+.icon1 {
+
+    display:
+        none;
+}
+
+
 .icon2 {
 
     display:
@@ -1029,177 +1049,207 @@ button:focus-visible,
 }
 
 </style>
+
 </head>
+
 <body>
 
+
+<!-- =========================================================
+     INTERFACE PRINCIPAL
+========================================================= -->
 
 <div class="mainUI">
 
 
-<header class="hero">
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
 
+    <header class="hero">
 
-    <div class="heroTag">
 
-        Mulher Amparada
+        <div class="heroTag">
 
-    </div>
+            Mulher Amparada
 
+        </div>
 
-    <div
-        class="heroTag1"
-        role="button"
-        tabindex="0"
-        onclick="window.location.href='Dev1.html'"
-    >
 
-        Sobre do desenvolvedor
+        <div
+            class="heroTag1"
+            role="button"
+            tabindex="0"
+            onclick="
+                window.location.href='Dev1.html'
+            "
+        >
 
-    </div>
+            Sobre do desenvolvedor
 
+        </div>
 
-    <div
-        class="heroTag1"
-        role="button"
-        tabindex="0"
-        onclick="abrirDesenvolvedor()"
-    >
 
-        Carta de apoio e acolhimento para as usuárias
+        <div
+            class="heroTag1"
+            role="button"
+            tabindex="0"
+            onclick="
+                abrirDesenvolvedor()
+            "
+        >
 
-    </div>
+            Carta de apoio e acolhimento para as usuárias
 
+        </div>
 
-    <div
-        class="heroTag1"
-        role="button"
-        tabindex="0"
-        onclick="window.location.href='dia.html'"
-    >
 
-        Feliz dia das mulheres!
+        <div
+            class="heroTag1"
+            role="button"
+            tabindex="0"
+            onclick="
+                window.location.href='dia.html'
+            "
+        >
 
-    </div>
+            Feliz dia das mulheres!
 
+        </div>
 
-</header>
 
+    </header>
 
-<section class="section">
 
+    <!-- =====================================================
+         ÁREA PROTEGIDA
+    ====================================================== -->
 
-    <div class="label">
+    <section class="section">
 
-        Área protegida
 
-    </div>
+        <div class="label">
 
+            Área protegida
 
-    <button
-        class="bigButton"
-        type="button"
-        onclick="iniciarBiometria()"
-    >
+        </div>
 
-        <span class="protect">
 
-            Acessar área
-            <br>
-            protegida
+        <button
+            class="bigButton"
+            type="button"
+            onclick="
+                iniciarBiometria()
+            "
+        >
 
-        </span>
+            <span class="protect">
 
-    </button>
+                Acessar área
+                <br>
+                protegida
 
+            </span>
 
-    <div class="label">
+        </button>
 
-        Explicações
 
-    </div>
+        <div class="label">
 
+            Explicações
 
-    <article class="info">
+        </div>
 
 
-        <h3>
+        <article class="info">
 
-            Para que serve:
 
-        </h3>
+            <h3>
 
+                Para que serve:
 
-        <p>
+            </h3>
 
-            <b>190 - Polícia</b>
 
-            <br>
+            <p>
 
-            Emergências como assalto,
-            perigo imediato ou violência.
+                <b>
+                    190 - Polícia
+                </b>
 
-        </p>
+                <br>
 
+                Emergências como assalto,
+                perigo imediato ou violência.
 
-        <p>
+            </p>
 
-            <b>192 - SAMU</b>
 
-            <br>
+            <p>
 
-            Emergências médicas,
-            acidentes ou pessoas passando mal.
+                <b>
+                    192 - SAMU
+                </b>
 
-        </p>
+                <br>
 
+                Emergências médicas,
+                acidentes ou pessoas passando mal.
 
-        <p>
+            </p>
 
-            <b>180 - Central da Mulher</b>
 
-            <br>
+            <p>
 
-            Denúncias e apoio em casos
-            de violência contra a mulher.
+                <b>
+                    180 - Central da Mulher
+                </b>
 
-        </p>
+                <br>
 
+                Denúncias e apoio em casos
+                de violência contra a mulher.
 
-        <h3>
+            </p>
 
-            Para que serve (bônus):
 
-        </h3>
+            <h3>
 
+                Para que serve (bônus):
 
-        <p>
+            </h3>
 
-            <b>
-                188 - CVV -
-                Centro de Valorização da Vida
-            </b>
 
-            <br>
+            <p>
 
-            Apoio emocional gratuito e sigiloso
-            24h para quem está em sofrimento
-            ou precisa conversar.
+                <b>
 
-        </p>
+                    188 - CVV -
+                    Centro de Valorização da Vida
 
+                </b>
 
-    </article>
+                <br>
 
+                Apoio emocional gratuito e sigiloso
+                24h para quem está em sofrimento
+                ou precisa conversar.
 
-</section>
+            </p>
+
+
+        </article>
+
+
+    </section>
 
 
 </div>
 
 
-<!-- =====================================================
+<!-- =========================================================
      TOGGLE
-===================================================== -->
+========================================================= -->
 
 <div
     class="toggle"
@@ -1217,7 +1267,9 @@ button:focus-visible,
     >
 
 
-        <!-- ÍCONE ALERTA -->
+        <!-- =================================================
+             ÍCONE ALERTA
+        ================================================== -->
 
         <svg
             class="icon1"
@@ -1247,7 +1299,9 @@ button:focus-visible,
         </svg>
 
 
-        <!-- ÍCONE INFO -->
+        <!-- =================================================
+             ÍCONE INFO
+        ================================================== -->
 
         <svg
             class="icon2"
@@ -1277,75 +1331,254 @@ button:focus-visible,
 
 </div>
 
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
 
-    const toggle = document.getElementById("toggle");
-    const alavanca = document.getElementById("alavanca");
+/* =========================================================
+   DESENVOLVEDOR
+========================================================= */
 
-    const icon1 = document.querySelector(".icon1");
-    const icon2 = document.querySelector(".icon2");
+function abrirDesenvolvedor() {
 
-    /*
-     * Começa na SEGUNDA opção.
-     */
-    let ativo = true;
+    window.location.href =
+        "Dev.html";
 
-    /*
-     * Estado inicial
-     */
-    alavanca.style.transform = "translateX(100%)";
-
-    icon1.style.display = "none";
-    icon2.style.display = "block";
+}
 
 
-    /*
-     * Clique no toggle
-     */
-    toggle.addEventListener("click", function () {
+/* =========================================================
+   BIOMETRIA
+========================================================= */
 
-        /*
-         * Alterna o estado
-         */
-        ativo = !ativo;
+function iniciarBiometria() {
 
-        /*
-         * Primeira opção
-         */
-        if (!ativo) {
+    if (
+        window.Android &&
+        typeof Android.iniciarBiometriaMusica ===
+            "function"
+    ) {
 
-            alavanca.style.transform = "translateX(0)";
+        try {
 
-            icon1.style.display = "block";
-            icon2.style.display = "none";
+            Android.iniciarBiometriaMusica();
 
-            /*
-             * Redireciona para index2.html
-             */
-            window.location.href = "index2.html";
-
-            return;
         }
 
+        catch (erro) {
 
-        /*
-         * Segunda opção
-         */
-        alavanca.style.transform = "translateX(100%)";
+            abrirAreaProtegida();
 
-        icon1.style.display = "none";
-        icon2.style.display = "block";
+        }
 
-        /*
-         * Redireciona para index3.html
-         */
-        window.location.href = "index3.html";
+    }
+
+    else {
+
+        abrirAreaProtegida();
+
+    }
+
+}
+
+
+/* =========================================================
+   FALLBACK
+========================================================= */
+
+function abrirAreaProtegida() {
+
+    window.location.href =
+        "file:///android_asset/user1/botao.html";
+
+}
+
+
+/* =========================================================
+   ACESSIBILIDADE DOS LINKS
+========================================================= */
+
+document
+    .querySelectorAll(".heroTag1")
+    .forEach(function(elemento, indice) {
+
+        elemento.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+
+                    event.preventDefault();
+
+                    elemento.click();
+
+                }
+
+            }
+        );
 
     });
 
-});
+
+/* =========================================================
+   TOGGLE
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        const toggle =
+            document.getElementById("toggle");
+
+        const alavanca =
+            document.getElementById("alavanca");
+
+        const icon1 =
+            document.querySelector(".icon1");
+
+        const icon2 =
+            document.querySelector(".icon2");
+
+
+        /*
+         * COMEÇA NA SEGUNDA OPÇÃO
+         */
+
+        let ativo = true;
+
+
+        /*
+         * ESTADO INICIAL
+         */
+
+        alavanca.style.transform =
+            "translateX(100%)";
+
+        icon1.style.display =
+            "none";
+
+        icon2.style.display =
+            "block";
+
+
+        /*
+         * CLIQUE
+         */
+
+        toggle.addEventListener(
+            "click",
+            function() {
+
+
+                /*
+                 * Alterna
+                 */
+
+                ativo =
+                    !ativo;
+
+
+                /*
+                 * Move a alavanca
+                 */
+
+                alavanca.style.transform =
+                    ativo
+                        ? "translateX(100%)"
+                        : "translateX(0)";
+
+
+                /*
+                 * Aguarda a animação
+                 */
+
+                setTimeout(
+                    function() {
+
+
+                        /*
+                         * Troca o ícone
+                         */
+
+                        icon1.style.display =
+                            ativo
+                                ? "none"
+                                : "block";
+
+                        icon2.style.display =
+                            ativo
+                                ? "block"
+                                : "none";
+
+
+                        /*
+                         * Redireciona
+                         */
+
+                        setTimeout(
+                            function() {
+
+                                if (ativo) {
+
+                                    window.location.href =
+                                        "index3.html";
+
+                                }
+
+                                else {
+
+                                    window.location.href =
+                                        "index2.html";
+
+                                }
+
+                            },
+                            100
+                        );
+
+
+                    },
+                    300
+                );
+
+            }
+        );
+
+
+        /*
+         * ACESSIBILIDADE DO TOGGLE
+         */
+
+        toggle.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+
+                    event.preventDefault();
+
+                    toggle.click();
+
+                }
+
+            }
+        );
+
+    }
+);
+
 </script>
 
 </body>
+
 </html>
